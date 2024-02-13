@@ -1,0 +1,113 @@
+// 박스 디자인(공통 디자인) -------------------------------------
+
+@mixin container {
+  background-color: var(--main-bgcolor);
+  color: var(--main-color);
+  border: 1px solid var(--main-white);
+  border-radius: 10px;
+  backdrop-filter: blur(30px);
+}
+
+@mixin s-box {
+  background-color: var(--main-bgcolor);
+  color: var(--main-color);
+  border: 1px solid var(--main-white);
+  border-radius: 5px;
+}
+
+@mixin main-button {
+  background-color: var(--main-button);
+  color: var(--main-color);
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+// market editor용
+@mixin market-s-box {
+  background-color: transparent;
+  color: var(--main-color);
+  border: 1px solid var(--main-white);
+  border-radius: 5px;
+}
+
+// 메뉴 호버
+@mixin hover {
+  transition: all 0.3s;
+  color: #ffffff;
+  text-shadow: 0 0 10px #ffffff81;
+  transform: translateY(-3px);
+}
+
+@mixin thum-hover {
+  transition: all 0.3s;
+  box-shadow: 0 0 20px 1px rgba(255, 255, 255, 0.212);
+}
+
+@mixin active {
+  color: #ffffff;
+  text-shadow: 0 0 10px #ffffff81;
+}
+
+// 에러 메시지(ex.필수값 입력하세요)
+@mixin error-message {
+  color: #fcbaba;
+  font-size: smaller;
+  margin: 7px 0 7px 0;
+}
+
+// 정렬 관련 -------------------------------------
+
+// 가운데 정렬
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// 양쪽 정렬
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// 중앙 정렬
+@mixin position-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// 상단 고정
+@mixin position-fixed {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+//내부요소 내리기
+@mixin inner-contents {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  margin: 100px 0px 0px 0px;
+  justify-content: center;
+}
+
+// 컨테이너 박스 가운데 정렬
+@mixin center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin button-size {
+  font-size: large;
+  width: 70px;
+  height: 30px;
+  margin: 4px;
+}

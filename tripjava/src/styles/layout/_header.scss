@@ -1,0 +1,54 @@
+#header {
+  @include flex-center; // flex-center 믹스인을 사용하여 중앙 정렬
+  flex-direction: column; // 요소들을 세로로 정렬
+  width: 100%; // 전체 높이를 채우도록 설정
+}
+
+.header_menu {
+  width: 100%;
+}
+
+.header_menu {
+  .menu {
+    display: flex;
+    list-style: none;
+    justify-content: space-between;
+    padding: 0 40px 0 40px;
+    align-items: center;
+    li {
+      a {
+        color: var(--main-color);
+        display: block;
+        transition: all 0.3s;
+        text-decoration: none;
+
+        &:hover {
+          @include hover;
+        }
+      }
+      // 헤더의 로그인 유저 정보
+      .logined-user {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        cursor: pointer;
+        img {
+          width: 3em;
+          height: 3em;
+          border-radius: 3em;
+          border: 1px solid var(--main-color);
+          background-color: var(--main-black);
+          // transition: cubic-bezier();
+        }
+        img:hover {
+          opacity: 0.6;
+        }
+      }
+    }
+  }
+}
+
+// 메뉴 클릭시 메뉴 글자 스타일
+.header_menu .menu li.active a {
+  @include active;
+}

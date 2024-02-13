@@ -1,0 +1,74 @@
+// 헤더 밑으로 스크롤 되게 처리
+// : 메인 스크롤 없애고, 각 페이지별 디브에만 스크롤
+.main {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; // 전체 페이지에서 스크롤 방지
+}
+// 스터디모집 메인 스크롤생성
+div.st-main-container {
+  height: calc(100vh - 220px);
+  overflow-y: auto;
+}
+// 중고거래 메인 스크롤생성
+div.market-main-box {
+  height: calc(100vh - 227px);
+  overflow-y: auto;
+}
+
+// 중고거래 판매하기 스크롤생성
+div.market_container {
+  height: calc(100vh - 220px);
+  overflow-y: auto;
+}
+
+// 스터디 작성하기 스크롤 생성
+div.study-edit-ouline {
+  height: calc(100vh - 220px);
+  overflow-y: auto;
+}
+
+// 스터디 디테일 페이지
+div.study-detail-container {
+  height: calc(100vh - 220px);
+  overflow-y: auto;
+}
+
+// 페이지 전체 공통적용할 스타일 넣는 부분
+body {
+  width: 100vw;
+  min-height: 100%;
+  color: var(--main-white);
+  font-family: var(--mainfont-SUIT);
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 400;
+  position: relative; /* 추가 */
+  z-index: 1; /* 추가 */
+
+  // 배경 그러데이션
+  // background: linear-gradient(17deg, hsl(273, 56%, 40%), rgba(255, 0, 0, 0)),
+  //   linear-gradient(127deg, #29347d, rgba(255, 0, 0, 0)),
+  //   linear-gradient(336deg, #ecc152, rgba(0, 0, 255, 0));
+  background: linear-gradient(40deg, var(--color-bg1), var(--color-bg2));
+
+  // 아래는 임시 배경 적용시 삭제 예정
+  // background-size: 500% 500%;
+  // animation: moveGrad 10s ease infinite;
+
+  //  grian 추가
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0 0 0 0;
+    opacity: 0.5;
+    background-repeat: repeat;
+    background-position: center;
+    background-image: url(https://grainy-gradients.vercel.app/noise.svg);
+    z-index: -10;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: auto;
+  }
+}

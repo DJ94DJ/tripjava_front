@@ -1,0 +1,222 @@
+div#marketcontainer {
+  @include container;
+  margin: 100px 0 0 0;
+  width: 65%;
+  // height: 100%;
+  padding: 40px 40px 40px 40px;
+  justify-content: center;
+}
+// 입력창들간 간격조절
+section.market-img,
+section.market-title,
+section.market-category,
+section.market-region,
+section.market-textarea {
+  margin-bottom: 20px;
+  cursor: default;
+
+  // 입력창 디자인
+  input,
+  textarea {
+    margin-top: 10px;
+    @include market-s-box;
+    height: 2.5rem;
+    padding: 10px;
+    &:focus {
+      outline: none;
+    }
+    &::placeholder {
+      color: var(--main-button);
+    }
+  }
+
+  // 설명창 디자인
+  textarea#market-textarea {
+    width: 100%;
+    height: 200px;
+    padding: 20px;
+    overflow: hidden;
+    resize: none;
+  }
+
+  // 상품명창 너비
+  input#market-title {
+    width: 40%;
+  }
+
+  // 상품명창 0/40 간격
+  span {
+    &.title-length {
+      margin-left: 10px;
+    }
+  }
+  div {
+    &.textarea-length {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-right: 3px;
+      margin: -6px 0 15px 0;
+    }
+  }
+}
+
+// 이미지 등록버튼 디자인
+div.img_container {
+  margin-top: 10px;
+  position: relative;
+  display: flex;
+  margin-bottom: 10px;
+  input[type='file'] {
+    display: none;
+  }
+  label[for='market-img'] {
+    position: relative;
+    display: flex;
+    width: 130px;
+    height: 130px;
+    ul {
+      display: flex;
+      margin: 0px;
+    }
+  }
+  div.market-img {
+    cursor: pointer;
+    // margin-top: 10px;
+    @include market-s-box;
+    @include flex-center;
+    flex-direction: column;
+    width: 130px;
+    height: 130px;
+    color: var(--main-color);
+
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+    div {
+      margin-top: 7px;
+    }
+    .img-length {
+      margin-top: 0px;
+    }
+  }
+}
+
+.textarea_container {
+  margin: 0;
+}
+
+textarea {
+  overflow: auto !important;
+}
+
+// 이미지 미리보기 디자인
+ul.image-previews-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 0;
+  div.image-container {
+    width: 130px;
+    height: 130px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    li.image-preview {
+      list-style: none;
+      width: 130px;
+      height: 130px;
+      img {
+        @include market-s-box;
+        width: 100%;
+        height: 100%;
+      }
+      div {
+        // 대표사진 글자 스타일
+        position: absolute;
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        border-radius: 30px;
+        padding: 3px;
+        background-color: hsla(0, 0%, 45%, 0.7);
+        top: 0.5rem;
+        left: 9.2rem;
+      }
+      button {
+        // x자 버튼 스타일
+        position: relative;
+        top: -132px;
+        right: -95px;
+        border: none;
+        background-color: transparent;
+        color: hsla(0, 0%, 45%, 0.7);
+        cursor: pointer;
+        svg {
+          width: 1.5em;
+          height: 1.5rem;
+        }
+      }
+    }
+  }
+}
+
+// 가격창 디자인
+section.market-price {
+  margin-bottom: 20px;
+  cursor: default;
+  label {
+    display: inline-flex;
+    margin-top: 10px;
+    @include market-s-box;
+    height: 2.5rem;
+    padding: 10px;
+    align-items: center;
+    width: 10rem;
+
+    input {
+      padding-left: 10px;
+      background-color: transparent;
+      border: 0;
+      color: var(--main-color);
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+  span {
+    &.title-length {
+      margin-left: 10px;
+    }
+  }
+}
+
+// 설명창
+section.market-textarea {
+  margin-bottom: 0 !important;
+}
+
+// 등록 버튼
+button.marketeditor-regi {
+  height: 2.5rem;
+  width: 12rem;
+  @include main-button;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+  #main {
+    width: 95%;
+    .market_container {
+      width: 100%;
+    }
+  }
+}
+
+// 에러 메시지
+.error-message {
+  @include error-message;
+  padding: 0 3px 0 3px;
+}
