@@ -1,13 +1,13 @@
-import '../../styles/style.scss';
+import "../../styles/style.scss";
 
-import React from 'react';
+import React from "react";
 
-function main() {
+function Main({ children }) {
   return (
     <div className="main_body">
-      <main>요기는 메인</main>
+      <main>{children}</main>
     </div>
   );
 }
 
-export default main;
+export default Main;
