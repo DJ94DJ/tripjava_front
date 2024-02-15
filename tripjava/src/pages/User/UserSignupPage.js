@@ -1,5 +1,7 @@
 import React from "react";
+import axios from "axios";
 import { useState } from "react";
+import "../../styles/style.scss";
 
 function UserSignupPage() {
   const [inputs, setInputs] = useState({
@@ -19,15 +21,22 @@ function UserSignupPage() {
     });
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const confirmPassword = e.target.elements.confirmPassword.value;
     if (password !== confirmPassword) {
       alert("패스워드가 일치하지 않습니다.");
       return;
     }
-    console.log(inputs);
-    // 회원가입 로직 추가
+
+    try {
+      const response = await axios.post("http://localhost:8080/user", inputs);
+      console.log(response.data);
+      // 회원가입 성공 처리
+    } catch (error) {
+      console.error(error);
+      // 회원가입 실패 처리
+    }
   };
 
   return (
