@@ -1,16 +1,21 @@
 import React, { useCallback } from 'react';
-// 구글 정식 맵스 라이브러리 사용
+import {
+  APIProvider,
+  Map,
+  useMapsLibrary,
+  useMap,
+} from '@vis.gl/react-google-maps';
 
-function App() {
+function GoogleMapComponent() {
   const position = { lat: 61.2176, lng: -149.8997 };
 
   return (
-    <APIProvider apiKey={process.env.GOOGLE_MAPS_API_KEY}>
-      <Map center={position} zoom={10}>
-        <Marker position={position} />
-      </Map>
-    </APIProvider>
+    <div style={{ height: '100vh', width: '100%' }}>
+      <APIProvider apiKey={process.env.GOOGLE_MAPS_API_KEY}>
+        <Map center={position} zoom={10}></Map>
+      </APIProvider>
+    </div>
   );
 }
 
-export default App;
+export default GoogleMapComponent;
