@@ -34,8 +34,8 @@
 // 메뉴 호버
 @mixin hover {
   transition: all 0.3s;
-  color: #ffffff;
-  text-shadow: 0 0 10px #ffffff81;
+  color: #000000;
+  text-shadow: 0 0 10px #000000;
   transform: translateY(-3px);
 }
 
@@ -45,8 +45,8 @@
 }
 
 @mixin active {
-  color: #ffffff;
-  text-shadow: 0 0 10px #ffffff81;
+  color: #000000;
+  text-shadow: 0 0 10px #000000;
 }
 
 // 에러 메시지(ex.필수값 입력하세요)
