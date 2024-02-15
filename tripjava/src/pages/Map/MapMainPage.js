@@ -1,12 +1,11 @@
 import React from 'react';
-import MapPlanner from '../../components/Map/MapPlanner';
-import GoogleMap from '../../components/Map/GoogleMapComponent';
+import GoogleMapComponent from '../../components/Map/GoogleMapComponent';
+import MapSidebar from '../../components/Map/MapSidebar';
 
 const MapMainPage = () => {
   return (
     <>
-      <div>MapMainPage</div>
-      <MapPlanner />
+      <MapSidebar />
       <GoogleMapComponent />
     </>
   );
