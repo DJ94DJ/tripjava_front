@@ -1,3 +1,5 @@
+// '@react-google-maps/api'; 라이브러리 사용!
+
 import React, { useCallback } from 'react';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 
@@ -17,7 +19,7 @@ function GoogleMapComponent() {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     // google maps 에서 받은 api key를 전달한다.
-    googleMapsApiKey: process.env.REACT_APP_API,
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
   });
 
   // 지도를 그릴때 동작하는 함수
