@@ -1,9 +1,10 @@
 .side_menu {
-  z-index: 9999;
+  @include container;
+  z-index: 100;
   position: fixed;
   left: 0;
   height: 100vh;
-  background-color: #ffffff;
+
   overflow-x: hidden;
   transition: width 0.3s ease;
 

@@ -2,7 +2,7 @@
   @include flex-center; // flex-center 믹스인을 사용하여 중앙 정렬
   flex-direction: column; // 요소들을 세로로 정렬
   width: 100%; // 전체 높이를 채우도록 설정
-  background-color: gray;
+  background-color: $main-color;
 }
 
 .header_menu {
