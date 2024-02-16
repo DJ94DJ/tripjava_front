@@ -1,0 +1,16 @@
+.mapsearch_container {
+  @include flex-center;
+  //   @include container;
+  z-index: 200;
+  position: absolute;
+  left: 300px;
+  margin: 80px 50px;
+}
+
+svg {
+  position: absolute;
+  z-index: 200;
+  text-align: right;
+  color: black;
+  cursor: pointer;
+}

@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
+import '../../styles/style.scss';
+import { BiSolidLeftArrow } from 'react-icons/bi';
+import { BiSolidRightArrow } from 'react-icons/bi';
 
 const MapSidebar = () => {
+  const [isExpanded, setIsExpanded] = useState(true); // 사이드바의 펼침/접힘 상태
+
+  // 사이드바 펼치기/접기
+  const toggleMenu = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
-    <div className="sidebar_container">
-      <div className="sidebar_header"></div>
-      <div className="sidebar_route">
-        <div className="route 1">1박</div>
-        <div className="route 2"></div>
-        <div className="route 3"></div>
+    <div className={`side_menu ${isExpanded ? 'expanded' : 'collapsed'}`}>
+      <div className="sidebar_content">
+        사이드바
+        <div className="toggle_button" onClick={toggleMenu}>
+          {isExpanded ? <BiSolidLeftArrow /> : <BiSolidRightArrow />}
+        </div>
       </div>
     </div>
   );
