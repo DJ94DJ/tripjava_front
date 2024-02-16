@@ -6,7 +6,7 @@ import '../../styles/style.scss';
 
 function GoogleMapComponent() {
   // 현재 위치
-  const [map, setMap] = useState(null);
+
   const center = {
     lat: 37.5336766,
     lng: 126.9632199,
