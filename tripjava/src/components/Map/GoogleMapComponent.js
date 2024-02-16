@@ -1,17 +1,18 @@
 // '@react-google-maps/api'; 라이브러리 사용!
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import '../../styles/style.scss';
 
 function GoogleMapComponent() {
   const center = {
-    lat: 37.5511694,
-    lng: 126.9882266,
+    lat: 37.5336766,
+    lng: 126.9632199,
   };
 
   const options = {
-    zoom: 16,
-    mapTypeId: 'terrain',
+    zoom: 18,
+    mapTypeId: 'roadmap',
   };
 
   // 지도를 불러오는 함수
