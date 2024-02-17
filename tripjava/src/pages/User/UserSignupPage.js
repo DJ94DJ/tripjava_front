@@ -42,34 +42,50 @@ function UserSignupPage() {
   return (
     <>
       <div>UserSignupPage</div>
-      <form onSubmit={onSubmit}>
-        <input name="id" value={id} onChange={onChange} placeholder="아이디" />
-        <input
-          name="password"
-          value={password}
-          onChange={onChange}
-          placeholder="패스워드"
-          type="password"
-        />
-        <input
-          name="confirmPassword"
-          placeholder="패스워드 확인"
-          type="password"
-        />
-        <input
-          name="email"
-          value={email}
-          onChange={onChange}
-          placeholder="이메일"
-        />
-        <input
-          name="nickname"
-          value={nickname}
-          onChange={onChange}
-          placeholder="닉네임"
-        />
-        <button type="submit">회원가입</button>
-      </form>
+      <div className="form-wrap">
+        <form className="signup-form" onSubmit={onSubmit}>
+          <div className="input-wrap">
+            <input
+              name="id"
+              value={id}
+              onChange={onChange}
+              placeholder="아이디"
+            />
+            <br />
+            <input
+              name="password"
+              value={password}
+              onChange={onChange}
+              placeholder="패스워드"
+              type="password"
+            />
+            <br />
+            <input
+              name="confirmPassword"
+              placeholder="패스워드 확인"
+              type="password"
+            />
+            <br />
+            <input
+              name="email"
+              value={email}
+              onChange={onChange}
+              placeholder="이메일"
+            />
+            <br />
+            <input
+              name="nickname"
+              value={nickname}
+              onChange={onChange}
+              placeholder="닉네임"
+            />
+            <br />
+            <button className="button" type="submit">
+              회원가입
+            </button>
+          </div>
+        </form>
+      </div>
     </>
   );
 }

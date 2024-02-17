@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useState } from "react";
+import "../../styles/style.scss";
 
 function UserLoginPage() {
   const [inputs, setInputs] = useState({
@@ -37,17 +38,33 @@ function UserLoginPage() {
   return (
     <>
       <div>UserLoginPage</div>
-      <form onSubmit={onSubmit}>
-        <input name="id" value={id} onChange={onChange} placeholder="아이디" />
-        <input
-          name="password"
-          value={password}
-          onChange={onChange}
-          placeholder="패스워드"
-          type="password"
-        />
-        <button type="submit">로그인</button>
-      </form>
+      <div className="form-wrap">
+        <div className="login-form">
+          <div className="input-wrap">
+            <form onSubmit={onSubmit}>
+              <input
+                name="id"
+                value={id}
+                onChange={onChange}
+                placeholder="아이디"
+              />
+              <br />
+              <br />
+              <input
+                name="password"
+                value={password}
+                onChange={onChange}
+                placeholder="패스워드"
+                type="password"
+              />
+              <br />
+              <br />
+              <br />
+              <button type="submit">로그인</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
