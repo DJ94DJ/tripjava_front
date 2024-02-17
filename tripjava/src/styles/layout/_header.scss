@@ -2,7 +2,12 @@
   @include flex-center; // flex-center 믹스인을 사용하여 중앙 정렬
   flex-direction: column; // 요소들을 세로로 정렬
   width: 100%; // 전체 높이를 채우도록 설정
-  background-color: $main-color;
+  background-color: $main-white;
+}
+
+.logo {
+  width: 140px;
+  padding: 20px;
 }
 
 .header_menu {
@@ -10,6 +15,9 @@
 }
 
 .header_menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   .menu {
     display: flex;
     list-style: none;
@@ -17,6 +25,7 @@
     padding: 0 40px 0 40px;
     align-items: center;
     li {
+      padding: 20px;
       a {
         color: var(--main-color);
         display: block;
