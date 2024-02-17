@@ -1,5 +1,5 @@
 .form-wrap {
-  @include flex-center;
+  @include position-center;
   height: 100%;
 
   .signup-form {
@@ -7,6 +7,9 @@
     // transform: translateY(-5rem);
     // flex-direction: column;
     padding: 3em;
+    width: 350px;
+    margin-bottom: 30%;
+
     border: 0;
     border: {
       radius: 16px;
@@ -67,10 +70,10 @@
         padding-left: 1em;
         font-size: 1.2em;
         background-color: transparent;
-        border: 1px solid var(--main-white);
+        border: 1px solid var(--main-grey);
       }
       input::placeholder {
-        color: var(--main-white);
+        color: var(--main-color);
       }
       input:focus {
         outline: 0;
@@ -96,7 +99,7 @@
         color: var(--main-black);
         border: 1px solid var(--main-white);
         &:hover {
-          background-color: var(--main-button);
+          background-color: var(--main-hove-color);
           color: #000;
         }
       }
@@ -113,7 +116,7 @@
         color: var(--main-black);
         border: 1px solid var(--main-white);
         &:hover {
-          background-color: var(--main-button);
+          background-color: var(--main-hove-color);
           color: #000;
         }
       }
@@ -124,6 +127,12 @@
       justify-content: center;
       margin-top: 1em;
       gap: 2em;
+    }
+
+    .guide {
+      text-align: right;
+      margin-left: auto;
+      color: #000;
     }
   }
 }

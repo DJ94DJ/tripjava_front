@@ -34,7 +34,7 @@
         border: 1px solid var(--main-white);
       }
       input::placeholder {
-        color: var(--main-white);
+        color: var(--main-bgcolor);
       }
       input:focus {
         outline: 0;
@@ -73,6 +73,10 @@
       justify-content: center;
       margin-top: 1em;
       gap: 2em;
+    }
+
+    .guide {
+      color: #000;
     }
   }
 }
