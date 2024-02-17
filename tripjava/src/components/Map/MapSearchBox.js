@@ -1,23 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import '../../styles/style.scss';
 import { FaLocationCrosshairs } from 'react-icons/fa6';
-// import { useGeoLocation } from '../../Hooks/useGeoLocation';
-
-// 현재 위치
-const geolocationOptions = {
-  enableHighAccuracy: false,
-  timeout: 1000 * 10,
-  maximumAge: 1000 * 3600 * 24,
-};
+import { Autocomplete } from '@react-google-maps/api';
 
 const MapSearchBox = () => {
+  const [directionsRes, setDestinationRes] = useState(null);
+  const [distance, setDistance] = useState('');
+  const [duration, setDuration] = useState('');
+
+  const originRef = useRef();
+  const destiantionRef = useRef();
+  // 붙여넣기한거
   // Origin과 Destination의 값을 감지하기 위한 state
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
+  const [selected, setSelected] = useState(null);
 
   // 경로 계산 결과를 표시하기 위한 state
-  const [distance, setDistance] = useState('');
-  const [duration, setDuration] = useState('');
 
   // Origin 입력 필드의 값 변경 이벤트 핸들러
   const handleOriginChange = (event) => {
@@ -54,21 +53,26 @@ const MapSearchBox = () => {
     <>
       <div className="mapsearch_container">
         {/* Origin 입력 필드 */}
-        <input
-          id="origin-input"
-          type="text"
-          placeholder="Origin"
-          value={origin}
-          onChange={handleOriginChange}
-        />
+        <Autocomplete>
+          <input
+            className="place-container"
+            id="origin-input"
+            type="text"
+            placeholder="Origin"
+            ref={originRef}
+            onChange={handleOriginChange}
+          />
+        </Autocomplete>
         {/* Destination 입력 필드 */}
-        <input
-          id="destination-input"
-          type="text"
-          placeholder="Destination"
-          value={destination}
-          onChange={handleDestinationChange}
-        />
+        <Autocomplete>
+          <input
+            id="destination-input"
+            type="text"
+            placeholder="Destination"
+            ref={destiantionRef}
+            onChange={handleDestinationChange}
+          />
+        </Autocomplete>
         {/* 경로 계산 버튼 */}
         <button id="calculate-route" onClick={handleCalculateRoute}>
           Calculate Route
@@ -86,7 +90,6 @@ const MapSearchBox = () => {
           <button id="recenter" onClick={handleRecenter}>
             Re-center
           </button>
-          <FaLocationCrosshairs />
         </div>
       </div>
     </>
