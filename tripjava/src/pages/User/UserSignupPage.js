@@ -11,6 +11,8 @@ function UserSignupPage() {
     nickname: "",
   });
 
+  const [idDuplicated, setIdDuplicated] = useState(false);
+
   const { id, password, email, nickname } = inputs;
 
   const onChange = (e) => {
@@ -21,6 +23,28 @@ function UserSignupPage() {
     });
   };
 
+  const checkDuplicateId = async (e) => {
+    e.preventDefault(); // 이벤트의 기본 동작을 막음
+    // 아이디 중복확인 로직
+    try {
+      const response = await axios.post(`http://localhost:8080/user/check-id`, {
+        id: id,
+      });
+      // 중복된 아이디가 없는 경우
+      if (response.data) {
+        alert("사용 가능한 아이디입니다.");
+        setIdDuplicated(false);
+      }
+      // 중복된 아이디가 있는 경우
+      else {
+        alert("중복된 아이디입니다. 다른 아이디를 입력하세요.");
+        setIdDuplicated(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     const confirmPassword = e.target.elements.confirmPassword.value;
@@ -29,9 +53,15 @@ function UserSignupPage() {
       return;
     }
 
+    if (idDuplicated) {
+      alert("아이디 중복확인이 필요합니다.");
+      return;
+    }
+
     try {
       const response = await axios.post("http://localhost:8080/user", inputs);
       console.log(response.data);
+      window.location = "/";
       // 회원가입 성공 처리
     } catch (error) {
       console.error(error);
@@ -51,6 +81,10 @@ function UserSignupPage() {
               onChange={onChange}
               placeholder="아이디"
             />
+            <button className="duplicate-button" onClick={checkDuplicateId}>
+              중복확인
+            </button>
+            <div className="guide">영어와 숫자 조합, 8~16자</div>
             <br />
             <input
               name="password"
@@ -59,6 +93,7 @@ function UserSignupPage() {
               placeholder="패스워드"
               type="password"
             />
+            <div className="guide">특수문자 포함, 8~16자</div>
             <br />
             <input
               name="confirmPassword"
@@ -72,6 +107,7 @@ function UserSignupPage() {
               onChange={onChange}
               placeholder="이메일"
             />
+            <div className="guide">예: example@example.com</div>
             <br />
             <input
               name="nickname"
@@ -80,7 +116,7 @@ function UserSignupPage() {
               placeholder="닉네임"
             />
             <br />
-            <button className="button" type="submit">
+            <button className="submit-button" type="submit">
               회원가입
             </button>
           </div>

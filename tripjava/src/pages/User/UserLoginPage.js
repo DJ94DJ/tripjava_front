@@ -27,7 +27,11 @@ function UserLoginPage() {
         "http://localhost:8080/user/login",
         inputs
       );
+      localStorage.setItem("token", response.data.token);
+      console.log("저장된 토큰:", localStorage.getItem("token"));
       console.log(response.data);
+      window.location = "/";
+
       // 로그인 성공 처리
     } catch (error) {
       console.error(error);
