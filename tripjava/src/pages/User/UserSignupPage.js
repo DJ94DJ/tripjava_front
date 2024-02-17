@@ -32,13 +32,13 @@ function UserSignupPage() {
       });
       // 중복된 아이디가 없는 경우
       if (response.data) {
-        alert("사용 가능한 아이디입니다.");
-        setIdDuplicated(false);
+        alert("중복된 아이디입니다. 다른 아이디를 입력하세요.");
+        setIdDuplicated(true);
       }
       // 중복된 아이디가 있는 경우
       else {
-        alert("중복된 아이디입니다. 다른 아이디를 입력하세요.");
-        setIdDuplicated(true);
+        alert("사용 가능한 아이디입니다.");
+        setIdDuplicated(false);
       }
     } catch (error) {
       console.error(error);
@@ -81,10 +81,22 @@ function UserSignupPage() {
               onChange={onChange}
               placeholder="아이디"
             />
+            <br />
             <button className="duplicate-button" onClick={checkDuplicateId}>
               중복확인
             </button>
-            <div className="guide">영어와 숫자 조합, 8~16자</div>
+            <br />
+            <br />
+            <br />
+            <input
+              name="nickname"
+              value={nickname}
+              onChange={onChange}
+              placeholder="닉네임"
+            />
+            <div className="guide">영어와 숫자 조합 특수문자 포함, 8~16자</div>
+            <br />
+            <br />
             <br />
             <input
               name="password"
@@ -93,7 +105,6 @@ function UserSignupPage() {
               placeholder="패스워드"
               type="password"
             />
-            <div className="guide">특수문자 포함, 8~16자</div>
             <br />
             <input
               name="confirmPassword"
@@ -101,6 +112,9 @@ function UserSignupPage() {
               type="password"
             />
             <br />
+            <br />
+            <br />
+
             <input
               name="email"
               value={email}
@@ -109,12 +123,9 @@ function UserSignupPage() {
             />
             <div className="guide">예: example@example.com</div>
             <br />
-            <input
-              name="nickname"
-              value={nickname}
-              onChange={onChange}
-              placeholder="닉네임"
-            />
+            <br />
+            <br />
+            <br />
             <br />
             <button className="submit-button" type="submit">
               회원가입

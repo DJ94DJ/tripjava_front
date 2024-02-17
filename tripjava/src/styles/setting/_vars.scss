@@ -6,9 +6,11 @@ $main-black: #2d2113;
 :root {
   // 메인 폰트, 컬러
   --mainfont-SUIT: "SUIT-Regular";
-  --main-white: #eee;
-  --main-color: rgba(255, 255, 255, 0.851);
-  --main-bgcolor: #ffffff;
+  --main-white: rgb(255, 253, 252);
+  --main-grey: rgb(232, 223, 206);
+  --main-color: #c1987d;
+  --main-hove-color: #ecb159;
+  --main-bgcolor: rgb(237, 217, 171);
   --main-button: rgba(127, 182, 160, 0.1);
   --main-black: #333;
 
