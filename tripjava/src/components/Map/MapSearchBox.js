@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import '../../styles/style.scss';
-import { FaLocationCrosshairs } from 'react-icons/fa6';
 import { Autocomplete } from '@react-google-maps/api';
 
 const MapSearchBox = () => {
