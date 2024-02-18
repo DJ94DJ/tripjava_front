@@ -6,6 +6,7 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.15.2",
+    "@reach/combobox": "^0.18.0",
     "@react-google-maps/api": "^2.19.3",
     "@reduxjs/toolkit": "^2.0.1",
     "@testing-library/jest-dom": "^5.17.0",
@@ -27,6 +28,7 @@
     "socket.io": "^4.7.3",
     "socket.io-client": "^4.7.3",
     "ts-node": "^10.9.2",
+    "use-places-autocomplete": "^4.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

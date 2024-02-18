@@ -6,8 +6,8 @@ import MapSearchBox from '../../components/Map/MapSearchBox';
 const MapMainPage = () => {
   return (
     <>
-      <MapSidebar />
-      <MapSearchBox />
+      {/* <MapSidebar /> */}
+      {/* <MapSearchBox /> */}
       <GoogleMapComponent />
     </>
   );

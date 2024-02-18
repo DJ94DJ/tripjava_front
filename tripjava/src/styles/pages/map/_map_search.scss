@@ -1,0 +1,15 @@
+.search_container {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translate(-50%);
+  z-index: 100;
+  width: 300px;
+
+  .combobox_input {
+    width: 100%;
+    padding: 0.5rem;
+    border: none;
+    background-color: #edd9ab;
+  }
+}
