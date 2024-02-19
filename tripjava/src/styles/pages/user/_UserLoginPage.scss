@@ -51,18 +51,8 @@
     }
     button {
       width: 100%;
-      border-radius: 10px;
-      padding: 0.5em;
       padding-left: 1em;
-      font-size: 1.2em;
-      cursor: pointer;
-      background-color: var(--main-bgcolor);
-      color: var(--main-black);
-      border: 1px solid var(--main-white);
-      &:hover {
-        background-color: var(--main-button);
-        color: #000;
-      }
+      @include main-button;
     }
 
     a {
