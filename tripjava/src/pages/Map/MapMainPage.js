@@ -4,6 +4,8 @@ import MapSidebar from '../../components/Map/MapSidebar';
 import MapSearchBox from '../../components/Map/MapSearchBox';
 
 const MapMainPage = () => {
+  const [selectedLocation, setSelectedLocation] = useState(null);
+
   return (
     <>
       {/* <MapSidebar /> */}
