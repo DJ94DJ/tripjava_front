@@ -23,7 +23,7 @@ const Layout = () => {
 
   return (
     <>
-      {location.pathname !== '/planner' && <Header />}
+      {location.pathname !== '/map' && <Header />}
       <Main>
         <Routes>
           {/* 메인 페이지 */}
