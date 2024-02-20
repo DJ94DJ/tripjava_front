@@ -47,7 +47,7 @@ const GoogleMapComponent = ({ selectedLocation }) => {
   );
 
   // 검색결과, 현재위치 시 줌값 : 9 -> 각 컴포넌트로 가서 줌값 세부 조절
-  const panTo = useCallback(({ lat, lng, zoom = 9 }) => {
+  const panTo = useCallback(({ lat, lng, zoom = 13 }) => {
     mapRef.current.panTo({ lat, lng });
     mapRef.current.setZoom(zoom);
     setMarkers((current) => [
