@@ -1,23 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../styles/style.scss';
-import { BiSolidLeftArrow } from 'react-icons/bi';
-import { BiSolidRightArrow } from 'react-icons/bi';
 
 const MapSidebar = () => {
-  const [isExpanded, setIsExpanded] = useState(true); // 사이드바의 펼침/접힘 상태
-
-  // 사이드바 펼치기/접기
-  const toggleMenu = () => {
-    setIsExpanded(!isExpanded);
-  };
-
   return (
-    <div className={`side_menu ${isExpanded ? 'expanded' : 'collapsed'}`}>
+    <div className="side_menu">
       <div className="sidebar_content">
-        사이드바
-        <div className="toggle_button" onClick={toggleMenu}>
-          {isExpanded ? <BiSolidLeftArrow /> : <BiSolidRightArrow />}
+        <div className="sidebar_header">
+          <img src="/static/logo_trip_java.svg" alt="logo" className="logo" />
         </div>
+        <div className="sidebar_date">세은님이 보낸 날짜 받깅</div>
+        <div className="sidebar_tourismApi"></div>
       </div>
     </div>
   );

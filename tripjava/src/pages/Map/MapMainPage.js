@@ -1,7 +1,6 @@
 import React from 'react';
 import GoogleMapComponent from '../../components/Map/GoogleMapComponent';
 import MapSidebar from '../../components/Map/MapSidebar';
-import MapSearchBox from '../../components/Map/MapSearchBox';
 import { useLocation } from 'react-router-dom';
 
 const MapMainPage = () => {
@@ -11,7 +10,6 @@ const MapMainPage = () => {
   return (
     <>
       <MapSidebar />
-      {/* <MapSearchBox /> */}
       <GoogleMapComponent selectedLocation={selectedLocation} />
     </>
   );

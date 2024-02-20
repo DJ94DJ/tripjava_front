@@ -21,7 +21,7 @@ const MainButton = () => {
   // 선택된 지역을 처리하는 함수
   const handleSelectRegion = (selectedRegionName) => {
     const selectedRegion = regions.find(
-      (region) => region.region === selectedRegionName
+      (region) => region.name === selectedRegionName
     );
     if (selectedRegion) {
       navigate('/planner', {
@@ -40,7 +40,7 @@ const MainButton = () => {
   // 사용자 입력에 따라 지역 목록 필터링
   useEffect(() => {
     const filtered = regions.filter((region) =>
-      region.region.toLowerCase().includes(inputValue.toLowerCase())
+      region.name.toLowerCase().includes(inputValue.toLowerCase())
     );
     setFilteredLocations(filtered);
   }, [inputValue]);
@@ -66,14 +66,11 @@ const MainButton = () => {
       </div>
       <div className="main_buttonbox">
         {!showSearch ? (
-          <button
-            className="mainbtn region"
-            onClick={() => setShowSearch(true)}
-          >
+          <button className="main_btn" onClick={() => setShowSearch(true)}>
             TRIPJAVA 시작하기
             {/* <img
               src="/static/logo_trip_java_pin.svg"
-              alt="pin"
+              alt="pin"  
               className="pin"
             /> */}
           </button>
@@ -88,18 +85,18 @@ const MainButton = () => {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
             />
-            <ComboboxPopover className="main_combobox_list">
+            <ComboboxPopover
+              className="main_combobox_list"
+              style={{ top: 255 }}
+            >
               <ComboboxList>
                 {filteredLocations.map((location, index) => (
-                  <ComboboxOption key={index} value={location.region} />
+                  <ComboboxOption key={index} value={location.name} />
                 ))}
               </ComboboxList>
             </ComboboxPopover>
           </Combobox>
         )}
-        {/* <button className="mainbtn make" onClick={handleCreateClick}>
-          만들기
-        </button> */}
       </div>
     </div>
   );
