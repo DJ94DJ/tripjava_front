@@ -1,2 +1,2 @@
 export const SET_AUTH = 'SET_AUTH';
-export const SET_SELECTED_REGIONDATE = 'SET_SELECTED_REGIONDATE';
+export const SET_MAININFO = 'SET_MAININFO';

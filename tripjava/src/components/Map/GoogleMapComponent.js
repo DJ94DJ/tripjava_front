@@ -1,5 +1,10 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { useJsApiLoader, GoogleMap, Marker, InfoWindow } from '@react-google-maps/api';
+import {
+  useJsApiLoader,
+  GoogleMap,
+  Marker,
+  InfoWindow,
+} from '@react-google-maps/api';
 import { FaLocationCrosshairs } from 'react-icons/fa6';
 import { MapLocate } from './MapLocate';
 import { MapSearch } from './MapSearch';
@@ -92,7 +97,9 @@ const GoogleMapComponent = ({ selectedLocation }) => {
             position={{ lat: marker.lat, lng: marker.lng }}
             onClick={() => {
               if (selected && selected.time === marker.time) {
-                setMarkers((current) => current.filter((m) => m.time !== marker.time));
+                setMarkers((current) =>
+                  current.filter((m) => m.time !== marker.time)
+                );
                 setSelected(null);
               } else {
                 setSelected(marker);
