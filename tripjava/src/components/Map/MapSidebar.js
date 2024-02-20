@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../../styles/style.scss';
 
 const MapSidebar = () => {
+  const navigate = useNavigate();
+  navigate('/');
+
   // api 불러오던거 작업중이었는데 일단 주석처리해둠!
   // const [touristSpots, setTouristSpots] = useState([]); // 관광지 데이터를 저장할 상태
 
@@ -28,7 +32,12 @@ const MapSidebar = () => {
     <div className="side_menu">
       <div className="sidebar_content">
         <div className="sidebar_header">
-          <img src="/static/logo_trip_java.svg" alt="logo" className="logo" />
+          <img
+            src="/static/logo_trip_java.svg"
+            alt="logo"
+            className="logo"
+            onClick={() => navigate('/')}
+          />
         </div>
         <div className="sidebar_date">세은님이 보낸 날짜 받깅</div>
         <div className="sidebar_tourismApi"></div>
