@@ -1,11 +1,11 @@
 // store.js
 import { createStore, combineReducers } from 'redux';
 import authReducer from './reducers/auth';
-import regionReducer from './reducers/regionReducer';
+import regiondateReducer from './reducers/regiondateReducer';
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  region: regionReducer,
+  region: regiondateReducer,
 });
 
 const store = createStore(rootReducer);
