@@ -11,7 +11,9 @@
 @import 'layout/header';
 
 // pages
+// - Main
 @import 'pages/main/main';
+@import 'pages/main/main_button';
 // - UserPage
 @import 'pages/User/UserSignupPage';
 @import 'pages/User/UserLoginPage';
