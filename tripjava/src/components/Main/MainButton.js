@@ -24,7 +24,7 @@ const MainButton = () => {
       (region) => region.name === selectedRegionName
     );
     if (selectedRegion) {
-      navigate('/planner', {
+      navigate('/date', {
         state: {
           selectedLocation: {
             lat: selectedRegion.lat,
