@@ -69,7 +69,10 @@ const MainButton = () => {
       </div>
       <div className="main_buttonbox">
         {!showSearch ? (
-          <button className="main_clickbtn" onClick={() => setShowSearch(true)}>
+          <button
+            className="mainbtn region"
+            onClick={() => setShowSearch(true)}
+          >
             TRIPJAVA 시작하기
             {/* <img
               src="/static/logo_trip_java_pin.svg"
@@ -88,17 +91,23 @@ const MainButton = () => {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
             />
-            <ComboboxPopover>
+            <ComboboxPopover className="main_combobox_list">
               <ComboboxList>
                 {filteredLocations.map((location, index) => (
-                  <ComboboxOption key={index} value={location.region} />
+                  <ComboboxOption
+                    key={index}
+                    value={location.region}
+                    onClick={handleCreateClick}
+                  />
                 ))}
               </ComboboxList>
             </ComboboxPopover>
           </Combobox>
         )}
+        {/* <button className="mainbtn make" onClick={handleCreateClick}>
+          만들기
+        </button> */}
       </div>
-      <button onClick={handleCreateClick}>만들기</button>
     </div>
   );
 };

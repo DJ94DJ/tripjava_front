@@ -10,7 +10,7 @@ const MapMainPage = () => {
 
   return (
     <>
-      {/* <MapSidebar /> */}
+      <MapSidebar />
       {/* <MapSearchBox /> */}
       <GoogleMapComponent selectedLocation={selectedLocation} />
     </>
