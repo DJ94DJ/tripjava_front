@@ -28,7 +28,7 @@ const Layout = () => {
           {/* 로그인/마이페이지 관련 */}
           <Route path="/" element={<MainButton />} />
           <Route path="/date" element={<MapDatePage />} />
-          <Route path="/find" element={<UserEditPage />} />
+          <Route path="/edit" element={<UserEditPage />} />
           <Route path="/leave" element={<UserLeavePage />} />
           <Route path="/login" element={<UserLoginPage />} />
           <Route path="/mypage" element={<UserMyPage />} />
