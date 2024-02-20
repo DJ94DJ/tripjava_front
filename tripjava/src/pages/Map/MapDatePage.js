@@ -1,7 +1,8 @@
-import React from 'react';
+import React from "react";
+import MapDate from "../../components/Map/MapDate";
 
 const MapDatePage = () => {
-  return <div>MapDatePage</div>;
+  return <MapDate />;
 };
 
 export default MapDatePage;
