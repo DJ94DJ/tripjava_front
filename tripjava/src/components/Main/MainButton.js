@@ -16,16 +16,14 @@ const MainButton = () => {
   const [inputValue, setInputValue] = useState('');
   const [filteredLocations, setFilteredLocations] = useState(regions);
   const containerRef = useRef();
-  const navigate = useNavigate(); // 페이지 이동을 위한 hook
+  const navigate = useNavigate(); // 페이지 이동을 위한 hook!!!
 
-  // '만들기' 버튼 클릭 핸들러
-  const handleCreateClick = () => {
-    // 사용자가 선택한 지역 이름과 일치하는 regions 배열 내 객체 찾기
+  // 선택된 지역을 처리하는 함수
+  const handleSelectRegion = (selectedRegionName) => {
     const selectedRegion = regions.find(
-      (region) => region.region === inputValue
+      (region) => region.name === selectedRegionName
     );
     if (selectedRegion) {
-      // '/planner' 페이지로 이동하면서 선택된 위치의 위도, 경도 데이터 전달
       navigate('/planner', {
         state: {
           selectedLocation: {
@@ -35,10 +33,17 @@ const MainButton = () => {
         },
       });
     } else {
-      // 일치하는 지역이 없는 경우의 처리 (옵션)
       alert('선택한 지역이 목록에 없습니다.');
     }
   };
+
+  // 사용자 입력에 따라 지역 목록 필터링
+  useEffect(() => {
+    const filtered = regions.filter((region) =>
+      region.name.toLowerCase().includes(inputValue.toLowerCase())
+    );
+    setFilteredLocations(filtered);
+  }, [inputValue]);
 
   // // 외부 클릭 감지를 위한 함수
   // useEffect(() => {
@@ -61,19 +66,18 @@ const MainButton = () => {
       </div>
       <div className="main_buttonbox">
         {!showSearch ? (
-          <button className="main_clickbtn" onClick={() => setShowSearch(true)}>
+          <button className="main_btn" onClick={() => setShowSearch(true)}>
             TRIPJAVA 시작하기
             {/* <img
               src="/static/logo_trip_java_pin.svg"
-              alt="pin"
+              alt="pin"  
               className="pin"
             /> */}
           </button>
         ) : (
-          // 원본
           <Combobox
             className="main_combobox_container"
-            onSelect={(item) => setInputValue(item)}
+            onSelect={handleSelectRegion} // 여기서 onSelect 이벤트를 handleSelectRegion 함수와 연결
             aria-labelledby="combobox-label"
           >
             <ComboboxInput
@@ -81,17 +85,19 @@ const MainButton = () => {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
             />
-            <ComboboxPopover>
+            <ComboboxPopover
+              className="main_combobox_list"
+              style={{ top: 255 }}
+            >
               <ComboboxList>
                 {filteredLocations.map((location, index) => (
-                  <ComboboxOption key={index} value={location.region} />
+                  <ComboboxOption key={index} value={location.name} />
                 ))}
               </ComboboxList>
             </ComboboxPopover>
           </Combobox>
         )}
       </div>
-      <button onClick={handleCreateClick}>만들기</button>
     </div>
   );
 };
