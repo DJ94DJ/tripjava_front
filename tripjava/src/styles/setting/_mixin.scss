@@ -36,7 +36,7 @@
   cursor: pointer;
   background-color: var(--main-bgcolor);
   color: var(--main-black);
-  border: 1px solid var(--main-white);
+  border: none;
   &:hover {
     background-color: var(--main-hove-color);
     color: #000;
