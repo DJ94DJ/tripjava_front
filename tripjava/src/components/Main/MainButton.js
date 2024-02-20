@@ -40,6 +40,14 @@ const MainButton = () => {
     }
   };
 
+  // 사용자 입력에 따라 지역 목록 필터링
+  useEffect(() => {
+    const filtered = regions.filter((region) =>
+      region.region.toLowerCase().includes(inputValue.toLowerCase())
+    );
+    setFilteredLocations(filtered);
+  }, [inputValue]);
+
   // // 외부 클릭 감지를 위한 함수
   // useEffect(() => {
   //   setFilteredLocations(
@@ -70,7 +78,6 @@ const MainButton = () => {
             /> */}
           </button>
         ) : (
-          // 원본
           <Combobox
             className="main_combobox_container"
             onSelect={(item) => setInputValue(item)}
