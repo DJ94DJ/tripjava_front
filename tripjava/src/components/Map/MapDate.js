@@ -43,7 +43,13 @@ const MapDate = () => {
     if (selectedRegionName && startDate && endDate) {
       ////////// 1. 리덕스에 지역, 시작/종료 날짜 데이터 저장
       // 리덕스 스토어에 선택된 지역 데이터 저장
-      dispatch(setSelectedRegionDate(selectedRegionName, startDate, endDate));
+      dispatch(
+        setSelectedRegionDate({
+          regionName: selectedRegionName,
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString(),
+        })
+      );
 
       ////////// 2. 백엔드로 지역 데이터 전송
       // 이 페이지에선 메인에서 prop으로 받은 지역 데이터만 백엔드로 보낼겁니다!
