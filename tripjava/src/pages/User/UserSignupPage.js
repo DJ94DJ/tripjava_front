@@ -7,9 +7,12 @@ function UserSignupPage() {
   const [inputs, setInputs] = useState({
     id: "",
     password: "",
+    confirmPassword: "",
     email: "",
     nickname: "",
   });
+
+  const [isPasswordMatched, setIsPasswordMatched] = useState(null);
 
   const [validState, setValidState] = useState({
     id: null,
@@ -27,7 +30,7 @@ function UserSignupPage() {
 
   const [idDuplicated, setIdDuplicated] = useState(null);
 
-  const { id, password, email, nickname } = inputs;
+  const { id, password, confirmPassword, email, nickname } = inputs;
 
   let validationTimer;
 
@@ -37,6 +40,10 @@ function UserSignupPage() {
       ...inputs,
       [name]: value,
     });
+
+    if (name === "confirmPassword") {
+      setIsPasswordMatched(inputs.password === value);
+    }
 
     if (validationTimer) clearTimeout(validationTimer);
 
@@ -70,7 +77,7 @@ function UserSignupPage() {
         default:
           break;
       }
-    }, 2500);
+    }, 0);
   };
 
   // 아이디 검증 (영어와 숫자만 가능)
@@ -79,10 +86,9 @@ function UserSignupPage() {
     return idReg.test(id);
   };
 
-  // 패스워드 검증 (8~16자, 영어와 숫자 조합, 특수문자 포함)
-  const passwordValidation = (password) => {
-    const passwordReg =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{4,16}$/;
+  // 패스워드 검증 (4~16자, 영어와 숫자 조합)
+  const passwordValidation = (password, confirmPassword) => {
+    const passwordReg = /^(?=.*[A-Za-z])(?=.*\d).{4,16}$/;
     return passwordReg.test(password);
   };
 
@@ -139,7 +145,7 @@ function UserSignupPage() {
     }
 
     if (!passwordValid) {
-      alert("비밀번호는 8~16자, 영어와 숫자 조합, 특수문자를 포함해야합니다.");
+      alert("비밀번호는 4~16자, 영어와 숫자 조합 필수, 특수문자 포함 가능");
       return;
     }
 
@@ -210,11 +216,16 @@ function UserSignupPage() {
               placeholder="닉네임"
             />
             <div className={nicknameValid === false ? "guide error" : "guide"}>
-              {nicknameValid === null
-                ? "한글, 영문, 숫자 포함, 3~10자 이내의 닉네임을 입력해주세요"
-                : nicknameValid
-                ? "형식에 일치합니다"
-                : "한글, 영문, 숫자 포함, 3~10자"}
+              {nicknameValid === null ? (
+                <>
+                  한글, 영문, 숫자 포함 <br />
+                  3~10자 이내의 닉네임을 입력해주세요
+                </>
+              ) : nicknameValid ? (
+                "형식에 일치합니다"
+              ) : (
+                "한글, 영문, 숫자 포함, 3~10자"
+              )}
             </div>
             <br />
             <br />
@@ -229,15 +240,31 @@ function UserSignupPage() {
             <br />
             <input
               name="confirmPassword"
+              value={confirmPassword} // 확인 패스워드 값 바인딩
+              onChange={onChange}
               placeholder="패스워드 확인"
               type="password"
             />
-            <div className={passwordValid === false ? "guide error" : "guide"}>
-              {passwordValid === null
-                ? `영어와 숫자 조합 특수문자 포함 4~16자 이내의 패스워드를 입력해주세요`
-                : passwordValid
-                ? "형식에 일치합니다"
-                : "영어와 숫자 조합 특수문자 포함, 4~16자"}
+            <div
+              className={
+                passwordValid === false || !isPasswordMatched
+                  ? "guide error"
+                  : "guide"
+              }
+            >
+              {passwordValid === null ? (
+                <>
+                  영어, 숫자 필수, 특수문자 포함 가능 <br />
+                  4~16자 이내의 패스워드를 입력해주세요
+                </>
+              ) : passwordValid && isPasswordMatched ? (
+                "형식에 일치합니다"
+              ) : (
+                <>
+                  영어, 숫자 필수, 특수문자 포함 가능 4~16자
+                  <br /> 패스워드가 일치하지 않습니다.
+                </>
+              )}
             </div>
             <br />
             <br />

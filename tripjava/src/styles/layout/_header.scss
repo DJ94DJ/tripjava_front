@@ -8,6 +8,7 @@
 .logo {
   width: 140px;
   padding: 20px;
+  cursor: pointer;
 }
 
 .header_menu {
@@ -18,14 +19,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   .menu {
     display: flex;
     list-style: none;
     justify-content: space-between;
     padding: 0 40px 0 40px;
     align-items: center;
+
     li {
       padding: 20px;
+      cursor: pointer;
+
+      &:hover {
+        font-weight: bold;
+      }
       a {
         color: var(--main-color);
         display: block;

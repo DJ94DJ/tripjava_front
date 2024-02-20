@@ -8,8 +8,6 @@
     border: 0;
     border: {
       radius: 16px;
-      top: 0.5px solid var(--main-white);
-      left: 0.5px solid var(--main-white);
     }
 
     h1 {
@@ -31,7 +29,7 @@
         padding-left: 1em;
         font-size: 1.2em;
         background-color: transparent;
-        border: 1px solid var(--main-white);
+        border: transparent;
       }
       input::placeholder {
         color: var(--main-bgcolor);
@@ -55,6 +53,14 @@
       @include main-button;
     }
 
+    .button_signup {
+      background-color: lightgray;
+    }
+
+    .link-container a {
+      text-decoration: none;
+    }
+
     a {
       color: var(--main-white);
     }
@@ -67,6 +73,11 @@
 
     .guide {
       color: #000;
+    }
+
+    .line {
+      width: 100%;
+      border: solid 0.5px rgb(237, 217, 171);
     }
   }
 }
