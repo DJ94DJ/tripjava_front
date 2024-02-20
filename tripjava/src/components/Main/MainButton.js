@@ -16,7 +16,7 @@ const MainButton = () => {
   const [inputValue, setInputValue] = useState('');
   const [filteredLocations, setFilteredLocations] = useState(regions);
   const containerRef = useRef();
-  const navigate = useNavigate(); // 페이지 이동을 위한 hook!!!
+  const navigate = useNavigate();
 
   // 선택된 지역을 처리하는 함수
   const handleSelectRegion = (selectedRegionName) => {
@@ -25,12 +25,7 @@ const MainButton = () => {
     );
     if (selectedRegion) {
       navigate('/date', {
-        state: {
-          selectedLocation: {
-            lat: selectedRegion.lat,
-            lng: selectedRegion.lng,
-          },
-        },
+        state: { selectedRegionName: selectedRegion.name },
       });
     } else {
       alert('선택한 지역이 목록에 없습니다.');
@@ -44,15 +39,6 @@ const MainButton = () => {
     );
     setFilteredLocations(filtered);
   }, [inputValue]);
-
-  // // 외부 클릭 감지를 위한 함수
-  // useEffect(() => {
-  //   setFilteredLocations(
-  //     regions.filter((location) =>
-  //       location.toLowerCase().includes(inputValue.toLowerCase())
-  //     )
-  //   );
-  // }, [inputValue]);
 
   return (
     <div className="main_container" ref={containerRef}>
@@ -68,16 +54,11 @@ const MainButton = () => {
         {!showSearch ? (
           <button className="main_btn" onClick={() => setShowSearch(true)}>
             TRIPJAVA 시작하기
-            {/* <img
-              src="/static/logo_trip_java_pin.svg"
-              alt="pin"  
-              className="pin"
-            /> */}
           </button>
         ) : (
           <Combobox
             className="main_combobox_container"
-            onSelect={handleSelectRegion} // 여기서 onSelect 이벤트를 handleSelectRegion 함수와 연결
+            onSelect={handleSelectRegion}
             aria-labelledby="combobox-label"
           >
             <ComboboxInput
