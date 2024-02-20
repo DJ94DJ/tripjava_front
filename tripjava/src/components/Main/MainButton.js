@@ -9,6 +9,7 @@ import {
 import '@reach/combobox/styles.css';
 import '../../styles/style.scss';
 import regions from './MainRegion';
+import { useNavigate } from 'react-router-dom';
 
 const sc = {
   lat: 38.2073706,
@@ -20,9 +21,14 @@ const MainButton = () => {
   const [inputValue, setInputValue] = useState('');
   const [filteredLocations, setFilteredLocations] = useState(regions);
   const containerRef = useRef();
+  const navigate = useNavigate(); // 페이지 이동을 위한 hook
 
+  // '만들기' 버튼 클릭 핸들러
+  const handleCreateClick = () => {
+    // '/planner' 페이지로 이동하면서 선택된 위치의 데이터 전달
+    navigate('/planner', { state: { selectedLocation: sc } });
+  };
   // 외부 클릭 감지를 위한 함수
-
   useEffect(() => {
     setFilteredLocations(
       regions.filter((location) =>
@@ -45,26 +51,18 @@ const MainButton = () => {
         {!showSearch ? (
           <button className="main_clickbtn" onClick={() => setShowSearch(true)}>
             TRIPJAVA 시작하기
-            <img
+            {/* <img
               src="/static/logo_trip_java_pin.svg"
               alt="pin"
               className="pin"
-            />
+            /> */}
           </button>
         ) : (
           // 원본
-          // <Combobox
-          //   className="main_combobox_container"
-          //   onSelect={(item) => setInputValue(item)}
-          //   aria-labelledby="combobox-label"
-          // >
           <Combobox
-            onSelect={(item) => {
-              setInputValue(item);
-              if (item === '속초') {
-                props.setSelectedLocation(sc); // sc는 속초의 위도와 경도를 가진 객체
-              }
-            }}
+            className="main_combobox_container"
+            onSelect={(item) => setInputValue(item)}
+            aria-labelledby="combobox-label"
           >
             <ComboboxInput
               placeholder="어디로 떠나고 싶나요?"
@@ -81,6 +79,7 @@ const MainButton = () => {
           </Combobox>
         )}
       </div>
+      <button onClick={handleCreateClick}>만들기</button>
     </div>
   );
 };

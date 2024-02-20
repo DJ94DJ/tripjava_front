@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useJsApiLoader, GoogleMap, Marker } from '@react-google-maps/api';
 import { FaLocationCrosshairs } from 'react-icons/fa6';
 import { MapLocate } from './MapLocate';
@@ -9,7 +9,7 @@ const center = {
   lng: 126.9632199,
 };
 
-const GoogleMapComponent = () => {
+const GoogleMapComponent = ({ selectedLocation }) => {
   const [map, setMap] = useState(/** @type google.maps.google.map */ (null));
   const [markers, setMarkers] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -32,9 +32,19 @@ const GoogleMapComponent = () => {
   // }, []);
 
   const mapRef = useRef();
-  const onMapLoad = useCallback((map) => {
-    mapRef.current = map;
-  }, []);
+  const onMapLoad = useCallback(
+    (map) => {
+      mapRef.current = map;
+      // 초기 위치 설정
+      if (selectedLocation) {
+        panTo({
+          lat: selectedLocation.lat,
+          lng: selectedLocation.lng,
+        });
+      }
+    },
+    [selectedLocation]
+  );
 
   // 검색결과, 현재위치 시 줌값 : 9 -> 각 컴포넌트로 가서 줌값 세부 조절
   const panTo = useCallback(({ lat, lng, zoom = 9 }) => {
