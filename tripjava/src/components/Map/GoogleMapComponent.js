@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { useJsApiLoader, GoogleMap, Marker } from '@react-google-maps/api';
+import { useJsApiLoader, GoogleMap, Marker, InfoWindow } from '@react-google-maps/api';
 import { FaLocationCrosshairs } from 'react-icons/fa6';
 import { MapLocate } from './MapLocate';
 import { MapSearch } from './MapSearch';
@@ -16,26 +16,36 @@ const GoogleMapComponent = ({ selectedLocation }) => {
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    // 사용할 구글 api 라이브러리를 아래에 추가!
     libraries: ['places'],
   });
 
-  // const onMapClick = useCallback((e) => {
-  //   setMarkers((current) => [
-  //     ...current,
-  //     {
-  //       lat: e.latLng.lat(),
-  //       lng: e.latLng.lng(),
-  //       time: new Date(),
-  //     },
-  //   ]);
-  // }, []);
+  const onMapClick = useCallback((e) => {
+    const clickedLatLng = {
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng(),
+    };
+
+    setMarkers((current) => [
+      ...current,
+      {
+        lat: clickedLatLng.lat,
+        lng: clickedLatLng.lng,
+        time: new Date(),
+      },
+    ]);
+
+    // 마커를 생성할 때 동시에 선택된 마커로 설정
+    setSelected({
+      lat: clickedLatLng.lat,
+      lng: clickedLatLng.lng,
+      time: new Date(),
+    });
+  }, []);
 
   const mapRef = useRef();
   const onMapLoad = useCallback(
     (map) => {
       mapRef.current = map;
-      // 초기 위치 설정
       if (selectedLocation) {
         panTo({
           lat: selectedLocation.lat,
@@ -46,12 +56,11 @@ const GoogleMapComponent = ({ selectedLocation }) => {
     [selectedLocation]
   );
 
-  // 검색결과, 현재위치 시 줌값 : 9 -> 각 컴포넌트로 가서 줌값 세부 조절
   const panTo = useCallback(({ lat, lng, zoom = 13 }) => {
     mapRef.current.panTo({ lat, lng });
     mapRef.current.setZoom(zoom);
     setMarkers((current) => [
-      // ...current,
+      ...current,
       {
         lat,
         lng,
@@ -74,18 +83,36 @@ const GoogleMapComponent = ({ selectedLocation }) => {
           mapTypeControl: false,
           fullscreenControl: false,
         }}
-        // 지도 클릭시 핑찍히게 하려면 아래 온클릭 활성화.. 근데 안하는게 나을듯..ㅠ
-        // onClick={onMapClick}
+        onClick={onMapClick}
         onLoad={onMapLoad}
       >
-        {markers.map((marker) => (
+        {markers.map((marker, index) => (
           <Marker
             key={`${marker.lat}-${marker.lng}`}
             position={{ lat: marker.lat, lng: marker.lng }}
             onClick={() => {
-              setSelected(marker);
+              if (selected && selected.time === marker.time) {
+                setMarkers((current) => current.filter((m) => m.time !== marker.time));
+                setSelected(null);
+              } else {
+                setSelected(marker);
+              }
             }}
-          />
+          >
+            선택된 마커에 대해서만 InfoWindow 표시
+            {selected && selected.time === marker.time && (
+              <InfoWindow
+                position={{ lat: marker.lat, lng: marker.lng }}
+                onCloseClick={() => setSelected(null)}
+              >
+                <div>
+                  <h3>선택한 위치</h3>
+                  <p>위도: {marker.lat}</p>
+                  <p>경도: {marker.lng}</p>
+                </div>
+              </InfoWindow>
+            )}
+          </Marker>
         ))}
       </GoogleMap>
     </>
