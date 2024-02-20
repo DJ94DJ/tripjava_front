@@ -1,4 +1,4 @@
-import { SET_SELECTED_REGIONDATE } from '../actions/types';
+import { SET_MAININFO } from '../actions/types';
 
 const initialState = {
   selectedRegionName: null,
@@ -6,9 +6,9 @@ const initialState = {
   endDate: null,
 };
 
-const regiondateReducer = (state = initialState, action) => {
+const maininfoReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_SELECTED_REGIONDATE:
+    case SET_MAININFO:
       return {
         ...state,
         selectedRegionName: action.payload.regionName,
@@ -20,4 +20,4 @@ const regiondateReducer = (state = initialState, action) => {
   }
 };
 
-export default regiondateReducer;
+export default maininfoReducer;

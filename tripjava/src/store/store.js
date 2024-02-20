@@ -1,12 +1,12 @@
 // store.js
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './reducers/auth';
-import regiondateReducer from './reducers/regiondateReducer';
+import maininfoReducer from './reducers/maininfoReducer';
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    region: regiondateReducer,
+    region: maininfoReducer,
   },
 });
 

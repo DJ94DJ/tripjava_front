@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import '../../styles/pages/map/_map_date.scss';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { setSelectedRegionDate } from '../../store/actions/regiondate';
+import { setSelectedRegionDate } from '../../store/actions/maininfo';
 
 const MapDate = () => {
   const [startDate, setStartDate] = useState(null);
@@ -16,6 +16,7 @@ const MapDate = () => {
   const location = useLocation();
   const selectedRegionName = location.state?.selectedRegionName;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleDateSelect = (date) => {
     if (!startDate) {
@@ -61,12 +62,14 @@ const MapDate = () => {
       };
       console.log('Selected period:', selectedPeriod);
       axios
-        .post('"http://localhost:8080/region"', regionData)
+        .post('http://localhost:8080/region', regionData) // 잘못된 쌍따옴표 제거
         .then((res) => {
           console.log('지역 잘 보내졌나요?', res.data);
+          navigate('/map'); // 백엔드로의 데이터 전송 성공 후 /map 페이지로 네비게이트
         })
         .catch((error) => {
           console.error('지역 잘 안보내짐!!!', error);
+          navigate('/map');
         });
     }
   };
