@@ -74,15 +74,13 @@ const MapDate = () => {
         .get(`http://localhost:8080/destination?addr1=${selectedRegionName}`)
         .then((res) => {
           const touristSpots = res.data.touristSpots;
-          console.log('지역 결과 잘 갖고 왔네요!!!', res.data);
+          console.log('mapdate 페이지에서 투어api 잘 들고왔니!!!!', res.data);
           const locations = touristSpots.map((spot) => ({
             lat: parseFloat(spot.mapy),
             lng: parseFloat(spot.mapx),
           }));
 
           // GoogleMapComponent가 포함된 페이지로 이동하면서 locations 상태를 전달합니다.
-          console.log('MapDate 페이지selectedRegion.lat:', selectedRegion.lat);
-          console.log('MapDate 페이지selectedRegion.lng:', selectedRegion.lng);
           navigate('/map', {
             state: {
               locations,

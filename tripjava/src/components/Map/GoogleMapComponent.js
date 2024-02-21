@@ -18,12 +18,11 @@ const center = {
 
 const GoogleMapComponent = () => {
   const location = useLocation();
-  const selectedLocation = location.state?.selectedLocation;
-  console.log('gmc페이지 Location state:', location.state);
-  const [map, setMap] = useState(/** @type google.maps.google.map */ (null));
   const [markers, setMarkers] = useState([]);
   const [selected, setSelected] = useState(null);
   const mapRef = useRef();
+  const [accommodations, setAccommodations] = useState([]); // 숙소 데이터 상태
+  const selectedLocation = location.state?.selectedLocation;
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -53,12 +52,11 @@ const GoogleMapComponent = () => {
     });
   }, []);
 
+  // 맵 불러올 때 load 되는 위치
   const onMapLoad = useCallback(
     (map) => {
       mapRef.current = map;
       if (selectedLocation && selectedLocation.lat && selectedLocation.lng) {
-        console.log('gmc 페이지selectedRegion.lat:', selectedLocation.lat);
-        console.log('gmc 페이지selectedRegion.lng:', selectedLocation.lng);
         panTo({
           lat: selectedLocation.lat,
           lng: selectedLocation.lng,
@@ -68,37 +66,68 @@ const GoogleMapComponent = () => {
         console.log(
           'selectedLocation is undefined or does not have lat, lng properties'
         );
-        panTo(center); // center는 지도의 기본 중심 위치
+        panTo(center);
       }
     },
     [selectedLocation, center]
   );
 
   const panTo = useCallback(({ lat, lng, zoom = 13 }) => {
-    mapRef.current.panTo({ lat, lng });
-    mapRef.current.setZoom(zoom);
-    setMarkers((current) => [
-      ...current,
-      {
-        lat,
-        lng,
-        time: new Date(),
-      },
-    ]);
+    if (mapRef.current) {
+      // mapRef.current가 존재하는지 확인
+      mapRef.current.panTo({ lat, lng });
+      mapRef.current.setZoom(zoom);
+      setMarkers((current) => [
+        ...current,
+        {
+          lat,
+          lng,
+          time: new Date(),
+        },
+      ]);
+    }
   }, []);
 
+  // 지역 선택한 거 지도에 반영되도록 useEffect!
   useEffect(() => {
-    if (selectedLocation && mapRef.current) {
+    if (selectedLocation && selectedLocation.lat && selectedLocation.lng) {
       panTo({
+        // 지도를 main에서 받아온 지역위치로 이동
         lat: selectedLocation.lat,
         lng: selectedLocation.lng,
+        zoom: 15, // 지역위치 불러올 때 지도 zoom값
       });
     }
     console.log(
-      '컴포넌트 마운트될 때 selectedLocation 값있니!!',
+      '컴포넌트 마운트될 때 selectedLocation 값있는지 췤',
       selectedLocation
     );
   }, [selectedLocation, panTo]);
+
+  // selectedLocation 값이 변경될 때마다 숙소 데이터 요청
+  useEffect(() => {
+    if (selectedLocation && selectedLocation.lat && selectedLocation.lng) {
+      const fetchData = async () => {
+        try {
+          const res = await axios.get(
+            `http://localhost:8080/destination/accommodation`,
+            {
+              params: {
+                mapx: selectedLocation.lng,
+                mapy: selectedLocation.lat,
+              },
+            }
+          );
+          setAccommodations(res.data); // 숙소 데이터 상태 업데이트
+          console.log('이 지역 숙소는 얘네들인데 보이니!', res.data); // 데이터 확인을 위한 콘솔 로그
+        } catch (error) {
+          console.error('Error fetching accommodation data:', error);
+        }
+      };
+
+      fetchData();
+    }
+  }, [selectedLocation]);
 
   if (!isLoaded) return 'Loading Maps';
 
