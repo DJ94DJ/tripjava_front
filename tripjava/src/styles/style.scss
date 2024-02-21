@@ -25,3 +25,10 @@
 @import "pages/map/map_search";
 @import "pages/map/map_locate";
 @import "pages/map/map_auth";
+
+// - PlannerPages
+@import "pages/planner/planner_page";
+@import "pages/planner/planner_pins";
+@import "pages/planner/planner_block";
+@import "pages/planner/planner_line";
+@import "pages/planner/planner_table";
