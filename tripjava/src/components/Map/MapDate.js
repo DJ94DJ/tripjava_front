@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setSelectedRegionDate } from '../../store/actions/maininfo';
 import regions from '../Main/MainRegion';
+import GoogleMapComponent from './GoogleMapComponent';
 
 const MapDate = () => {
   const [startDate, setStartDate] = useState(null);
@@ -40,6 +41,11 @@ const MapDate = () => {
     return diffInDays;
   };
 
+  // 선택된 지역의 위도와 경도 찾기
+  const selectedRegion = regions.find(
+    (region) => region.name === selectedRegionName
+  );
+
   const handleComplete = () => {
     // main에서 받은 지역 정보를 추가했어요:)
     if (selectedRegionName && startDate && endDate) {
@@ -49,17 +55,17 @@ const MapDate = () => {
       );
       ////////// 1. 리덕스에 지역, 시작/종료날짜, 위/경도 데이터 저장
       // 리덕스 스토어에 선택된 지역 데이터 저장
-      if (selectedRegion) {
-        dispatch(
-          setSelectedRegionDate({
-            regionName: selectedRegionName,
-            startDate: startDate.toISOString(),
-            endDate: endDate.toISOString(),
-            lat: selectedRegion.lat,
-            lng: selectedRegion.lng,
-          })
-        );
-      }
+      // if (selectedRegion) {
+      //   dispatch(
+      //     setSelectedRegionDate({
+      //       regionName: selectedRegionName,
+      //       startDate: startDate.toISOString(),
+      //       endDate: endDate.toISOString(),
+      //       lat: selectedRegion.lat,
+      //       lng: selectedRegion.lng,
+      //     })
+      //   );
+      // }
 
       ////////// 2. 백엔드로 지역 데이터 전송
       // 이 페이지에선 메인에서 prop으로 받은 지역 데이터만 백엔드로 보낼겁니다!
@@ -71,17 +77,32 @@ const MapDate = () => {
       };
       console.log('Selected period:', selectedPeriod);
       axios
-        .get(`http://localhost:8080/destination?addr1=${selectedRegionName}`) // 잘못된 쌍따옴표 제거
+        .get(`http://localhost:8080/destination?addr1=${selectedRegionName}`)
         .then((res) => {
-          console.log('지역 잘 보내졌나요?', res.data);
-          navigate('/map'); // 백엔드로의 데이터 전송 성공 후 /map 페이지로 네비게이트
+          const touristSpots = res.data.touristSpots;
+          console.log('지역 결과 잘 갖고 왔네요!!!', res.data);
+          const locations = touristSpots.map((spot) => ({
+            lat: parseFloat(spot.mapy),
+            lng: parseFloat(spot.mapx),
+          }));
+
+          // GoogleMapComponent가 포함된 페이지로 이동하면서 locations 상태를 전달합니다.
+          navigate('/map', { state: { locations } });
         })
         .catch((error) => {
-          console.error('지역 잘 안보내짐!!!', error);
-          navigate('/map');
+          console.error('Error fetching tourist spots', error);
         });
     }
   };
+
+  //         console.log('지역 결과 잘 갖고 왔네요!!!', res.data);
+  //         navigate('/map');
+  //       })
+  //       .catch((error) => {
+  //         console.error('지역 잘 안보내짐!!!', error);
+  //       });
+  //   }
+  // };
 
   return (
     <div className="container">
