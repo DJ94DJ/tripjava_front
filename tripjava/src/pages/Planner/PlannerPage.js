@@ -4,6 +4,7 @@ import PlannerPins from "../../components/Planner/PlannerPins";
 import PlannerBlock from "../../components/Planner/PlannerBlock";
 import PlannerLine from "../../components/Planner/PlannerLine";
 import PlannerTable from "../../components/Planner/PlannerTable";
+import KakaoShare from "../../components/Planner/KakaoShare";
 
 const PlannerPage = () => {
   return (
@@ -12,6 +13,7 @@ const PlannerPage = () => {
       <br />
       <div className="planner_page_all">
         <div>PlannerPage</div>
+        <KakaoShare />
 
         <h1>(지역명) 여행 ?박</h1>
         <div className="pins_and_block">
