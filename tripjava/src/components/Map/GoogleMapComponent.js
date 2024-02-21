@@ -8,6 +8,8 @@ import {
 import { FaLocationCrosshairs } from 'react-icons/fa6';
 import { MapLocate } from './MapLocate';
 import { MapSearch } from './MapSearch';
+import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 const center = {
   lat: 37.5336766,
@@ -15,9 +17,11 @@ const center = {
 };
 
 const GoogleMapComponent = ({ selectedLocation }) => {
+  const location = useLocation();
   const [map, setMap] = useState(/** @type google.maps.google.map */ (null));
   const [markers, setMarkers] = useState([]);
   const [selected, setSelected] = useState(null);
+  const mapRef = useRef();
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -47,18 +51,23 @@ const GoogleMapComponent = ({ selectedLocation }) => {
     });
   }, []);
 
-  const mapRef = useRef();
   const onMapLoad = useCallback(
     (map) => {
       mapRef.current = map;
-      if (selectedLocation) {
+      if (selectedLocation && selectedLocation.lat && selectedLocation.lng) {
         panTo({
           lat: selectedLocation.lat,
           lng: selectedLocation.lng,
         });
+      } else {
+        // selectedLocation이 유효하지 않은 경우, 지도의 중심을 기본 위치로 설정
+        console.log(
+          'selectedLocation is undefined or does not have lat, lng properties'
+        );
+        panTo(center); // center는 지도의 기본 중심 위치
       }
     },
-    [selectedLocation]
+    [selectedLocation, center]
   );
 
   const panTo = useCallback(({ lat, lng, zoom = 13 }) => {
@@ -73,6 +82,14 @@ const GoogleMapComponent = ({ selectedLocation }) => {
       },
     ]);
   }, []);
+
+  useEffect(() => {
+    // MapDate 페이지에서 전달받은 locations 상태를 사용합니다.
+    if (location.state?.locations) {
+      console.log('location.state.locations:', location.state.locations);
+      setMarkers(location.state.locations);
+    }
+  }, [location]);
 
   if (!isLoaded) return 'Loading Maps';
 
@@ -93,7 +110,7 @@ const GoogleMapComponent = ({ selectedLocation }) => {
       >
         {markers.map((marker, index) => (
           <Marker
-            key={`${marker.lat}-${marker.lng}`}
+            key={index}
             position={{ lat: marker.lat, lng: marker.lng }}
             onClick={() => {
               if (selected && selected.time === marker.time) {
