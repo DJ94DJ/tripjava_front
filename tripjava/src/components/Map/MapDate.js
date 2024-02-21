@@ -71,7 +71,7 @@ const MapDate = () => {
       };
       console.log('Selected period:', selectedPeriod);
       axios
-        .post('http://localhost:8080/region', regionData) // 잘못된 쌍따옴표 제거
+        .get(`http://localhost:8080/destination?addr1=${selectedRegionName}`) // 잘못된 쌍따옴표 제거
         .then((res) => {
           console.log('지역 잘 보내졌나요?', res.data);
           navigate('/map'); // 백엔드로의 데이터 전송 성공 후 /map 페이지로 네비게이트

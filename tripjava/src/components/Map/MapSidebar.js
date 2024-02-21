@@ -18,13 +18,13 @@ const MapSidebar = () => {
       if (selectedRegionName) {
         // selectedRegionName이 있을 때만 API 호출
         try {
-          const response = await fetch(
+          const res = await fetch(
             `http://localhost:8080/destination?addr1=${selectedRegionName}`
           );
-          if (!response.ok) {
+          if (!res.ok) {
             throw new Error('데이터를 불러오는 데 실패했습니다.');
           }
-          const data = await response.json();
+          const data = await res.json();
           setTouristSpots(data); // 가져온 데이터를 상태에 저장
         } catch (error) {
           console.error('Error fetching data: ', error);
