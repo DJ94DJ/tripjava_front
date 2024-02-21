@@ -29,7 +29,7 @@ export default function Header() {
         });
     }
     setToken(tokenInLocalStorage); // 로컬 스토리지에 저장된 토큰을 상태로 설정합니다.
-  }, [auth, token]);
+  }, []);
 
   const onLogout = () => {
     dispatch(logout()); // 로그아웃 액션을 디스패치합니다.
