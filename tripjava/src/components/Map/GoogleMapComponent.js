@@ -16,8 +16,10 @@ const center = {
   lng: 126.9632199,
 };
 
-const GoogleMapComponent = ({ selectedLocation }) => {
+const GoogleMapComponent = () => {
   const location = useLocation();
+  const selectedLocation = location.state?.selectedLocation;
+  console.log('gmc페이지 Location state:', location.state);
   const [map, setMap] = useState(/** @type google.maps.google.map */ (null));
   const [markers, setMarkers] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -55,6 +57,8 @@ const GoogleMapComponent = ({ selectedLocation }) => {
     (map) => {
       mapRef.current = map;
       if (selectedLocation && selectedLocation.lat && selectedLocation.lng) {
+        console.log('gmc 페이지selectedRegion.lat:', selectedLocation.lat);
+        console.log('gmc 페이지selectedRegion.lng:', selectedLocation.lng);
         panTo({
           lat: selectedLocation.lat,
           lng: selectedLocation.lng,
@@ -84,12 +88,17 @@ const GoogleMapComponent = ({ selectedLocation }) => {
   }, []);
 
   useEffect(() => {
-    // MapDate 페이지에서 전달받은 locations 상태를 사용합니다.
-    if (location.state?.locations) {
-      console.log('location.state.locations:', location.state.locations);
-      setMarkers(location.state.locations);
+    if (selectedLocation && mapRef.current) {
+      panTo({
+        lat: selectedLocation.lat,
+        lng: selectedLocation.lng,
+      });
     }
-  }, [location]);
+    console.log(
+      '컴포넌트 마운트될 때 selectedLocation 값있니!!',
+      selectedLocation
+    );
+  }, [selectedLocation, panTo]);
 
   if (!isLoaded) return 'Loading Maps';
 
