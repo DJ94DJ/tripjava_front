@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
 const PlannerTable = () => {
-  return <div>PlannerTable</div>;
+  return <div className="test_PlannerTable">PlannerTable</div>;
 };
 
 export default PlannerTable;
