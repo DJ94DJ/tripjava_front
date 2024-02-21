@@ -1,0 +1,47 @@
+.alert {
+  @include container;
+  @include flex-center;
+  top: 2.5%;
+  left: 78%;
+  width: 33%;
+  height: 18%;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  z-index: 101;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 16px;
+  overflow: hidden;
+  //   position: fixed;
+}
+
+.login_alert {
+  width: 60%;
+  @include main-button;
+}
+
+.close_alert {
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+@media (max-width: 768px) {
+  .alert {
+    top: 5%;
+    left: 68%;
+    width: 28%;
+    height: 12%;
+    font-size: 10px; /* 텍스트 크기 줄이기 */
+  }
+  .close_alert {
+    font-size: 10px;
+  }
+}

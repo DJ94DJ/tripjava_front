@@ -1,7 +1,8 @@
-import React from 'react';
-import GoogleMapComponent from '../../components/Map/GoogleMapComponent';
-import MapSidebar from '../../components/Map/MapSidebar';
-import { useLocation } from 'react-router-dom';
+import React from "react";
+import GoogleMapComponent from "../../components/Map/GoogleMapComponent";
+import MapSidebar from "../../components/Map/MapSidebar";
+import { useLocation } from "react-router-dom";
+import MapAuth from "../../components/Map/MapAuth";
 
 const MapMainPage = () => {
   const location = useLocation();
@@ -9,7 +10,9 @@ const MapMainPage = () => {
 
   return (
     <>
+      <MapAuth />
       <MapSidebar />
+
       <GoogleMapComponent selectedLocation={selectedLocation} />
     </>
   );
