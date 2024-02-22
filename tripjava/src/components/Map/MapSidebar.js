@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/style.scss';
+import { PiSealCheckFill } from 'react-icons/pi';
 
 // 날짜 포맷 변경 함수
 function formatDate(dateString) {
@@ -47,9 +48,25 @@ const MapSidebar = ({ startDate, endDate, period }) => {
         <div className="sidebar_hotel">
           <h3>숙소</h3>
           <ul>
-            {markers.map((marker, index) => (
-              <li key={index}>{marker.title}</li> // 마커의 title을 리스트 아이템으로 표시
-            ))}
+            {markers.map((marker, index) => {
+              // "[한국관광 품질인증/Korea Quality]" 문자열 제거
+              const titleWithoutCertification = marker.title
+                .replace('[한국관광 품질인증/Korea Quality]', '')
+                .trim();
+
+              return (
+                <li key={index}>
+                  {titleWithoutCertification}
+                  {/* 조건부 렌더링을 사용하여 특정 문자열이 있을 경우 아이콘 표시 */}
+                  {marker.title.includes(
+                    '[한국관광 품질인증/Korea Quality]'
+                  ) && (
+                    <PiSealCheckFill />
+                    // <img src="/static/mark.jpeg" alt="mark" className="mark" />
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
         <div className="sidebar_route day1">
