@@ -8,4 +8,7 @@
   .sidebar_header {
     margin-top: 5px;
   }
+  .sidebar_date {
+    @include flex-center;
+  }
 }

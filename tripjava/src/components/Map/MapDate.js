@@ -3,8 +3,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { setSelectedRegionDate } from '../../store/actions/maininfo';
 import regions from '../Main/MainRegion';
 import '../../styles/style.scss';
 
@@ -16,7 +14,6 @@ const MapDate = () => {
   const endDateRef = useRef(null);
   const location = useLocation();
   const selectedRegionName = location.state?.selectedRegionName;
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleStartDateSelect = (date) => {
@@ -54,14 +51,14 @@ const MapDate = () => {
         (region) => region.name === selectedRegionName
       );
 
-      ////////// 2. 백엔드로 지역 데이터 전송
+      ////////// 백엔드로 지역 데이터 전송
       // 이 페이지에선 메인에서 prop으로 받은 지역 데이터만 백엔드로 보낼겁니다!
       // 날짜는 /map 페이지에서 다른 정보랑 한꺼번에 보낼거에요!)
 
       // 백엔드로 전송할 데이터
-      const regionData = {
-        regionName: selectedRegionName,
-      };
+      // const regionData = {
+      //   regionName: selectedRegionName,
+      // };
       console.log('Selected period:', selectedPeriod);
       axios
         .get(`http://localhost:8080/destination?addr1=${selectedRegionName}`)
@@ -73,7 +70,7 @@ const MapDate = () => {
             lng: parseFloat(spot.mapx),
           }));
 
-          // GoogleMapComponent가 포함된 페이지로 이동하면서 locations 상태를 전달합니다.
+          // GoogleMapComponent로 이동하면서 locations, 위도, 경도, 날짜, touristSpots 정보 전달!!
           navigate('/map', {
             state: {
               locations,
@@ -81,7 +78,11 @@ const MapDate = () => {
                 lat: selectedRegion.lat,
                 lng: selectedRegion.lng,
               },
-              touristSpots, //touristSpots의 전체 데이터 추가로 전달하자!
+              touristSpots, //touristSpots의 전체 데이터도 전달하자!
+              // 날짜 정보도 전달하자!
+              startDate: startDate.toISOString(),
+              endDate: endDate.toISOString(),
+              period: selectedPeriod,
             },
           });
         })
@@ -89,6 +90,7 @@ const MapDate = () => {
           console.error('Error fetching tourist spots', error);
         });
     }
+    console.log('MapDate에서 보낼 때 selectedPeriod 보이니?:', selectedPeriod);
   };
 
   return (

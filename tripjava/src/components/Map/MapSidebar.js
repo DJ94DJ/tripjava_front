@@ -1,14 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/style.scss';
 
-const MapSidebar = ({ startDate, endDate }) => {
+// 날짜 포맷 변경 함수
+function formatDate(dateString) {
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    weekday: 'short',
+  };
+  const date = new Date(dateString);
+  return date
+    .toLocaleDateString('ko-KR', options)
+    .replace('. ', '.')
+    .replace('. ', '.');
+}
+
+function formatPeriod(startDate, endDate) {
+  const startFormat = formatDate(startDate); // "2024.02.22(목)"
+  const endFormat = formatDate(endDate); // "2024.02.24(토)"
+  return `${startFormat} ~ ${endFormat}`;
+}
+
+const MapSidebar = ({ startDate, endDate, period }) => {
+  console.log('sidebar에 period 보내졌니?', period);
   const navigate = useNavigate();
   navigate('/');
-  // 날짜 포멧 변경
-  const formattedStartDate = startDate ? startDate.toLocaleDateString() : '';
-  const formattedEndDate = endDate ? endDate.toLocaleDateString() : '';
+  const formattedPeriod = formatPeriod(startDate, endDate);
 
   return (
     <div className="side_menu">
@@ -21,9 +41,8 @@ const MapSidebar = ({ startDate, endDate }) => {
             onClick={() => navigate('/')}
           />
         </div>
-        <div className="sidebar_date">
-          {formattedStartDate}, {formattedEndDate}
-        </div>
+        <div className="sidebar_date">{formattedPeriod}</div>
+        <div className="sidebar_hotel"></div>
         <div className="sidebar_tourismApi"></div>
       </div>
     </div>
