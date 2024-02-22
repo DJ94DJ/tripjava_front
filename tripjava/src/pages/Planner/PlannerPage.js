@@ -1,10 +1,10 @@
-import React from "react";
-import "../../styles/style.scss";
-import PlannerPins from "../../components/Planner/PlannerPins";
-import PlannerBlock from "../../components/Planner/PlannerBlock";
-import PlannerLine from "../../components/Planner/PlannerLine";
-import PlannerTable from "../../components/Planner/PlannerTable";
-import KakaoShare from "../../components/Planner/KakaoShare";
+import React from 'react';
+import '../../styles/style.scss';
+import PlannerPins from '../../components/Planner/PlannerPins';
+import PlannerMemo from '../../components/Planner/PlannerMemo';
+import PlannerLine from '../../components/Planner/PlannerLine';
+import PlannerTable from '../../components/Planner/PlannerTable';
+import KakaoShare from '../../components/Planner/KakaoShare';
 
 const PlannerPage = () => {
   return (
@@ -18,7 +18,7 @@ const PlannerPage = () => {
         <h1>(지역명) 여행 ?박</h1>
         <div className="pins_and_block">
           <PlannerPins />
-          <PlannerBlock />
+          <PlannerMemo />
         </div>
         <h1>여행지 목록</h1>
         <div>
