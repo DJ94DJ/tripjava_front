@@ -154,18 +154,11 @@ const GoogleMapComponent = () => {
       >
       {accommodations.map((marker, index) => (
         <Marker
-          key={index}
-          position={{ lat: marker.lat, lng: marker.lng }}
-          onClick={() => {
-            if (selected && selected.time === marker.time) {
-              setAccommodations((current) =>
-                current.filter((m) => m.time !== marker.time)
-              );
-              setSelected(null);
-            } else {
-              setSelected(marker);
-            }
-          }}
+        key={index}
+        position={{ lat: marker.lat, lng: marker.lng }}
+        onClick={() => {
+          setSelected(marker);
+        }}
           >
             선택된 마커에 대해서만 InfoWindow 표시
             {selected && selected.time === marker.time && (
