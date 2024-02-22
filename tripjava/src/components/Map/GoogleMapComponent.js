@@ -104,30 +104,36 @@ const GoogleMapComponent = () => {
     );
   }, [selectedLocation, panTo]);
 
-  // selectedLocation 값이 변경될 때마다 숙소 데이터 요청
-  useEffect(() => {
-    if (selectedLocation && selectedLocation.lat && selectedLocation.lng) {
-      const fetchData = async () => {
-        try {
-          const res = await axios.get(
-            `http://localhost:8080/destination/accommodation`,
-            {
-              params: {
-                mapx: selectedLocation.lng,
-                mapy: selectedLocation.lat,
-              },
-            }
-          );
-          setAccommodations(res.data); // 숙소 데이터 상태 업데이트
-          console.log('이 지역 숙소 : ', res.data); // 데이터 확인을 위한 콘솔 로그
-        } catch (error) {
-          console.error('Error fetching accommodation data:', error);
-        }
-      };
+    // selectedLocation 값이 변경될 때마다 숙소 데이터 요청
+    useEffect(() => {
+      if (selectedLocation && selectedLocation.lat && selectedLocation.lng) {
+          const fetchData = async () => {
+            try {
+              const res = await axios.get(
+                `http://localhost:8080/destination/accommodation`,
+                {
+                  params: {
+                    mapx: selectedLocation.lng,
+                    mapy: selectedLocation.lat,
+                  },
+                }
+              );
+                    // 숙소 데이터를 마커 데이터로 변환
+          const accommodationMarkers = res.data.accommodations.map(accommodation => ({
+            lat: Number(accommodation.mapy),
+            lng: Number(accommodation.mapx),
+            time: new Date(),
+          }));
+          setAccommodations(accommodationMarkers); // 숙소 데이터 상태 업데이트
+          console.log('이 지역 숙소 :', accommodationMarkers); // 데이터 확인을 위한 콘솔 로그
+          } catch (error) {
+            console.error('Error fetching accommodation data:', error);
+          }
+        };
 
-      fetchData();
-    }
-  }, [selectedLocation]);
+        fetchData();
+      }
+    }, [selectedLocation]);
 
   if (!isLoaded) return 'Loading Maps';
 
@@ -146,20 +152,20 @@ const GoogleMapComponent = () => {
         onClick={onMapClick}
         onLoad={onMapLoad}
       >
-        {markers.map((marker, index) => (
-          <Marker
-            key={index}
-            position={{ lat: marker.lat, lng: marker.lng }}
-            onClick={() => {
-              if (selected && selected.time === marker.time) {
-                setMarkers((current) =>
-                  current.filter((m) => m.time !== marker.time)
-                );
-                setSelected(null);
-              } else {
-                setSelected(marker);
-              }
-            }}
+      {accommodations.map((marker, index) => (
+        <Marker
+          key={index}
+          position={{ lat: marker.lat, lng: marker.lng }}
+          onClick={() => {
+            if (selected && selected.time === marker.time) {
+              setAccommodations((current) =>
+                current.filter((m) => m.time !== marker.time)
+              );
+              setSelected(null);
+            } else {
+              setSelected(marker);
+            }
+          }}
           >
             선택된 마커에 대해서만 InfoWindow 표시
             {selected && selected.time === marker.time && (
