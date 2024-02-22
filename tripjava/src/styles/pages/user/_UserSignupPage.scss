@@ -1,12 +1,16 @@
 .form-wrap {
   @include position-center;
+  overflow-y: auto;
   height: 100%;
 
   .signup-form {
     @include container;
+
     // transform: translateY(-5rem);
     // flex-direction: column;
     padding: 3em;
+    margin-top: 200em;
+    margin-bottom: 100em;
     width: 100%;
     border: 0;
     border: {

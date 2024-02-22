@@ -20,12 +20,15 @@
 @import 'pages/User/UserLoginPage';
 
 // - MapPages
-@import 'pages/map/map_main';
-@import 'pages/map/map_sidebar';
-@import 'pages/map/map_search';
-@import 'pages/map/map_locate';
-@import 'pages/map/map_auth';
+@import "pages/map/map_main";
+@import "pages/map/map_sidebar";
+@import "pages/map/map_search";
+@import "pages/map/map_locate";
+@import "pages/map/map_auth";
 @import 'pages/map/map_date';
+@import "Pages/map/map_pinsvg";
+@import "Pages/map/map_numsvg";
+
 
 // - PlannerPages
 @import 'pages/planner/planner_page';

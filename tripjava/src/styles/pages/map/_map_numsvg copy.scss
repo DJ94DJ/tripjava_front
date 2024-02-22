@@ -1,0 +1,111 @@
+$colors: col1 rgb(198, 46, 0), col2 rgb(233, 113, 27), col3 rgb(222, 151, 0),
+  col4 rgb(35, 99, 35), col5 rgb(45, 45, 183), col6 rgb(132, 19, 132),
+  col7 rgb(217, 47, 132), col8 rgb(63, 57, 56);
+
+.pin-svg {
+  .pin-logo {
+    fill: black;
+  }
+  .pin-bg {
+    fill: grey;
+  }
+  &.day {
+    width: 58px;
+    &.num1 {
+      .pin-logo {
+        fill: rgb(198, 46, 0);
+      }
+      .pin-bg {
+        fill: white;
+      }
+    }
+    &.num2 {
+      .pin-logo {
+        fill: rgb(233, 113, 27);
+      }
+      .pin-bg {
+        fill: white;
+      }
+    }
+    &.num3 {
+      .pin-logo {
+        fill: rgb(222, 151, 0);
+      }
+      .pin-bg {
+        fill: white;
+      }
+    }
+    &.num4 {
+      .pin-logo {
+        fill: rgb(35, 99, 35);
+      }
+      .pin-bg {
+        fill: white;
+      }
+    }
+    &.num5 {
+      .pin-logo {
+        fill: rgb(45, 45, 183);
+      }
+      .pin-bg {
+        fill: white;
+      }
+    }
+    &.num6 {
+      .pin-logo {
+        fill: rgb(132, 19, 132);
+      }
+      .pin-bg {
+        fill: white;
+      }
+    }
+    &.num7 {
+      .pin-logo {
+        fill: rgb(217, 47, 132);
+      }
+      .pin-bg {
+        fill: white;
+      }
+    }
+    &.num8 {
+      .pin-logo {
+        fill: rgb(63, 57, 56);
+      }
+      .pin-bg {
+        fill: white;
+      }
+    }
+  }
+}
+
+.col1 {
+  fill: rgb(198, 46, 0);
+}
+
+.col2 {
+  fill: rgb(233, 113, 27);
+}
+
+.col3 {
+  fill: rgb(222, 151, 0);
+}
+
+.col4 {
+  fill: rgb(35, 99, 35);
+}
+
+.col5 {
+  fill: rgb(45, 45, 183);
+}
+
+.col6 {
+  fill: rgb(132, 19, 132);
+}
+
+.col7 {
+  fill: rgb(217, 47, 132);
+}
+
+.col8 {
+  fill: rgb(63, 57, 56);
+}

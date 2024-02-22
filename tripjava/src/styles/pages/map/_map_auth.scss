@@ -1,10 +1,11 @@
 .alert {
   @include container;
   @include flex-center;
-  top: 2.5%;
-  left: 78%;
-  width: 33%;
-  height: 18%;
+  top: 0;
+  right: 0;
+  margin: 2%;
+  width: 350px;
+  height: 200px;
   position: fixed;
   display: flex;
   flex-direction: column;
