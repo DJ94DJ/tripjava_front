@@ -64,7 +64,7 @@ const MapDate = () => {
         .get(`http://localhost:8080/destination?addr1=${selectedRegionName}`)
         .then((res) => {
           const touristSpots = res.data.touristSpots;
-          console.log('mapdate 페이지에서 투어api 잘 들고왔니!!!!', res.data);
+          console.log('mapdate 페이지/투어api 호출 : ', res.data);
           const locations = touristSpots.map((spot) => ({
             lat: parseFloat(spot.mapy),
             lng: parseFloat(spot.mapx),
@@ -90,7 +90,6 @@ const MapDate = () => {
           console.error('Error fetching tourist spots', error);
         });
     }
-    console.log('MapDate에서 보낼 때 selectedPeriod 보이니?:', selectedPeriod);
   };
 
   return (

@@ -25,7 +25,7 @@ function formatPeriod(startDate, endDate) {
 }
 
 const MapSidebar = ({ startDate, endDate, period }) => {
-  console.log('sidebar에 period 보내졌니?', period);
+  console.log('sidebar/period 확인 : ', period);
   const navigate = useNavigate();
   navigate('/');
   const formattedPeriod = formatPeriod(startDate, endDate);
