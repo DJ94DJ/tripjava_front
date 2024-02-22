@@ -47,19 +47,6 @@ const MapDate = () => {
       const selectedRegion = regions.find(
         (region) => region.name === selectedRegionName
       );
-      ////////// 1. 리덕스에 지역, 시작/종료날짜, 위/경도 데이터 저장
-      // 리덕스 스토어에 선택된 지역 데이터 저장
-      // if (selectedRegion) {
-      //   dispatch(
-      //     setSelectedRegionDate({
-      //       regionName: selectedRegionName,
-      //       startDate: startDate.toISOString(),
-      //       endDate: endDate.toISOString(),
-      //       lat: selectedRegion.lat,
-      //       lng: selectedRegion.lng,
-      //     })
-      //   );
-      // }
 
       ////////// 2. 백엔드로 지역 데이터 전송
       // 이 페이지에선 메인에서 prop으로 받은 지역 데이터만 백엔드로 보낼겁니다!
@@ -88,6 +75,7 @@ const MapDate = () => {
                 lat: selectedRegion.lat,
                 lng: selectedRegion.lng,
               },
+              touristSpots, //touristSpots의 전체 데이터 추가로 전달하자!
             },
           });
         })
