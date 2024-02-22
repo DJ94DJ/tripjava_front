@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/style.scss';
 
@@ -24,7 +24,8 @@ function formatPeriod(startDate, endDate) {
   return `${startFormat} ~ ${endFormat}`;
 }
 
-const MapSidebar = ({ startDate, endDate }) => {
+const MapSidebar = ({ startDate, endDate, period }) => {
+  console.log('sidebar에 period 보내졌니?', period);
   const navigate = useNavigate();
   navigate('/');
   const formattedPeriod = formatPeriod(startDate, endDate);
@@ -41,6 +42,7 @@ const MapSidebar = ({ startDate, endDate }) => {
           />
         </div>
         <div className="sidebar_date">{formattedPeriod}</div>
+        <div className="sidebar_hotel"></div>
         <div className="sidebar_tourismApi"></div>
       </div>
     </div>

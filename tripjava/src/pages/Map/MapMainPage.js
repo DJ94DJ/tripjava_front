@@ -8,8 +8,7 @@ import regions from '../../components/Main/MainRegion';
 const MapMainPage = () => {
   const location = useLocation();
   const selectedRegionName = location.state?.selectedRegionName;
-  const { startDate, endDate } = location.state || {};
-
+  const { startDate, endDate, period } = location.state || {};
   // 선택된 지역의 위도와 경도 찾기
   const selectedRegion = regions.find(
     (region) => region.name === selectedRegionName
@@ -18,7 +17,7 @@ const MapMainPage = () => {
   return (
     <>
       <MapAuth />
-      <MapSidebar startDate={startDate} endDate={endDate} />
+      <MapSidebar startDate={startDate} endDate={endDate} period={period} />
       <GoogleMapComponent selectedLocation={selectedRegion} />
     </>
   );

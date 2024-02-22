@@ -158,15 +158,13 @@ const GoogleMapComponent = () => {
         onClick={onMapClick}
         onLoad={onMapLoad}
       >
-
-      {accommodations.map((marker, index) => (
-        <Marker
-        key={index}
-        position={{ lat: marker.lat, lng: marker.lng }}
-        onClick={() => {
-          setSelected(marker);
-        }}
-
+        {accommodations.map((marker, index) => (
+          <Marker
+            key={index}
+            position={{ lat: marker.lat, lng: marker.lng }}
+            onClick={() => {
+              setSelected(marker);
+            }}
           >
             선택된 마커에 대해서만 InfoWindow 표시
             {selected && selected.time === marker.time && (
