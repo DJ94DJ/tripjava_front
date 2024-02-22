@@ -125,7 +125,7 @@ const GoogleMapComponent = () => {
             time: new Date(),
           }));
           setAccommodations(accommodationMarkers); // 숙소 데이터 상태 업데이트
-          console.log('이 지역 숙소는 얘네들인데 보이니!', accommodationMarkers); // 데이터 확인을 위한 콘솔 로그
+          console.log('이 지역 숙소 :', accommodationMarkers); // 데이터 확인을 위한 콘솔 로그
           } catch (error) {
             console.error('Error fetching accommodation data:', error);
           }
