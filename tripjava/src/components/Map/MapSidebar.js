@@ -1,39 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/style.scss';
 
-const MapSidebar = () => {
+// 날짜 포맷 변경 함수
+function formatDate(dateString) {
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    weekday: 'short',
+  };
+  const date = new Date(dateString);
+  return date
+    .toLocaleDateString('ko-KR', options)
+    .replace('. ', '.')
+    .replace('. ', '.');
+}
+
+function formatPeriod(startDate, endDate) {
+  const startFormat = formatDate(startDate); // "2024.02.22(목)"
+  const endFormat = formatDate(endDate); // "2024.02.24(토)"
+  return `${startFormat} ~ ${endFormat}`;
+}
+
+const MapSidebar = ({ startDate, endDate, period }) => {
+  console.log('sidebar에 period 보내졌니?', period);
   const navigate = useNavigate();
   navigate('/');
-  const [touristSpots, setTouristSpots] = useState([]);
-  const selectedRegionName = useSelector(
-    (state) => state.maininfo?.selectedRegionName
-  );
-  // Redux 상태에서 지역명 가져오기
-
-  useEffect(() => {
-    // 데이터 로드 함수 정의
-    const fetchTouristSpots = async () => {
-      if (selectedRegionName) {
-        // selectedRegionName이 있을 때만 API 호출
-        try {
-          const res = await fetch(
-            `http://localhost:8080/destination?addr1=${selectedRegionName}`
-          );
-          if (!res.ok) {
-            throw new Error('데이터를 불러오는 데 실패했습니다.');
-          }
-          const data = await res.json();
-          setTouristSpots(data); // 가져온 데이터를 상태에 저장
-        } catch (error) {
-          console.error('Error fetching data: ', error);
-        }
-      }
-    };
-
-    fetchTouristSpots();
-  }, [selectedRegionName]); // selectedRegionName이 변경될 때마다 함수를 다시 호출
+  const formattedPeriod = formatPeriod(startDate, endDate);
 
   return (
     <div className="side_menu">
@@ -46,18 +41,9 @@ const MapSidebar = () => {
             onClick={() => navigate('/')}
           />
         </div>
-        <div className="sidebar_date">세은님이 보낸 날짜 받깅</div>
-        <div className="sidebar_tourismApi">
-          {touristSpots.map((spot) => (
-            <div key={spot.contentid} className="tourist-spot">
-              <h3>{spot.title}</h3>
-              <p>{spot.addr1}</p>
-              <p>
-                위도: {spot.mapx}, 경도: {spot.mapy}
-              </p>
-            </div>
-          ))}
-        </div>
+        <div className="sidebar_date">{formattedPeriod}</div>
+        <div className="sidebar_hotel"></div>
+        <div className="sidebar_tourismApi"></div>
       </div>
     </div>
   );
