@@ -1,8 +1,31 @@
 .planner_page_all {
   overflow: scroll;
   height: 100vh;
+  position: relative;
 }
 
 .pins_and_block {
   display: flex;
+}
+
+
+
+.kakaoshare_top{
+  position: absolute;
+  top: 5;
+  right: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.kakao_share {
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  height: 50%; 
+}
+
+#kakaotalk-sharing-btn {
+  cursor: pointer; // 이 부분을 추가합니다.
 }
