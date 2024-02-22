@@ -1,5 +1,61 @@
 .test_PlannerBlock {
   width: 37%;
   height: 60vh;
-  background-color: gold;
+  background-color: rgb(254, 251, 246);
+  font-size: 1.2rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .content {
+    flex-grow: 1;
+
+  .planner_title {
+    font-size: 1.5rem;
+    @include flex-center;
+  }
+
+  .item-notice {
+    font-size: 13px;
+  }
+
+  .item-text {
+    cursor: pointer;
+  }
+
+  div {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
+  }
+}
+
+  .input-area {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; // 부모 요소의 너비를 100%로 설정
+    margin-bottom: 0;
+
+    input[type="text"] {
+      width: 78%;
+      height: 30px;
+      border-radius: 10px;
+      border: 1px solid black;
+      padding: 10px;
+    }
+
+    button {
+      @include main-button;
+      width: 20%;
+      height: 30px;
+      font-size: 18px;
+    }
+  }
 }
