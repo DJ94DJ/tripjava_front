@@ -16,6 +16,7 @@ import axios from 'axios';
 import MapStyle from './MapStyle';
 import { useDispatch } from 'react-redux';
 import { addMarker } from '../../store/actions/triproute';
+import { PiSealCheckFill } from 'react-icons/pi';
 
 const svgString = ReactDOMServer.renderToStaticMarkup(<HomePinSvg />);
 const svgUrl = svgToMiniDataURI(svgString);
@@ -213,8 +214,26 @@ const GoogleMapComponent = () => {
                 position={{ lat: marker.lat, lng: marker.lng }}
                 onCloseClick={() => setSelected(null)}
               >
-                <div>
-                  <h3>{selected.title}</h3>
+                <div className="infoWindow">
+                  <div className="infoWindow_header">
+                    <h3 style={{ display: 'inline' }}>
+                      {/* "[한국관광 품질인증/Korea Quality]"가 있으면 제거 */}
+                      {marker.title
+                        .replace('[한국관광 품질인증/Korea Quality]', '')
+                        .trim()}
+                    </h3>
+                    {/* "[한국관광 품질인증/Korea Quality]"가 있으면 아이콘 추가 */}
+                    {marker.title.includes(
+                      '[한국관광 품질인증/Korea Quality]'
+                    ) && (
+                      <img
+                        src="/static/mark3.jpeg"
+                        alt="mark"
+                        className="mark"
+                        style={{ display: 'inline' }}
+                      />
+                    )}
+                  </div>
                   <p>{selected.addr1}</p>
                   <p>위도: {marker.lat}</p>
                   <p>경도: {marker.lng}</p>
