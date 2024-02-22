@@ -32,8 +32,6 @@ body {
     flex-direction: column;
     align-items: center;
 
-  
-
     h3 {
       margin-bottom: 4rem;
       order: 1;
@@ -76,7 +74,7 @@ body {
       font-weight: bold;
     }
   }
-  
+
   .selectedButton-wrapper {
     position: absolute;
     top: calc(60% + 1.5rem);
@@ -85,15 +83,15 @@ body {
     z-index: 999;
 
     button {
-      cursor: pointer;
-      font-size: 1.3rem;
-      padding: 1.5rem 3.5rem;
-      background-color: rgb(89, 106, 81);
-      color: white;
-      border: 1px solid white;
-      border-radius: 10px;
+      @include main-button;
+
+      // cursor: pointer;
+      // font-size: 1.3rem;
+      // padding: 1.5rem 3.5rem;
+      // background-color: rgb(89, 106, 81);
+      // color: white;
+      // border: 1px solid white;
+      // border-radius: 10px;
     }
   }
-  
-  
 }
