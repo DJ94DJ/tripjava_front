@@ -1,23 +1,20 @@
-import { SET_TRIPROUTE } from '../actions/types';
+import { ADD_MARKER, RESET_MARKERS } from '../actions/triproute';
 
 const initialState = {
-  selectedRegionName: null,
-  startDate: null,
-  endDate: null,
-  lat: null,
-  lng: null,
+  markers: [], // 마커 정보를 저장할 배열
 };
 
 const triprouteReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_TRIPROUTE:
+    case ADD_MARKER:
       return {
         ...state,
-        selectedRegionName: action.payload.regionName,
-        startDate: action.payload.startDate,
-        endDate: action.payload.endDate,
-        lat: action.payload.lat,
-        lng: action.payload.lng,
+        markers: [...state.markers, action.payload],
+      };
+    case RESET_MARKERS:
+      return {
+        ...state,
+        markers: [],
       };
     default:
       return state;

@@ -14,6 +14,8 @@ import ReactDOMServer from 'react-dom/server';
 import svgToMiniDataURI from 'mini-svg-data-uri';
 import axios from 'axios';
 import MapStyle from './MapStyle';
+import { useDispatch } from 'react-redux';
+import { addMarker } from '../../store/actions/triproute';
 
 const svgString = ReactDOMServer.renderToStaticMarkup(<HomePinSvg />);
 const svgUrl = svgToMiniDataURI(svgString);
@@ -32,6 +34,12 @@ const GoogleMapComponent = () => {
   const mapRef = useRef();
   const [accommodations, setAccommodations] = useState([]); // 숙소 데이터 상태
   const selectedLocation = location.state?.selectedLocation;
+  const dispatch = useDispatch();
+
+  const onMarkerClick = (marker) => {
+    console.log('마커 정보 로깅:', marker);
+    dispatch(addMarker(marker));
+  };
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -196,6 +204,7 @@ const GoogleMapComponent = () => {
             position={{ lat: marker.lat, lng: marker.lng }}
             onClick={() => {
               setSelected(marker);
+              onMarkerClick(marker);
             }}
           >
             {/* 선택된 마커에 대해서만 InfoWindow 표시 */}

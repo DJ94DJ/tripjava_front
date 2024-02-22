@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 function UserMyPage() {
   const auth = useSelector((state) => state.auth);
@@ -11,7 +11,7 @@ function UserMyPage() {
       .get(`http://localhost:8080/user?id=${auth.id}`)
       .then((response) => {
         setUserInfo(response.data); // 응답에서 사용자 정보를 가져와 저장합니다.
-        console.log("마이페이지 요청", response.data);
+        console.log('마이페이지 요청', response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -32,7 +32,7 @@ function UserMyPage() {
             className="button_Edit"
             type="button"
             onClick={() => {
-              window.location.href = "/edit";
+              window.location.href = '/edit';
             }}
           >
             회원정보 수정
@@ -41,7 +41,7 @@ function UserMyPage() {
             className="button_Leave"
             type="button"
             onClick={() => {
-              window.location.href = "/leave";
+              window.location.href = '/leave';
             }}
           >
             탈퇴하기

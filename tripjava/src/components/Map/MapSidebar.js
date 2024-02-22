@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/style.scss';
 
@@ -25,9 +25,11 @@ function formatPeriod(startDate, endDate) {
 }
 
 const MapSidebar = ({ startDate, endDate, period }) => {
+  // Redux 스토어에서 마커 정보 갖고오기!
+  const markers = useSelector((state) => state.triproute.markers);
+  console.log('스토어에서 가져온 마커 정보 로깅:', markers);
   console.log('sidebar/period 확인 : ', period);
   const navigate = useNavigate();
-  navigate('/');
   const formattedPeriod = formatPeriod(startDate, endDate);
 
   return (
@@ -42,7 +44,20 @@ const MapSidebar = ({ startDate, endDate, period }) => {
           />
         </div>
         <div className="sidebar_date">{formattedPeriod}</div>
-        <div className="sidebar_hotel"></div>
+        <div className="sidebar_hotel">
+          <h3>숙소</h3>
+          <ul>
+            {markers.map((marker, index) => (
+              <li key={index}>{marker.title}</li> // 마커의 title을 리스트 아이템으로 표시
+            ))}
+          </ul>
+        </div>
+        <div className="sidebar_route day1">
+          <ul></ul>
+        </div>
+        <div className="sidebar_route day2"></div>
+        <div className="sidebar_route day3"></div>
+        <div className="sidebar_route day4"></div>
         <div className="sidebar_tourismApi"></div>
       </div>
     </div>
