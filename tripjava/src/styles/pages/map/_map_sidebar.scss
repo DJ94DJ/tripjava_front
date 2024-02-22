@@ -12,3 +12,17 @@
     @include flex-center;
   }
 }
+li {
+  display: flex;
+  align-items: center;
+  img.mark {
+    width: 1rem;
+    height: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}

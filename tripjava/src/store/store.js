@@ -6,7 +6,7 @@ import triprouteReducer from './reducers/triprouteReducer';
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    region: triprouteReducer,
+    triproute: triprouteReducer,
   },
 });
 

@@ -1,0 +1,29 @@
+.gm-style-iw-d {
+  padding: 0 12px 12px 0;
+  .gm-style.gm-style-iw-c {
+    padding: 0;
+    .gm-style-iw-d {
+      div {
+        h3 {
+          margin: 5px 0 5px 0;
+        }
+      }
+    }
+  }
+}
+.infoWindow_header {
+  display: flex;
+  align-items: center;
+  height: 1.5rem;
+  img.mark {
+    margin-left: 7px;
+    width: 5.1rem;
+    height: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+p {
+  margin-block-end: 0;
+}

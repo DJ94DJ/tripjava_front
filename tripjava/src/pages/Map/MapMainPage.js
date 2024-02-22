@@ -2,6 +2,7 @@ import React from 'react';
 import GoogleMapComponent from '../../components/Map/GoogleMapComponent';
 import MapSidebar from '../../components/Map/MapSidebar';
 import { useLocation } from 'react-router-dom';
+import { MapNearby } from '../../components/Map/MapNearby';
 import MapAuth from '../../components/Map/MapAuth';
 import regions from '../../components/Main/MainRegion';
 
@@ -19,6 +20,7 @@ const MapMainPage = () => {
       <MapAuth />
       <MapSidebar startDate={startDate} endDate={endDate} period={period} />
       <GoogleMapComponent selectedLocation={selectedRegion} />
+      <MapNearby />
     </>
   );
 };
