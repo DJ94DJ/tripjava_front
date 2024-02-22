@@ -13,7 +13,11 @@ const PlannerPage = () => {
       <br />
       <div className="planner_page_all">
         <div>PlannerPage</div>
+        
+        <div className="kakaoshare_top">
+          <h3> 공유하기</h3>
         <KakaoShare />
+        </div>
 
         <h1>(지역명) 여행 ?박</h1>
         <div className="pins_and_block">
