@@ -104,36 +104,42 @@ const GoogleMapComponent = () => {
     );
   }, [selectedLocation, panTo]);
 
-    // selectedLocation 값이 변경될 때마다 숙소 데이터 요청
-    useEffect(() => {
-      if (selectedLocation && selectedLocation.lat && selectedLocation.lng) {
-          const fetchData = async () => {
-            try {
-              const res = await axios.get(
-                `http://localhost:8080/destination/accommodation`,
-                {
-                  params: {
-                    mapx: selectedLocation.lng,
-                    mapy: selectedLocation.lat,
-                  },
-                }
-              );
-                    // 숙소 데이터를 마커 데이터로 변환
-          const accommodationMarkers = res.data.accommodations.map(accommodation => ({
-            lat: Number(accommodation.mapy),
-            lng: Number(accommodation.mapx),
-            time: new Date(),
-          }));
+  // selectedLocation 값이 변경될 때마다 숙소 데이터 요청
+  useEffect(() => {
+    if (selectedLocation && selectedLocation.lat && selectedLocation.lng) {
+      const touristData = async () => {
+        try {
+          const res = await axios.get(
+            `http://localhost:8080/destination/accommodation`,
+            {
+              params: {
+                mapx: selectedLocation.lng,
+                mapy: selectedLocation.lat,
+              },
+            }
+          );
+          // 숙소 데이터를 마커 데이터로 변환
+          const accommodationMarkers = res.data.accommodations.map(
+            (accommodation) => ({
+              lat: Number(accommodation.mapy),
+              lng: Number(accommodation.mapx),
+              addr1: accommodation.addr1,
+              contentid: accommodation.contentid,
+              title: accommodation.title,
+              time: new Date(), // 이 속성은 필요 없
+              time: new Date(),
+            })
+          );
           setAccommodations(accommodationMarkers); // 숙소 데이터 상태 업데이트
-          console.log('이 지역 숙소는 얘네들인데 보이니!', accommodationMarkers); // 데이터 확인을 위한 콘솔 로그
-          } catch (error) {
-            console.error('Error fetching accommodation data:', error);
-          }
-        };
+          console.log('이 지역 숙소 데이터 췤 :', accommodationMarkers);
+        } catch (error) {
+          console.error('Error fetching accommodation data:', error);
+        }
+      };
 
-        fetchData();
-      }
-    }, [selectedLocation]);
+      touristData();
+    }
+  }, [selectedLocation]);
 
   if (!isLoaded) return 'Loading Maps';
 
@@ -152,6 +158,7 @@ const GoogleMapComponent = () => {
         onClick={onMapClick}
         onLoad={onMapLoad}
       >
+
       {accommodations.map((marker, index) => (
         <Marker
         key={index}
@@ -159,6 +166,7 @@ const GoogleMapComponent = () => {
         onClick={() => {
           setSelected(marker);
         }}
+
           >
             선택된 마커에 대해서만 InfoWindow 표시
             {selected && selected.time === marker.time && (
@@ -167,7 +175,8 @@ const GoogleMapComponent = () => {
                 onCloseClick={() => setSelected(null)}
               >
                 <div>
-                  <h3>선택한 위치</h3>
+                  <h3>{selected.title}</h3>
+                  <p>{selected.addr1}</p>
                   <p>위도: {marker.lat}</p>
                   <p>경도: {marker.lng}</p>
                 </div>
