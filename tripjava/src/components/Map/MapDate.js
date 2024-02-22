@@ -81,7 +81,10 @@ const MapDate = () => {
                 lat: selectedRegion.lat,
                 lng: selectedRegion.lng,
               },
-              touristSpots, //touristSpots의 전체 데이터 추가로 전달하자!
+              touristSpots, //touristSpots의 전체 데이터도 전달하자!
+              // 날짜 정보도 전달하자!
+              startDate: startDate.toISOString(),
+              endDate: endDate.toISOString(),
             },
           });
         })
