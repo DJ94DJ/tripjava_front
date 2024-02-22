@@ -1,21 +1,22 @@
-import './App.css';
+import "./App.css";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   useLocation,
-} from 'react-router-dom';
-import Header from './components/Layout/Header';
-import Main from './pages/Main/Main';
-import UserEditPage from './pages/User/UserEditPage';
-import UserLeavePage from './pages/User/UserLeavePage';
-import UserLoginPage from './pages/User/UserLoginPage';
-import UserSignupPage from './pages/User/UserSignupPage';
-import UserMyPage from './pages/User/UserMyPage';
-import MapDatePage from './pages/Map/MapDatePage';
-import MapMainPage from './pages/Map/MapMainPage';
-import MainButton from './components/Main/MainButton';
-import PlannerPage from './pages/Planner/PlannerPage';
+} from "react-router-dom";
+import Header from "./components/Layout/Header";
+import Main from "./pages/Main/Main";
+import UserEditPage from "./pages/User/UserEditPage";
+import UserLeavePage from "./pages/User/UserLeavePage";
+import UserLoginPage from "./pages/User/UserLoginPage";
+import UserSignupPage from "./pages/User/UserSignupPage";
+import UserMyPage from "./pages/User/UserMyPage";
+import MapDatePage from "./pages/Map/MapDatePage";
+import MapMainPage from "./pages/Map/MapMainPage";
+import MainButton from "./components/Main/MainButton";
+import PlannerPage from "./pages/Planner/PlannerPage";
+import MapPinTest from "./pages/Map/MapPinTest";
 
 // Header 조건부로 렌더링! (planner 페이지에선 헤더 제외)
 const Layout = () => {
@@ -23,7 +24,7 @@ const Layout = () => {
 
   return (
     <>
-      {location.pathname !== '/map' && <Header />}
+      {location.pathname !== "/map" && <Header />}
       <Main>
         <Routes>
           {/* 메인 페이지 */}
@@ -38,6 +39,7 @@ const Layout = () => {
           {/* 지도 페이지 */}
           <Route path="/map" element={<MapMainPage />} />
           <Route path="/date" element={<MapDatePage />} />
+          <Route path="/test" element={<MapPinTest />} />
           {/* 일정 페이지 */}
           <Route path="/planner" element={<PlannerPage />} />
         </Routes>

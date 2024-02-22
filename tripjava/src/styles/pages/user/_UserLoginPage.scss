@@ -1,9 +1,13 @@
 .form-wrap {
   @include flex-center;
+  overflow-y: auto;
   height: 100%;
 
   .login-form {
     @include container;
+    margin-top: 20em;
+    margin-bottom: 2em;
+
     padding: 3em;
     border: 0;
     border: {

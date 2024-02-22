@@ -1,0 +1,30 @@
+$colors: col1 rgb(198, 46, 0), col2 rgb(233, 113, 27), col3 rgb(222, 151, 0),
+  col4 rgb(35, 99, 35), col5 rgb(45, 45, 183), col6 rgb(132, 19, 132),
+  col7 rgb(217, 47, 132), col8 rgb(63, 57, 56);
+
+.pin-svg {
+  .pin-logo {
+    fill: black;
+  }
+  .pin-bg {
+    fill: grey;
+  }
+  &.day {
+    width: 58px;
+
+    @for $i from 1 through 8 {
+      &.num#{$i} {
+        @each $color-name, $color-value in $colors {
+          &.#{$color-name} {
+            .pin-logo {
+              fill: $color-value;
+            }
+            .pin-bg {
+              fill: white;
+            }
+          }
+        }
+      }
+    }
+  }
+}
