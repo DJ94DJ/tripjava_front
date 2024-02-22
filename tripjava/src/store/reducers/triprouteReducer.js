@@ -1,4 +1,4 @@
-import { SET_MAININFO } from '../actions/types';
+import { SET_TRIPROUTE } from '../actions/types';
 
 const initialState = {
   selectedRegionName: null,
@@ -8,9 +8,9 @@ const initialState = {
   lng: null,
 };
 
-const maininfoReducer = (state = initialState, action) => {
+const triprouteReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_MAININFO:
+    case SET_TRIPROUTE:
       return {
         ...state,
         selectedRegionName: action.payload.regionName,
@@ -24,4 +24,4 @@ const maininfoReducer = (state = initialState, action) => {
   }
 };
 
-export default maininfoReducer;
+export default triprouteReducer;

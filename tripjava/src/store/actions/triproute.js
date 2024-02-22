@@ -1,4 +1,4 @@
-import { SET_MAININFO } from './types';
+import { SET_TRIPROUTE } from './types';
 
 export const setSelectedRegionDate = (
   regionName,
@@ -8,7 +8,7 @@ export const setSelectedRegionDate = (
   lng
 ) => {
   return {
-    type: SET_MAININFO,
+    type: SET_TRIPROUTE,
     payload: { regionName, startDate, endDate, lat, lng },
   };
 };
