@@ -1,10 +1,9 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect } from 'react';
 import {
   useJsApiLoader,
   GoogleMap,
   Marker,
   InfoWindow,
-
 } from '@react-google-maps/api';
 import { FaLocationCrosshairs } from 'react-icons/fa6';
 import { MapLocate } from './MapLocate';
@@ -14,12 +13,12 @@ import { HomePinSvg } from './PinSvg';
 import ReactDOMServer from 'react-dom/server';
 import svgToMiniDataURI from 'mini-svg-data-uri';
 import axios from 'axios';
+import MapStyle from './MapStyle';
 
 const svgString = ReactDOMServer.renderToStaticMarkup(<HomePinSvg />);
 const svgUrl = svgToMiniDataURI(svgString);
 
-
-console.log(" 사진 :" ,svgUrl);
+console.log(' 사진 :', svgUrl);
 
 const center = {
   lat: 37.5336766,
@@ -36,7 +35,7 @@ const GoogleMapComponent = () => {
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    libraries: ["places"],
+    libraries: ['places'],
   });
 
   const onMapClick = useCallback((e) => {
@@ -74,7 +73,7 @@ const GoogleMapComponent = () => {
       } else {
         // selectedLocation이 유효하지 않은 경우, 지도의 중심을 기본 위치로 설정
         console.log(
-          "selectedLocation is undefined or does not have lat, lng properties"
+          'selectedLocation is undefined or does not have lat, lng properties'
         );
         panTo(center);
       }
@@ -109,7 +108,7 @@ const GoogleMapComponent = () => {
       });
     }
     console.log(
-      "컴포넌트 마운트될 때 selectedLocation 값있는지 췤",
+      '컴포넌트 마운트될 때 selectedLocation 값있는지 췤',
       selectedLocation
     );
   }, [selectedLocation, panTo]);
@@ -141,9 +140,9 @@ const GoogleMapComponent = () => {
             })
           );
           setAccommodations(accommodationMarkers); // 숙소 데이터 상태 업데이트
-          console.log("이 지역 숙소 데이터 췤 :", accommodationMarkers);
+          console.log('이 지역 숙소 데이터 췤 :', accommodationMarkers);
         } catch (error) {
-          console.error("Error fetching accommodation data:", error);
+          console.error('Error fetching accommodation data:', error);
         }
       };
 
@@ -155,21 +154,21 @@ const GoogleMapComponent = () => {
     if (selected) {
       setTimeout(() => {
         const elements = document.querySelectorAll(
-          ".gm-style-iw.gm-style-iw-c"
+          '.gm-style-iw.gm-style-iw-c'
         );
         elements.forEach((el) => {
-          if (!el.querySelector("h3")) {
+          if (!el.querySelector('h3')) {
             // <h3> 태그를 가진 요소가 없는 경우에만 스타일 변경
-            el.style.opacity = "0";
+            el.style.opacity = '0';
           }
         });
       }, 5); // 5ms 후에 스타일 변경 코드 실행
     }
   }, [selected]);
 
-  if (!isLoaded) return "Loading Maps";
+  if (!isLoaded) return 'Loading Maps';
 
-  if (!isLoaded) return "Loading Maps";
+  if (!isLoaded) return 'Loading Maps';
 
   return (
     <>
@@ -178,20 +177,21 @@ const GoogleMapComponent = () => {
       <GoogleMap
         center={center}
         zoom={9}
-        mapContainerStyle={{ width: "100%", height: "100vh" }}
+        mapContainerStyle={{ width: '100%', height: '100vh' }}
         options={{
           mapTypeControl: false,
           fullscreenControl: false,
+          styles: MapStyle(),
         }}
         onClick={onMapClick}
         onLoad={onMapLoad}
       >
         {accommodations.map((marker, index) => (
           <Marker
-          icon={{
-            url : "/static/logo_trip_java.svg",
-            scaledSize: new window.google.maps.Size(100, 100)
-          }}
+            icon={{
+              url: '/static/logo_trip_java.svg',
+              scaledSize: new window.google.maps.Size(100, 100),
+            }}
             key={index}
             position={{ lat: marker.lat, lng: marker.lng }}
             onClick={() => {
