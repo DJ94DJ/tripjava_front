@@ -1,0 +1,15 @@
+.nearby_menu {
+  @include container;
+  z-index: 100;
+  position: fixed;
+  left: 0;
+  height: 100vh;
+  width: 300px;
+  margin-left: 300px;
+  //   .nearby_header {
+  //     margin-top: 5px;
+  //   }
+  //   .nearby_date {
+  //     @include flex-center;
+  //   }
+}
