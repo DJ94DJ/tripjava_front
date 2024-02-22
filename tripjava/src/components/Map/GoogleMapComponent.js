@@ -9,7 +9,16 @@ import { FaLocationCrosshairs } from 'react-icons/fa6';
 import { MapLocate } from './MapLocate';
 import { MapSearch } from './MapSearch';
 import { useLocation } from 'react-router-dom';
+import { HomePinSvg } from './PinSvg';
+import ReactDOMServer from 'react-dom/server';
+import svgToMiniDataURI from 'mini-svg-data-uri';
 import axios from 'axios';
+
+const svgString = ReactDOMServer.renderToStaticMarkup(<HomePinSvg />);
+const svgUrl = svgToMiniDataURI(svgString);
+
+
+console.log(" 사진 :" ,svgUrl);
 
 const center = {
   lat: 37.5336766,
@@ -160,13 +169,17 @@ const GoogleMapComponent = () => {
       >
         {accommodations.map((marker, index) => (
           <Marker
+          icon={{
+            url : "/static/logo_trip_java.svg",
+            scaledSize: new window.google.maps.Size(100, 100)
+          }}
             key={index}
             position={{ lat: marker.lat, lng: marker.lng }}
             onClick={() => {
               setSelected(marker);
             }}
           >
-            선택된 마커에 대해서만 InfoWindow 표시
+            {/* 선택된 마커에 대해서만 InfoWindow 표시 */}
             {selected && selected.time === marker.time && (
               <InfoWindow
                 position={{ lat: marker.lat, lng: marker.lng }}
