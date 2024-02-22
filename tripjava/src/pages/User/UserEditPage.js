@@ -57,8 +57,12 @@ function UserEditPage() {
       ? { ...userInfo, password }
       : { ...userInfo };
 
+    const url = password
+      ? "http://localhost:8080/user"
+      : "http://localhost:8080/user/nickname-email";
+
     axios
-      .patch(`http://localhost:8080/user`, updatedUserInfo)
+      .patch(url, updatedUserInfo)
       .then((response) => {
         console.log(response);
         const { id, nickname, token } = response.data; // 'response.data'로 접근합니다.

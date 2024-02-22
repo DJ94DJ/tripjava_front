@@ -21,39 +21,41 @@ function UserMyPage() {
   return (
     <>
       <br></br> <br></br>
-      <div className="container_1">
-        <h2>계정정보</h2>
-        <div>ID: {userInfo.id}</div>
-        <div>Password: ⦁⦁⦁⦁⦁⦁⦁⦁</div>
-        <div>Email: {userInfo.email}</div>
-        <div>Nickname: {userInfo.nickname}</div>
-        <button
-          className="button_Edit"
-          type="button"
-          onClick={() => {
-            window.location.href = "/edit";
-          }}
-        >
-          회원정보 수정
-        </button>
-        <button
-          className="button_Leave"
-          type="button"
-          onClick={() => {
-            window.location.href = "/leave";
-          }}
-        >
-          탈퇴하기
-        </button>
-      </div>
-      <div className="container_2">
-        <h2>나의 여행계획</h2>
-        <div className="tourlist">
-          <h3>그냥 넣어둔 리스트1</h3>
-          <h3>그냥 넣어둔 리스트2</h3>
-          <h3>그냥 넣어둔 리스트3</h3>
+      <div className="wrap">
+        <div className="myPage-form">
+          <h2>계정정보</h2>
+          <div>ID: {userInfo.id}</div>
+          <div>Password: ⦁⦁⦁⦁⦁⦁⦁⦁</div>
+          <div>Email: {userInfo.email}</div>
+          <div>Nickname: {userInfo.nickname}</div>
+          <button
+            className="button_Edit"
+            type="button"
+            onClick={() => {
+              window.location.href = "/edit";
+            }}
+          >
+            회원정보 수정
+          </button>
+          <button
+            className="button_Leave"
+            type="button"
+            onClick={() => {
+              window.location.href = "/leave";
+            }}
+          >
+            탈퇴하기
+          </button>
         </div>
-        <div className="container_map_img"></div>
+        <div className="myPage-form">
+          <h2>나의 여행계획</h2>
+          <div className="tourlist">
+            <h3>그냥 넣어둔 리스트1</h3>
+            <h3>그냥 넣어둔 리스트2</h3>
+            <h3>그냥 넣어둔 리스트3</h3>
+          </div>
+          <div className="container_map_img"></div>
+        </div>
       </div>
     </>
   );
