@@ -29,30 +29,29 @@ li {
   }
 }
 
-.sidebar_hotel,
-.sidebar_route {
+.sidebar_hotel {
   padding: 25px;
   h3 {
-    color: $map-htag;
-    margin: 5px 0 5px 3px;
-    font-family: var(--pointfont);
-    font-weight: lighter;
-    font-size: 16px;
+    @include h3-tag;
   }
   .sidebar_hotel_container {
     div {
       @include input-box;
       margin-bottom: 10px;
       display: flex;
+      align-items: center;
       justify-content: space-between;
       white-space: nowrap;
       // box-shadow: 0 2px 7px 1px rgba(0, 0, 0, 0.034);
       // overflow: hidden;
       // text-overflow: ellipsis;
-      font-size: 13px;
+      font-size: 14px;
+      svg {
+        margin: 0 1px 0 3px;
+      }
       button {
-        // position: absolute;
-        top: 2px;
+        margin-left: auto;
+        padding-top: 2.2px;
         background-color: transparent;
         border: none;
 
@@ -63,5 +62,12 @@ li {
         }
       }
     }
+  }
+}
+
+.sidebar_route {
+  padding: 0 25px 25px 25px;
+  h3 {
+    @include h3-tag;
   }
 }

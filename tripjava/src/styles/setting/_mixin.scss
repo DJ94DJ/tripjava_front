@@ -17,25 +17,6 @@
   border: 1px solid var(--main-grey);
 }
 
-@mixin s-box {
-  background-color: var(--main-bgcolor);
-  color: var(--main-color);
-  border: 1px solid var(--main-white);
-  border-radius: 5px;
-}
-
-@mixin active {
-  color: #000000;
-  text-shadow: 0 0 10px #000000;
-}
-
-// 에러 메시지(ex.필수값 입력하세요)
-@mixin error-message {
-  color: #fcbaba;
-  font-size: smaller;
-  margin: 7px 0 7px 0;
-}
-
 // 버튼 관련
 @mixin main-button {
   display: flex;
@@ -53,6 +34,33 @@
     background-color: var(--main-hove-color);
     color: #000;
   }
+}
+
+@mixin h3-tag {
+  color: $map-hcolor;
+  margin: 5px 0 5px 3px;
+  font-family: var(--pointfont);
+  font-weight: lighter;
+  font-size: 16px;
+}
+
+@mixin s-box {
+  background-color: var(--main-bgcolor);
+  color: var(--main-color);
+  border: 1px solid var(--main-white);
+  border-radius: 5px;
+}
+
+@mixin active {
+  color: #000000;
+  text-shadow: 0 0 10px #000000;
+}
+
+// 에러 메시지(ex.필수값 입력하세요)
+@mixin error-message {
+  color: #fcbaba;
+  font-size: smaller;
+  margin: 7px 0 7px 0;
 }
 
 // 정렬 관련 -------------------------------------
