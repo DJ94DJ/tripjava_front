@@ -27,8 +27,8 @@ function formatPeriod(startDate, endDate) {
 
 const MapSidebar = ({ startDate, endDate, period }) => {
   // Redux 스토어에서 마커 정보 갖고오기!
-  const markers = useSelector((state) => state.triproute.markers);
-  console.log('스토어에서 가져온 마커 정보 로깅:', markers);
+  const routes = useSelector((state) => state.triproute.routes);
+  console.log('스토어에서 가져온 마커 정보 로깅:', routes);
   console.log('sidebar/period 확인 : ', period);
   const navigate = useNavigate();
   const formattedPeriod = formatPeriod(startDate, endDate);
@@ -48,9 +48,9 @@ const MapSidebar = ({ startDate, endDate, period }) => {
         <div className="sidebar_hotel">
           <h3>숙소</h3>
           <ul>
-            {markers.map((marker, index) => {
+            {routes.map((route, index) => {
               // "[한국관광 품질인증/Korea Quality]" 문자열 제거
-              const titleWithoutCertification = marker.title
+              const titleWithoutCertification = route.title
                 .replace('[한국관광 품질인증/Korea Quality]', '')
                 .trim();
 
@@ -58,7 +58,7 @@ const MapSidebar = ({ startDate, endDate, period }) => {
                 <li key={index}>
                   {titleWithoutCertification}
                   {/* 조건부 렌더링을 사용하여 특정 문자열이 있을 경우 아이콘 표시 */}
-                  {marker.title.includes(
+                  {route.title.includes(
                     '[한국관광 품질인증/Korea Quality]'
                   ) && (
                     <PiSealCheckFill />

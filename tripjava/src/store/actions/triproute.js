@@ -1,13 +1,14 @@
-export const ADD_MARKER = 'ADD_MARKER';
-export const RESET_MARKERS = 'RESET_MARKERS';
+export const ADD_ROUTE = 'ADD_ROUTE';
+export const RESET_ROUTE = 'RESET_ROUTE';
+export const REMOVE_ROUTE = 'REMOVE_ROUTE';
 
 // 마커 추가
-export const addMarker = (marker) => ({
-  type: ADD_MARKER,
-  payload: marker,
+export const addRoute = (route) => ({
+  type: ADD_ROUTE,
+  payload: route,
 });
 
 // 마커 정보 초기화
-export const resetMarkers = () => ({
-  type: RESET_MARKERS,
+export const resetRoute = () => ({
+  type: RESET_ROUTE,
 });
