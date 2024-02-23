@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/style.scss';
 import { PiSealCheckFill } from 'react-icons/pi';
+import { removeRoute } from '../../store/actions/triproute';
+import { FaXmark } from 'react-icons/fa6';
 
 // 날짜 포맷 변경 함수
 function formatDate(dateString) {
@@ -32,6 +34,12 @@ const MapSidebar = ({ startDate, endDate, period }) => {
   console.log('sidebar/period 확인 : ', period);
   const navigate = useNavigate();
   const formattedPeriod = formatPeriod(startDate, endDate);
+  const dispatch = useDispatch();
+
+  // 리덕스 route에 담긴 인덱스 삭제!!
+  const handleRemoveRoute = (id) => {
+    dispatch(removeRoute(id));
+  };
 
   return (
     <div className="side_menu">
@@ -47,7 +55,7 @@ const MapSidebar = ({ startDate, endDate, period }) => {
         <div className="sidebar_date">{formattedPeriod}</div>
         <div className="sidebar_hotel">
           <h3>숙소</h3>
-          <ul>
+          <div className="sidebar_hotel_container">
             {routes.map((route, index) => {
               // "[한국관광 품질인증/Korea Quality]" 문자열 제거
               const titleWithoutCertification = route.title
@@ -55,19 +63,20 @@ const MapSidebar = ({ startDate, endDate, period }) => {
                 .trim();
 
               return (
-                <li key={index}>
+                <div key={index}>
                   {titleWithoutCertification}
-                  {/* 조건부 렌더링을 사용하여 특정 문자열이 있을 경우 아이콘 표시 */}
+                  {/*  한국관광 품질인증/Korea Quality]이 있을 경우 아이콘 표시 */}
                   {route.title.includes(
                     '[한국관광 품질인증/Korea Quality]'
-                  ) && (
-                    <PiSealCheckFill />
-                    // <img src="/static/mark.jpeg" alt="mark" className="mark" />
-                  )}
-                </li>
+                  ) && <PiSealCheckFill />}
+                  {/* 삭제 버튼에 title을 인자로 넘기기!! */}
+                  <button onClick={() => handleRemoveRoute(route.id)}>
+                    <FaXmark />
+                  </button>
+                </div>
               );
             })}
-          </ul>
+          </div>
         </div>
         <div className="sidebar_route day1">
           <ul></ul>
