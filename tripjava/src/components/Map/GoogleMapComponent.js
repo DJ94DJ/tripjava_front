@@ -15,7 +15,7 @@ import svgToMiniDataURI from 'mini-svg-data-uri';
 import axios from 'axios';
 import MapStyle from './MapStyle';
 import { useDispatch } from 'react-redux';
-import { addMarker } from '../../store/actions/triproute';
+import { addRoute } from '../../store/actions/triproute';
 import { PiSealCheckFill } from 'react-icons/pi';
 
 const svgString = ReactDOMServer.renderToStaticMarkup(<HomePinSvg />);
@@ -39,7 +39,7 @@ const GoogleMapComponent = () => {
 
   const onMarkerClick = (marker) => {
     console.log('마커 정보 로깅:', marker);
-    dispatch(addMarker(marker));
+    dispatch(addRoute(marker));
   };
 
   const { isLoaded } = useJsApiLoader({

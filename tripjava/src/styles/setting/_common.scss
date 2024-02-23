@@ -9,4 +9,5 @@ body {
   font-weight: 400;
   position: relative; /* 추가 */
   z-index: 1; /* 추가 */
+  user-select: none;
 }

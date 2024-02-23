@@ -9,7 +9,9 @@
     margin-top: 5px;
   }
   .sidebar_date {
-    @include flex-center;
+    padding-left: 25px;
+    font-family: var(--pointfont);
+    font-size: 14px;
   }
 }
 li {
@@ -24,5 +26,48 @@ li {
   svg {
     width: 14px;
     height: 14px;
+  }
+}
+
+.sidebar_hotel {
+  padding: 25px;
+  h3 {
+    @include h3-tag;
+  }
+  .sidebar_hotel_container {
+    div {
+      @include input-box;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      white-space: nowrap;
+      // box-shadow: 0 2px 7px 1px rgba(0, 0, 0, 0.034);
+      // overflow: hidden;
+      // text-overflow: ellipsis;
+      font-size: 14px;
+      svg {
+        margin: 0 1px 0 3px;
+      }
+      button {
+        margin-left: auto;
+        padding-top: 2.2px;
+        background-color: transparent;
+        border: none;
+
+        svg {
+          // @include flex-center;
+          cursor: pointer;
+          color: $map-delete;
+        }
+      }
+    }
+  }
+}
+
+.sidebar_route {
+  padding: 0 25px 25px 25px;
+  h3 {
+    @include h3-tag;
   }
 }

@@ -12,4 +12,12 @@
   //   .nearby_date {
   //     @include flex-center;
   //   }
+  .nearby_header {
+    h3 {
+      margin-top: 5px;
+      @include h3-tag;
+      margin: 20px 0 20px 0;
+      padding-top: 10px;
+    }
+  }
 }

@@ -19,8 +19,8 @@ const MapMainPage = () => {
     <>
       <MapAuth />
       <MapSidebar startDate={startDate} endDate={endDate} period={period} />
-      <GoogleMapComponent selectedLocation={selectedRegion} />
       <MapNearby />
+      <GoogleMapComponent selectedLocation={selectedRegion} />
     </>
   );
 };

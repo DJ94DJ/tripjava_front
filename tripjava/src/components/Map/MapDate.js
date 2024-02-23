@@ -87,7 +87,7 @@ const MapDate = () => {
           });
         })
         .catch((error) => {
-          console.error('Error fetching tourist spots', error);
+          console.error('Error touristSpots', error);
         });
     }
   };
