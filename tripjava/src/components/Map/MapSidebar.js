@@ -5,6 +5,7 @@ import '../../styles/style.scss';
 import { PiSealCheckFill } from 'react-icons/pi';
 import { removeRoute } from '../../store/actions/triproute';
 import { FaXmark } from 'react-icons/fa6';
+import { FaHotel } from 'react-icons/fa';
 
 // 날짜 포맷 변경 함수
 function formatDate(dateString) {
@@ -79,6 +80,7 @@ const MapSidebar = ({ startDate, endDate, period }) => {
           </div>
         </div>
         <div className="sidebar_route day1">
+          <h3>일정</h3>
           <ul></ul>
         </div>
         <div className="sidebar_route day2"></div>

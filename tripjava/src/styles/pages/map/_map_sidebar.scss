@@ -9,7 +9,9 @@
     margin-top: 5px;
   }
   .sidebar_date {
-    @include flex-center;
+    padding-left: 25px;
+    font-family: var(--pointfont);
+    font-size: 14px;
   }
 }
 li {
@@ -24,5 +26,42 @@ li {
   svg {
     width: 14px;
     height: 14px;
+  }
+}
+
+.sidebar_hotel,
+.sidebar_route {
+  padding: 25px;
+  h3 {
+    color: $map-htag;
+    margin: 5px 0 5px 3px;
+    font-family: var(--pointfont);
+    font-weight: lighter;
+    font-size: 16px;
+  }
+  .sidebar_hotel_container {
+    div {
+      @include input-box;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      white-space: nowrap;
+      // box-shadow: 0 2px 7px 1px rgba(0, 0, 0, 0.034);
+      // overflow: hidden;
+      // text-overflow: ellipsis;
+      font-size: 13px;
+      button {
+        // position: absolute;
+        top: 2px;
+        background-color: transparent;
+        border: none;
+
+        svg {
+          // @include flex-center;
+          cursor: pointer;
+          color: $map-delete;
+        }
+      }
+    }
   }
 }
