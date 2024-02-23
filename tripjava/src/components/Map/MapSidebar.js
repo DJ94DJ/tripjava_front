@@ -58,7 +58,7 @@ const MapSidebar = ({ startDate, endDate, period }) => {
       });
       // 응답 데이터가 배열인지 확인하고, 그렇지 않으면 빈 배열을 할당
       const destinations = Array.isArray(res.data) ? res.data : [];
-      console.log('mapsidebar 주변 데이터:', res.data);
+      console.log('클릭한 숙소 주변 데이터:', res.data);
       setNearbyDestinations(destinations); // 상태 업데이트
     } catch (error) {
       console.error('근처 목적지 정보 불러오기 실패:', error);
