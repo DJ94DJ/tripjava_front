@@ -6,6 +6,7 @@ import { PiSealCheckFill } from 'react-icons/pi';
 import { removeRoute } from '../../store/actions/triproute';
 import { FaXmark } from 'react-icons/fa6';
 import { FaHotel } from 'react-icons/fa';
+import axios from 'axios';
 
 // 날짜 포맷 변경 함수
 function formatDate(dateString) {
@@ -31,15 +32,38 @@ function formatPeriod(startDate, endDate) {
 const MapSidebar = ({ startDate, endDate, period }) => {
   // Redux 스토어에서 마커 정보 갖고오기!
   const routes = useSelector((state) => state.triproute.routes);
-  console.log('스토어에서 가져온 마커 정보 로깅:', routes);
-  console.log('sidebar/period 확인 : ', period);
+  // console.log('스토어에서 가져온 마커 정보 로깅:', routes);
+  // console.log('sidebar/period 확인 : ', period);
   const navigate = useNavigate();
   const formattedPeriod = formatPeriod(startDate, endDate);
   const dispatch = useDispatch();
+  const [nearbyDestinations, setNearbyDestinations] = useState([]);
 
   // 리덕스 route에 담긴 인덱스 삭제!!
   const handleRemoveRoute = (id) => {
     dispatch(removeRoute(id));
+  };
+
+  // 근처 목적지 정보를 불러오는 함수
+  const fetchNearbyDestinations = async (id) => {
+    const route = routes.find((route) => route.id === id);
+    if (!route) return;
+
+    try {
+      const res = await axios.get(`http://localhost:8080/destination/nearby`, {
+        params: {
+          mapx: route.lng, // 경도
+          mapy: route.lat, // 위도
+        },
+      });
+      // 응답 데이터가 배열인지 확인하고, 그렇지 않으면 빈 배열을 할당
+      const destinations = Array.isArray(res.data) ? res.data : [];
+      console.log('mapsidebar 주변 데이터:', res.data);
+      setNearbyDestinations(destinations); // 상태 업데이트
+    } catch (error) {
+      console.error('근처 목적지 정보 불러오기 실패:', error);
+      setNearbyDestinations([]); // 오류 발생 시 상태를 빈 배열로 초기화
+    }
   };
 
   return (
@@ -64,7 +88,10 @@ const MapSidebar = ({ startDate, endDate, period }) => {
                 .trim();
 
               return (
-                <div key={index}>
+                <div
+                  key={index}
+                  onClick={() => fetchNearbyDestinations(route.id)}
+                >
                   {titleWithoutCertification}
                   {/*  한국관광 품질인증/Korea Quality]이 있을 경우 아이콘 표시 */}
                   {route.title.includes(
@@ -83,10 +110,12 @@ const MapSidebar = ({ startDate, endDate, period }) => {
           <h3>일정</h3>
           <ul></ul>
         </div>
-        <div className="sidebar_route day2"></div>
-        <div className="sidebar_route day3"></div>
-        <div className="sidebar_route day4"></div>
-        <div className="sidebar_tourismApi"></div>
+        <div className="nearby_menu">
+          {/* 근처 목적지 정보 표시 */}
+          {nearbyDestinations.map((destination) => (
+            <div key={destination.contentid}>{/* 목적지 정보 표시 */}</div>
+          ))}
+        </div>
       </div>
     </div>
   );

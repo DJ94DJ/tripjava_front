@@ -38,7 +38,7 @@ const GoogleMapComponent = () => {
   const dispatch = useDispatch();
 
   const onMarkerClick = (marker) => {
-    console.log('마커 정보 로깅:', marker);
+    // console.log('마커 정보 로깅:', marker);
     dispatch(addRoute(marker));
   };
 
@@ -116,10 +116,10 @@ const GoogleMapComponent = () => {
         zoom: 15, // 지역위치 불러올 때 지도 zoom값
       });
     }
-    console.log(
-      '컴포넌트 마운트될 때 selectedLocation 값있는지 췤',
-      selectedLocation
-    );
+    // console.log(
+    //   '컴포넌트 마운트될 때 selectedLocation 값있는지 췤',
+    //   selectedLocation
+    // );
   }, [selectedLocation, panTo]);
 
   // selectedLocation 값이 변경될 때마다 숙소 데이터 요청
@@ -149,7 +149,7 @@ const GoogleMapComponent = () => {
             })
           );
           setAccommodations(accommodationMarkers); // 숙소 데이터 상태 업데이트
-          console.log('이 지역 숙소 데이터 췤 :', accommodationMarkers);
+          // console.log('이 지역 숙소 데이터 췤 :', accommodationMarkers);
         } catch (error) {
           console.error('Error fetching accommodation data:', error);
         }
