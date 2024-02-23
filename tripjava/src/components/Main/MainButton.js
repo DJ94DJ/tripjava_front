@@ -44,20 +44,25 @@ const MainButton = () => {
     <div className="main_container" ref={containerRef}>
       <div className="main_explainbox">
         <h1>
-          행복한 여행의 첫 시작,
+          행복한 여행의 시작,
           <br />
-          TRIPJAVA와 함께
+          TRIPJAVA와 함께!
         </h1>
         <h4>TRIPJAVA를 사용해 여행 계획을 손쉽게 세워보세요!</h4>
       </div>
       <div className="main_buttonbox">
         {!showSearch ? (
-          <button className="main_btn" onClick={() => setShowSearch(true)}>
+          <button
+            className={`main_btn ${showSearch ? 'main_btn--hidden' : ''}`}
+            onClick={() => setShowSearch(true)}
+          >
             TRIPJAVA 시작하기
           </button>
         ) : (
           <Combobox
-            className="main_combobox_container"
+            className={`main_combobox_container ${
+              showSearch ? 'main_combobox_container--animated' : ''
+            }`}
             onSelect={handleSelectRegion}
             aria-labelledby="combobox-label"
           >
@@ -68,7 +73,12 @@ const MainButton = () => {
             />
             <ComboboxPopover
               className="main_combobox_list"
-              style={{ top: 255 }}
+              style={{
+                top: 345,
+                border: 'none',
+                paddingLeft: 10,
+                fontSize: 18,
+              }}
             >
               <ComboboxList>
                 {filteredLocations.map((location, index) => (
