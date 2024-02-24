@@ -8,6 +8,8 @@ import { FaXmark } from 'react-icons/fa6';
 import { FaHotel } from 'react-icons/fa';
 import { FaPlus } from 'react-icons/fa6';
 import axios from 'axios';
+import { addSpot, addRoute } from '../../store/actions/triproute';
+import { FaRegFaceSadTear } from 'react-icons/fa6';
 
 // 날짜 포맷 변경 함수
 function formatDate(dateString) {
@@ -88,20 +90,37 @@ const MapSidebar = ({ startDate, endDate }) => {
           mapy: route.lat, // 위도
         },
       });
-      // 데이터 구조에 맞게 상태 업데이트
-      setDestinations({
-        restaurants: res.data.restaurants,
-        touristSpots: res.data.touristSpots,
-      });
+      console.log('숙소 근처 데이터 갖고 와지는지 확인', res.data);
+      // 데이터가 있는지 확인하고 상태 업데이트
+      if (res.data && res.data.restaurants && res.data.touristSpots) {
+        setDestinations({
+          restaurants: res.data.restaurants,
+          touristSpots: res.data.touristSpots,
+        });
+      } else {
+        // 데이터가 없는 경우 메시지 표시
+        setDestinations({
+          restaurants: [{ name: '데이터가 없습니다' }],
+          touristSpots: [{ name: '데이터가 없습니다' }],
+        });
+      }
     } catch (error) {
       console.error('근처 목적지 정보 불러오기 실패:', error);
-      setDestinations({ restaurants: [], touristSpots: [] });
+      // 에러가 발생한 경우도 메시지 표시
     }
   };
 
   // 일정에 +버튼 눌러서 장소 추가
-  const handleAddSpot = (title) => {
-    setSelectedSpot((prevTitles) => [...prevTitles, title]);
+  // const handleAddSpot = (destination, spot, accommodation) => {
+  //   setSelectedSpot((prevTitles) => [...prevTitles, destination.title]);
+  //   dispatch(addSpot(selectedDate, destination));
+  //   dispatch(addSpot(selectedDate, spot, accommodation));
+  // };
+
+  const handleAddSpot = (spot) => {
+    setSelectedSpot((prevTitles) => [...prevTitles, spot.title]);
+    // spot과 accommodation 정보를 리덕스 스토어에 저장
+    dispatch(addSpot(selectedDate, spot));
   };
 
   return (
@@ -189,22 +208,32 @@ const MapSidebar = ({ startDate, endDate }) => {
             </button>
           </div>
           <div className="nearby_container">
-            <div className="nearby_list">
-              {destinations[selectedCategory].map((destination) => (
-                <div key={destination.contentid} className="nearby_item">
-                  <div className="nearby_imgcontainer">
-                    <img
-                      src={destination.firstimage || '/static/noimage.gif'}
-                      alt={destination.title}
-                    />
+            {destinations[selectedCategory].length === 0 ? (
+              <div
+                className="no-data-message"
+                style={{ fontSize: 14, fontWeight: 'bold' }}
+              >
+                주변 추천 장소가 없습니다.
+                <FaRegFaceSadTear />
+              </div>
+            ) : (
+              <div className="nearby_list">
+                {destinations[selectedCategory].map((destination) => (
+                  <div key={destination.contentid} className="nearby_item">
+                    <div className="nearby_imgcontainer">
+                      <img
+                        src={destination.firstimage || '/static/noimage.gif'}
+                        alt={destination.title}
+                      />
+                    </div>
+                    <h4>{destination.title}</h4>
+                    <button onClick={() => handleAddSpot(destination)}>
+                      <FaPlus />
+                    </button>
                   </div>
-                  <h4>{destination.title}</h4>
-                  <button onClick={() => handleAddSpot(destination.title)}>
-                    <FaPlus />
-                  </button>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

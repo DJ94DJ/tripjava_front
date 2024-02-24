@@ -19,3 +19,9 @@ export const removeRoute = (id) => ({
   type: REMOVE_ROUTE,
   payload: id,
 });
+
+// 날짜, 관광지, 음식점 추가
+export const addSpot = (selectedDate, spot) => ({
+  type: 'ADD_SPOT',
+  payload: { selectedDate, spot },
+});

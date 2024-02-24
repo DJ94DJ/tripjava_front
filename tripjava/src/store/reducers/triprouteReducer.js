@@ -2,7 +2,7 @@ import { ADD_ROUTE, RESET_ROUTE, REMOVE_ROUTE } from '../actions/triproute';
 
 const initialState = {
   routes: [], // 마커 정보를 저장할 배열
-  selectedDestinations: [],
+  tripData: {},
 };
 
 const triprouteReducer = (state = initialState, action) => {
@@ -22,17 +22,21 @@ const triprouteReducer = (state = initialState, action) => {
         ...state,
         routes: state.routes.filter((route) => route.id !== action.payload),
       };
-    case 'ADD_SELECTED_DESTINATION':
+
+    case 'ADD_SPOT':
+      const { selectedDate: date, spot } = action.payload;
+      const currentData = state.tripData[date] || {
+        spots: [],
+      }; // 현재 날짜의 데이터를 가져오거나 초기값 설정
       return {
         ...state,
-        selectedDestinations: [...state.selectedDestinations, action.payload],
-      };
-    case 'REMOVE_SELECTED_DESTINATION':
-      return {
-        ...state,
-        selectedDestinations: state.selectedDestinations.filter(
-          (destination) => destination.contentid !== action.payload
-        ),
+        tripData: {
+          ...state.tripData,
+          [date]: {
+            ...currentData,
+            spots: [...currentData.spots, spot], // 기존 spots에 새 spot 추가
+          },
+        },
       };
     default:
       return state;

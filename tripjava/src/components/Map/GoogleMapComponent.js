@@ -15,7 +15,7 @@ import svgToMiniDataURI from 'mini-svg-data-uri';
 import axios from 'axios';
 import MapStyle from './MapStyle';
 import { useDispatch, useSelector } from 'react-redux';
-import { addRoute } from '../../store/actions/triproute';
+import { addRoute, addSpot } from '../../store/actions/triproute';
 import { PiSealCheckFill } from 'react-icons/pi';
 
 const svgString = ReactDOMServer.renderToStaticMarkup(<HomePinSvg />);
@@ -28,7 +28,7 @@ const center = {
   lng: 126.9632199,
 };
 
-const GoogleMapComponent = () => {
+const GoogleMapComponent = ({ startDate }) => {
   const location = useLocation();
   const [markers, setMarkers] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -36,10 +36,12 @@ const GoogleMapComponent = () => {
   const [accommodations, setAccommodations] = useState([]); // 숙소 데이터 상태
   const selectedLocation = location.state?.selectedLocation;
   const dispatch = useDispatch();
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const onMarkerClick = (marker) => {
     // console.log('마커 정보 로깅:', marker);
     dispatch(addRoute(marker));
+    dispatch(addSpot(selectedDate, marker));
   };
 
   const { isLoaded } = useJsApiLoader({
@@ -175,8 +177,13 @@ const GoogleMapComponent = () => {
     }
   }, [selected]);
 
-  if (!isLoaded) return 'Loading Maps';
+  useEffect(() => {
+    if (startDate) {
+      setSelectedDate(startDate);
+    }
+  }, [startDate]);
 
+  if (!isLoaded) return 'Loading Maps';
   return (
     <>
       <MapLocate panTo={panTo} />
