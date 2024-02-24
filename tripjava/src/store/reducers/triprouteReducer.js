@@ -2,6 +2,7 @@ import { ADD_ROUTE, RESET_ROUTE, REMOVE_ROUTE } from '../actions/triproute';
 
 const initialState = {
   routes: [], // 마커 정보를 저장할 배열
+  selectedDestinations: [],
 };
 
 const triprouteReducer = (state = initialState, action) => {
@@ -21,7 +22,18 @@ const triprouteReducer = (state = initialState, action) => {
         ...state,
         routes: state.routes.filter((route) => route.id !== action.payload),
       };
-
+    case 'ADD_SELECTED_DESTINATION':
+      return {
+        ...state,
+        selectedDestinations: [...state.selectedDestinations, action.payload],
+      };
+    case 'REMOVE_SELECTED_DESTINATION':
+      return {
+        ...state,
+        selectedDestinations: state.selectedDestinations.filter(
+          (destination) => destination.contentid !== action.payload
+        ),
+      };
     default:
       return state;
   }

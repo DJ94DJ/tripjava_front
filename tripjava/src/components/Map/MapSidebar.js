@@ -3,7 +3,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/style.scss';
 import { PiSealCheckFill } from 'react-icons/pi';
-import { removeRoute } from '../../store/actions/triproute';
+import {
+  removeRoute,
+  addSelectedDestination,
+} from '../../store/actions/triproute';
 import { FaXmark } from 'react-icons/fa6';
 import { FaHotel } from 'react-icons/fa';
 import { FaPlus } from 'react-icons/fa6';
@@ -56,6 +59,7 @@ const MapSidebar = ({ startDate, endDate, period }) => {
       ...prevDestinations,
       destination,
     ]);
+    dispatch(addSelectedDestination(destination));
   };
 
   // 근처 목적지 정보를 불러오는 함수
@@ -129,8 +133,11 @@ const MapSidebar = ({ startDate, endDate, period }) => {
           <div className="sidebar_route">
             <h3>일정</h3>
             <div>
-              {selectedDestinations.map((destination, index) => (
-                <div key={index}>{destination.title}</div>
+              {selectedDestinations.map((destination) => (
+                <div key={destination.contentid}>
+                  <h4>{destination.title}</h4>
+                  {/* 필요한 경우 추가 정보 표시 */}
+                </div>
               ))}
             </div>
           </div>

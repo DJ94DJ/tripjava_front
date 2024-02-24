@@ -19,3 +19,14 @@ export const removeRoute = (id) => ({
   type: REMOVE_ROUTE,
   payload: id,
 });
+
+// 사용자가 선택한 경로 추가
+export const addSelectedDestination = (destination) => ({
+  type: 'ADD_SELECTED_DESTINATION',
+  payload: destination,
+});
+
+export const removeSelectedDestination = (contentid) => ({
+  type: 'REMOVE_SELECTED_DESTINATION',
+  payload: contentid,
+});
