@@ -46,20 +46,10 @@ const MapSidebar = ({ startDate, endDate, period }) => {
     touristSpots: [],
   });
   const [selectedCategory, setSelectedCategory] = useState('touristSpots');
-  const [selectedDestinations, setSelectedDestinations] = useState([]);
 
   // 리덕스 route에 담긴 인덱스 삭제!!
   const handleRemoveRoute = (id) => {
     dispatch(removeRoute(id));
-  };
-
-  // 경로 추가 함수
-  const handleAddDestination = (destination) => {
-    setSelectedDestinations((prevDestinations) => [
-      ...prevDestinations,
-      destination,
-    ]);
-    dispatch(addSelectedDestination(destination));
   };
 
   // 근처 목적지 정보를 불러오는 함수
@@ -132,14 +122,7 @@ const MapSidebar = ({ startDate, endDate, period }) => {
           </div>
           <div className="sidebar_route">
             <h3>일정</h3>
-            <div>
-              {selectedDestinations.map((destination) => (
-                <div key={destination.contentid}>
-                  <h4>{destination.title}</h4>
-                  {/* 필요한 경우 추가 정보 표시 */}
-                </div>
-              ))}
-            </div>
+            <div className="sidebar_spot"></div>
           </div>
         </div>
       </div>
@@ -167,7 +150,7 @@ const MapSidebar = ({ startDate, endDate, period }) => {
                     />
                   </div>
                   <h4>{destination.title}</h4>
-                  <button onClick={() => handleAddDestination(destination)}>
+                  <button>
                     <FaPlus />
                   </button>
                 </div>

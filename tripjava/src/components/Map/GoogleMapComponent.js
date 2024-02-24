@@ -36,9 +36,6 @@ const GoogleMapComponent = () => {
   const [accommodations, setAccommodations] = useState([]); // 숙소 데이터 상태
   const selectedLocation = location.state?.selectedLocation;
   const dispatch = useDispatch();
-  const selectedDestinations = useSelector(
-    (state) => state.selectedDestinations
-  );
 
   const onMarkerClick = (marker) => {
     // console.log('마커 정보 로깅:', marker);
@@ -108,10 +105,6 @@ const GoogleMapComponent = () => {
       ]);
     }
   }, []);
-
-  useEffect(() => {
-    console.log('Selected destinations:', selectedDestinations);
-  }, [selectedDestinations]);
 
   // 지역 선택한 거 지도에 반영되도록 useEffect!
   useEffect(() => {
@@ -204,54 +197,7 @@ const GoogleMapComponent = () => {
           <Marker
             icon={{
               url: '/static/home_marker.svg',
-              scaledSize: new window.google.maps.Size(70, 70),
-            }}
-            key={index}
-            position={{ lat: marker.lat, lng: marker.lng }}
-            onClick={() => {
-              setSelected(marker);
-              onMarkerClick(marker);
-            }}
-          >
-            {/* 선택된 마커에 대해서만 InfoWindow 표시 */}
-            {selected && selected.time === marker.time && (
-              <InfoWindow
-                position={{ lat: marker.lat, lng: marker.lng }}
-                onCloseClick={() => setSelected(null)}
-              >
-                <div className="infoWindow">
-                  <div className="infoWindow_header">
-                    <h3 style={{ display: 'inline' }}>
-                      {/* "[한국관광 품질인증/Korea Quality]"가 있으면 제거 */}
-                      {marker.title
-                        .replace('[한국관광 품질인증/Korea Quality]', '')
-                        .trim()}
-                    </h3>
-                    {/* "[한국관광 품질인증/Korea Quality]"가 있으면 아이콘 추가 */}
-                    {marker.title.includes(
-                      '[한국관광 품질인증/Korea Quality]'
-                    ) && (
-                      <img
-                        src="/static/mark3.jpeg"
-                        alt="mark"
-                        className="mark"
-                        style={{ display: 'inline' }}
-                      />
-                    )}
-                  </div>
-                  <p>{selected.addr1}</p>
-                  <p>위도: {marker.lat}</p>
-                  <p>경도: {marker.lng}</p>
-                </div>
-              </InfoWindow>
-            )}
-          </Marker>
-        ))}
-        {accommodations.map((marker, index) => (
-          <Marker
-            icon={{
-              url: '/static/logo_trip_java.svg',
-              scaledSize: new window.google.maps.Size(100, 100),
+              scaledSize: new window.google.maps.Size(50, 50),
             }}
             key={index}
             position={{ lat: marker.lat, lng: marker.lng }}
