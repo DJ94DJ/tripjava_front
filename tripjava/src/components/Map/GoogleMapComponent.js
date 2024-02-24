@@ -197,7 +197,7 @@ const GoogleMapComponent = () => {
           <Marker
             icon={{
               url: '/static/home_marker.svg',
-              scaledSize: new window.google.maps.Size(70, 70),
+              scaledSize: new window.google.maps.Size(50, 50),
             }}
             key={index}
             position={{ lat: marker.lat, lng: marker.lng }}
