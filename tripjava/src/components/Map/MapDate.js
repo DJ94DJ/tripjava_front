@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import axios from "axios";
-import regions from "../Main/MainRegion";
-import "../../styles/style.scss";
+import React, { useState, useRef, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import axios from 'axios';
+import regions from '../Main/MainRegion';
+import '../../styles/style.scss';
 
 const MapDate = () => {
   const [startDate, setStartDate] = useState(null);
@@ -21,7 +21,7 @@ const MapDate = () => {
     currentDate.setHours(0, 0, 0, 0);
 
     if (date.getTime() < currentDate.getTime()) {
-      alert("시작 날짜는 현재 날짜보다 이전일 수 없습니다.");
+      alert('시작 날짜는 현재 날짜보다 이전일 수 없습니다.');
       return;
     }
     setStartDate(date);
@@ -30,15 +30,20 @@ const MapDate = () => {
 
   const handleEndDateSelect = (date) => {
     if (!startDate) {
-      alert("시작 날짜를 먼저 선택해주세요!");
+      alert('시작 날짜를 먼저 선택해주세요!');
       return;
     }
     if (date.getTime() < startDate.getTime()) {
-      alert("종료 날짜는 시작 날짜보다 이전일 수 없습니다.");
+      alert('종료 날짜는 시작 날짜보다 이전일 수 없습니다.');
+      return;
+    }
+    const period = calculatePeriod(startDate, date);
+    if (period > 4) {
+      // 5일 이상인 경우
+      alert('여행 기간은 최대 5일까지만 선택 가능합니다.');
       return;
     }
     setEndDate(date);
-    const period = calculatePeriod(startDate, date);
     setSelectedPeriod(period);
   };
 
@@ -64,19 +69,19 @@ const MapDate = () => {
       // const regionData = {
       //   regionName: selectedRegionName,
       // };
-      console.log("Selected period:", selectedPeriod);
+      console.log('Selected period:', selectedPeriod);
       axios
         .get(`http://localhost:8080/destination?addr1=${selectedRegionName}`)
         .then((res) => {
           const touristSpots = res.data.touristSpots;
-          console.log("mapdate 페이지/투어api 호출 : ", res.data);
+          console.log('mapdate 페이지/투어api 호출 : ', res.data);
           const locations = touristSpots.map((spot) => ({
             lat: parseFloat(spot.mapy),
             lng: parseFloat(spot.mapx),
           }));
 
           // GoogleMapComponent로 이동하면서 locations, 위도, 경도, 날짜, touristSpots 정보 전달!!
-          navigate("/map", {
+          navigate('/map', {
             state: {
               locations,
               selectedLocation: {
@@ -92,7 +97,7 @@ const MapDate = () => {
           });
         })
         .catch((error) => {
-          console.error("Error touristSpots", error);
+          console.error('Error touristSpots', error);
         });
     }
   };
@@ -106,7 +111,7 @@ const MapDate = () => {
           <DatePicker
             selected={startDate}
             onChange={handleStartDateSelect}
-            customInput={<input style={{ display: "none" }} />}
+            customInput={<input style={{ display: 'none' }} />}
             open={true}
             className="start-date-picker"
             ref={startDateRef}
@@ -126,7 +131,7 @@ const MapDate = () => {
           <DatePicker
             selected={endDate}
             onChange={handleEndDateSelect}
-            customInput={<input style={{ display: "none" }} />}
+            customInput={<input style={{ display: 'none' }} />}
             open={true}
             className="end-date-picker"
             ref={endDateRef}

@@ -17,6 +17,9 @@
     h3 {
       @include h3-tag;
     }
+    div {
+      margin: 5px 0 0 3px;
+    }
   }
 }
 li {
@@ -31,6 +34,26 @@ li {
   svg {
     width: 14px;
     height: 14px;
+  }
+}
+
+.sidebar_tabs {
+  display: flex;
+  button {
+    @include h3-tag;
+    @include main-button;
+    border-radius: 7px !important;
+    font-size: 12.5px !important;
+    margin: 3px 10px 5px 0;
+  }
+}
+
+.sidebar_selecteddate {
+  h4 {
+    margin: 5px 0 5px 3px;
+    font-family: var(--pointfont);
+    font-size: 14px;
+    font-weight: lighter;
   }
 }
 
@@ -52,21 +75,21 @@ li {
       font-size: 14px;
       h4 {
         margin: 0;
-      }
-      svg {
-        margin: 0 1px 0 3px;
-      }
-      button {
-        margin-left: auto;
-        padding-top: 4px;
-        background-color: transparent;
-        border: none;
-
+        vertical-align: middle;
         svg {
-          // @include flex-center;
-          cursor: pointer;
-          color: $map-delete;
+          vertical-align: middle;
+          margin: 0 1px 2px 3px;
         }
+      }
+    }
+    button {
+      margin-left: auto;
+      padding-top: 4px;
+      background-color: transparent;
+      border: none;
+      svg {
+        cursor: pointer;
+        color: $map-delete;
       }
     }
   }
@@ -79,7 +102,6 @@ li {
 }
 
 //////////// nearby 관련
-
 .nearby_menu {
   @include container;
   z-index: 100;
@@ -99,6 +121,7 @@ li {
     .nearby_category {
       display: flex;
       button {
+        @include h3-tag;
         @include main-button;
         border-radius: 7px !important;
         font-size: 0.8em !important;

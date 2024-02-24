@@ -3,15 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/style.scss';
 import { PiSealCheckFill } from 'react-icons/pi';
-import {
-  removeRoute,
-  addSelectedDestination,
-} from '../../store/actions/triproute';
+import { removeRoute } from '../../store/actions/triproute';
 import { FaXmark } from 'react-icons/fa6';
 import { FaHotel } from 'react-icons/fa';
 import { FaPlus } from 'react-icons/fa6';
-
 import axios from 'axios';
+
 // 날짜 포맷 변경 함수
 function formatDate(dateString) {
   const options = {
@@ -27,13 +24,20 @@ function formatDate(dateString) {
     .replace('. ', '.');
 }
 
+// 날짜를 더하는 함수
+function addDays(date, days) {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
 function formatPeriod(startDate, endDate) {
   const startFormat = formatDate(startDate); // "2024.02.22(목)"
   const endFormat = formatDate(endDate); // "2024.02.24(토)"
   return `${startFormat} ~ ${endFormat}`;
 }
 
-const MapSidebar = ({ startDate, endDate, period }) => {
+const MapSidebar = ({ startDate, endDate }) => {
   // Redux 스토어에서 마커 정보 갖고오기!
   const routes = useSelector((state) => state.triproute.routes);
   // console.log('스토어에서 가져온 마커 정보 로깅:', routes);
@@ -46,10 +50,31 @@ const MapSidebar = ({ startDate, endDate, period }) => {
     touristSpots: [],
   });
   const [selectedCategory, setSelectedCategory] = useState('touristSpots');
+  const [selectedSpot, setSelectedSpot] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const calculatePeriod = (startDate, endDate) => {
+    // 문자열을 Date 객체로 변환
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffInTime = end.getTime() - start.getTime();
+    const diffInDays = Math.ceil(diffInTime / (1000 * 3600 * 24)) + 1;
+    return diffInDays;
+  };
+
+  // 기간에 따른 탭 생성 로직
+  const period = calculatePeriod(startDate, endDate);
+  const tabs = Array.from({ length: period }, (_, i) => i + 1);
 
   // 리덕스 route에 담긴 인덱스 삭제!!
   const handleRemoveRoute = (id) => {
     dispatch(removeRoute(id));
+  };
+
+  // 일차 버튼을 클릭했을 때 실행되는 함수
+  const handleDayClick = (day) => {
+    const selectedDayDate = addDays(startDate, day - 1); // 선택된 일차에 해당하는 날짜 계산
+    setSelectedDate(formatDate(selectedDayDate)); // 상태 업데이트
   };
 
   // 근처 목적지 정보를 불러오는 함수
@@ -74,6 +99,11 @@ const MapSidebar = ({ startDate, endDate, period }) => {
     }
   };
 
+  // 일정에 +버튼 눌러서 장소 추가
+  const handleAddSpot = (title) => {
+    setSelectedSpot((prevTitles) => [...prevTitles, title]);
+  };
+
   return (
     <>
       <div className="side_menu">
@@ -87,9 +117,24 @@ const MapSidebar = ({ startDate, endDate, period }) => {
         </div>
         <div className="sidebar_content">
           <div className="sidebar_date">
-            <h3>기간</h3>
-            {formattedPeriod}
+            <h3>여행 기간</h3>
+            <div>{formattedPeriod}</div>
+            <hr />
           </div>
+          <div className="sidebar_tabs">
+            {tabs.map((tab) => (
+              <button key={tab} onClick={() => handleDayClick(tab)}>
+                {tab}일차
+              </button>
+            ))}
+          </div>
+          {/* 선택된 날짜 표시 */}
+          {selectedDate && (
+            <div className="sidebar_selecteddate">
+              <h4>{selectedDate}</h4>
+            </div>
+          )}
+          {/* 나머지 JSX 마크업 */}
           <div className="sidebar_hotel">
             <h3>숙소</h3>
             <div className="sidebar_hotel_container">
@@ -122,7 +167,11 @@ const MapSidebar = ({ startDate, endDate, period }) => {
           </div>
           <div className="sidebar_route">
             <h3>일정</h3>
-            <div className="sidebar_spot"></div>
+            <div className="sidebar_spot">
+              {selectedSpot.map((title, index) => (
+                <div key={index}>{title}</div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -150,7 +199,7 @@ const MapSidebar = ({ startDate, endDate, period }) => {
                     />
                   </div>
                   <h4>{destination.title}</h4>
-                  <button>
+                  <button onClick={() => handleAddSpot(destination.title)}>
                     <FaPlus />
                   </button>
                 </div>
