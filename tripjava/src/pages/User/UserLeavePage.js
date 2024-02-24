@@ -50,16 +50,18 @@ function UserLeavePage() {
   };
 
   return (
-    <div>
-      <h2>계정 삭제하기</h2>
-      <p>계정을 삭제하시려면 하단에 기입된 귀하의 이메일을 직접 입력하세요.</p>
+    <div className="userLeavePage">
+      <h2 className="title">계정 삭제하기</h2>
+      <p className="description">
+        계정을 삭제하시려면 하단에 기입된 귀하의 이메일을 직접 입력하세요.
+      </p>
       <p>{userEmail}</p>
-      <form onSubmit={handleSubmit}>
-        <label>
+      <form className="userLeaveForm" onSubmit={handleSubmit}>
+        <label className="emailInput">
           <input type="email" value={email} onChange={handleChange} />
         </label>
 
-        <button type="submit" disabled={!isMatching}>
+        <button className="deleteButton" type="submit" disabled={!isMatching}>
           계정 삭제
         </button>
       </form>
