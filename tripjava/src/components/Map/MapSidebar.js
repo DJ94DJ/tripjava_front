@@ -186,14 +186,21 @@ const MapSidebar = ({ startDate, endDate }) => {
           </div>
           <div className="sidebar_route">
             <h3>일정</h3>
-            <div className="sidebar_spot">
-              {selectedSpot.map((title, index) => (
-                <div key={index}>{title}</div>
-              ))}
-            </div>
+            {selectedSpot.map((title, index) => (
+              <div className="sidebar_routecontainer">
+                <h4 key={index}>{title}</h4>
+                <button>
+                  <FaXmark />
+                </button>
+              </div>
+            ))}
+          </div>
+          <div className="sidebar_footter">
+            <button>저장</button>
           </div>
         </div>
       </div>
+
       <div className="nearby_menu">
         <div className="nearby_content">
           <div className="nearby_header">
