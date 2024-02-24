@@ -41,7 +41,7 @@ const GoogleMapComponent = ({ startDate }) => {
   const onMarkerClick = (marker) => {
     // console.log('마커 정보 로깅:', marker);
     dispatch(addRoute(marker));
-    dispatch(addSpot(selectedDate, marker));
+    // dispatch(addSpot(selectedDate, marker));
   };
 
   const { isLoaded } = useJsApiLoader({

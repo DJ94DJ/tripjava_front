@@ -101,7 +101,7 @@ li {
   h3 {
     @include h3-tag;
   }
-  .sidebar_routecontainer {
+  div {
     @include input-box;
     margin-bottom: 10px;
     display: flex;

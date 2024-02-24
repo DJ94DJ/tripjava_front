@@ -1,4 +1,9 @@
-import { ADD_ROUTE, RESET_ROUTE, REMOVE_ROUTE } from '../actions/triproute';
+import {
+  ADD_ROUTE,
+  RESET_ROUTE,
+  REMOVE_ROUTE,
+  REMOVE_SPOT,
+} from '../actions/triproute';
 
 const initialState = {
   routes: [], // 마커 정보를 저장할 배열
@@ -35,6 +40,21 @@ const triprouteReducer = (state = initialState, action) => {
           [date]: {
             ...currentData,
             spots: [...currentData.spots, spot], // 기존 spots에 새 spot 추가
+          },
+        },
+      };
+    case REMOVE_SPOT:
+      const { selectedDate, id } = action.payload;
+      const updatedSpots = state.tripData[selectedDate].spots.filter(
+        (spot) => spot.id !== id
+      );
+      return {
+        ...state,
+        tripData: {
+          ...state.tripData,
+          [selectedDate]: {
+            ...state.tripData[selectedDate],
+            spots: updatedSpots,
           },
         },
       };

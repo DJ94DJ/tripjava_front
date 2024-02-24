@@ -3,13 +3,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/style.scss';
 import { PiSealCheckFill } from 'react-icons/pi';
-import { removeRoute } from '../../store/actions/triproute';
 import { FaXmark } from 'react-icons/fa6';
 import { FaHotel } from 'react-icons/fa';
 import { FaPlus } from 'react-icons/fa6';
 import axios from 'axios';
-import { addSpot, addRoute } from '../../store/actions/triproute';
+import {
+  addSpot,
+  removeRoute,
+  addRoute,
+  removeSpot,
+} from '../../store/actions/triproute';
 import { FaRegFaceSadTear } from 'react-icons/fa6';
+import { v4 as uuidv4 } from 'uuid';
 
 // 날짜 포맷 변경 함수
 function formatDate(dateString) {
@@ -68,11 +73,6 @@ const MapSidebar = ({ startDate, endDate }) => {
   const period = calculatePeriod(startDate, endDate);
   const tabs = Array.from({ length: period }, (_, i) => i + 1);
 
-  // 리덕스 route에 담긴 인덱스 삭제!!
-  const handleRemoveRoute = (id) => {
-    dispatch(removeRoute(id));
-  };
-
   // 일차 버튼을 클릭했을 때 실행되는 함수
   const handleDayClick = (day) => {
     const selectedDayDate = addDays(startDate, day - 1); // 선택된 일차에 해당하는 날짜 계산
@@ -110,17 +110,24 @@ const MapSidebar = ({ startDate, endDate }) => {
     }
   };
 
-  // 일정에 +버튼 눌러서 장소 추가
-  // const handleAddSpot = (destination, spot, accommodation) => {
-  //   setSelectedSpot((prevTitles) => [...prevTitles, destination.title]);
-  //   dispatch(addSpot(selectedDate, destination));
-  //   dispatch(addSpot(selectedDate, spot, accommodation));
-  // };
+  // 리덕스 route에 담긴 인덱스 삭제!!
+  const handleRemoveRoute = (id) => {
+    dispatch(removeRoute(id));
+  };
 
   const handleAddSpot = (spot) => {
-    setSelectedSpot((prevTitles) => [...prevTitles, spot.title]);
-    // spot과 accommodation 정보를 리덕스 스토어에 저장
-    dispatch(addSpot(selectedDate, spot));
+    // 각 spot에 고유한 id 부여
+    const spotWithId = { ...spot, id: uuidv4() };
+    setSelectedSpot((prevSpots) => [...prevSpots, spotWithId]);
+    // spot 정보를 리덕스 스토어에 저장
+    dispatch(addSpot(selectedDate, spotWithId));
+  };
+
+  // 리덕스랑 장소 삭제 !
+  const handleRemoveSpot = (selectedDate, id) => {
+    console.log('Spot삭제 함수 인자들 잘 들어가지나 쳌', selectedDate, id); // 값을 확인하기 위한 로그
+    dispatch(removeSpot(selectedDate, id));
+    setSelectedSpot((prevSpots) => prevSpots.filter((spot) => spot.id !== id));
   };
 
   return (
@@ -186,10 +193,10 @@ const MapSidebar = ({ startDate, endDate }) => {
           </div>
           <div className="sidebar_route">
             <h3>일정</h3>
-            {selectedSpot.map((title, index) => (
-              <div className="sidebar_routecontainer">
-                <h4 key={index}>{title}</h4>
-                <button>
+            {selectedSpot.map((spot, index) => (
+              <div key={index}>
+                <h4>{spot.title}</h4>
+                <button onClick={() => handleRemoveSpot(selectedDate, spot.id)}>
                   <FaXmark />
                 </button>
               </div>
