@@ -3,9 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/style.scss';
 import { PiSealCheckFill } from 'react-icons/pi';
-import { removeRoute } from '../../store/actions/triproute';
+import {
+  removeRoute,
+  addSelectedDestination,
+} from '../../store/actions/triproute';
 import { FaXmark } from 'react-icons/fa6';
 import { FaHotel } from 'react-icons/fa';
+import { FaPlus } from 'react-icons/fa6';
+
 import axios from 'axios';
 // 날짜 포맷 변경 함수
 function formatDate(dateString) {
@@ -41,10 +46,20 @@ const MapSidebar = ({ startDate, endDate, period }) => {
     touristSpots: [],
   });
   const [selectedCategory, setSelectedCategory] = useState('touristSpots');
+  const [selectedDestinations, setSelectedDestinations] = useState([]);
 
   // 리덕스 route에 담긴 인덱스 삭제!!
   const handleRemoveRoute = (id) => {
     dispatch(removeRoute(id));
+  };
+
+  // 경로 추가 함수
+  const handleAddDestination = (destination) => {
+    setSelectedDestinations((prevDestinations) => [
+      ...prevDestinations,
+      destination,
+    ]);
+    dispatch(addSelectedDestination(destination));
   };
 
   // 근처 목적지 정보를 불러오는 함수
@@ -115,9 +130,16 @@ const MapSidebar = ({ startDate, endDate, period }) => {
               })}
             </div>
           </div>
-          <div className="sidebar_route day1">
+          <div className="sidebar_route">
             <h3>일정</h3>
-            <ul></ul>
+            <div>
+              {selectedDestinations.map((destination) => (
+                <div key={destination.contentid}>
+                  <h4>{destination.title}</h4>
+                  {/* 필요한 경우 추가 정보 표시 */}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -145,6 +167,9 @@ const MapSidebar = ({ startDate, endDate, period }) => {
                     />
                   </div>
                   <h4>{destination.title}</h4>
+                  <button onClick={() => handleAddDestination(destination)}>
+                    <FaPlus />
+                  </button>
                 </div>
               ))}
             </div>

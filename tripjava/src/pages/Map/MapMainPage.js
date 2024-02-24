@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import GoogleMapComponent from '../../components/Map/GoogleMapComponent';
 import MapSidebar from '../../components/Map/MapSidebar';
 import { useLocation } from 'react-router-dom';
@@ -14,13 +14,22 @@ const MapMainPage = () => {
   const selectedRegion = regions.find(
     (region) => region.name === selectedRegionName
   );
+  const [selectedDestinations, setSelectedDestinations] = useState([]);
 
   return (
     <>
       <MapAuth />
-      <MapSidebar startDate={startDate} endDate={endDate} period={period} />
-      {/* <MapNearby /> */}
-      <GoogleMapComponent selectedLocation={selectedRegion} />
+      <MapSidebar
+        startDate={startDate}
+        endDate={endDate}
+        period={period}
+        selectedDestinations={selectedDestinations}
+        setSelectedDestinations={setSelectedDestinations}
+      />
+      <GoogleMapComponent
+        selectedLocation={selectedRegion}
+        selectedDestinations={selectedDestinations}
+      />
     </>
   );
 };
