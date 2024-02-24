@@ -58,7 +58,7 @@ li {
       }
       button {
         margin-left: auto;
-        padding-top: 2.2px;
+        padding-top: 4px;
         background-color: transparent;
         border: none;
 
@@ -143,6 +143,17 @@ li {
           background-color: #ffc80059; // 원하는 배경색을 지정합니다.
           mix-blend-mode: multiply; // 배경색과 이미지를 혼합하는 방식을 지정합니다.
           z-index: 1; // 이미지 아래에 배경색을 표시하기 위해 z-index를 설정합니다.
+        }
+      }
+      button {
+        margin-left: auto;
+        padding-top: 5px;
+        background-color: transparent;
+        border: none;
+        svg {
+          margin: 0 1px 0 3px;
+          cursor: pointer;
+          color: $map-delete;
         }
       }
     }

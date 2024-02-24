@@ -28,7 +28,7 @@ const center = {
   lng: 126.9632199,
 };
 
-const GoogleMapComponent = () => {
+const GoogleMapComponent = ({ selectedDestinations }) => {
   const location = useLocation();
   const [markers, setMarkers] = useState([]);
   const [selected, setSelected] = useState(null);
