@@ -1,4 +1,5 @@
 import React from "react";
+import "../../styles/style.scss";
 import {
   HomePinSvg,
   MealPinSvg,
@@ -15,17 +16,41 @@ import {
   Num8PinSvg,
 } from "../../components/Map/NumSvg";
 import MakePin from "../../components/Map/MakePin";
+import MakePindown from "../../components/Map/MakePinDown";
+import "../../styles/style.scss";
 
 const MapPinTest = () => {
+  const pinTypes = ["home", "meal", "place"];
+  const nums = [1, 2, 3, 4, 5, 6, 7, 8];
+  const colors = [
+    "col1",
+    "col2",
+    "col3",
+    "col4",
+    "col5",
+    "col6",
+    "col7",
+    "col8",
+  ];
   return (
     <>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <HomePinSvg />
+      <div className="pintest" style={{ display: "flex", flexWrap: "wrap" }}>
+        {pinTypes.map((pinType) =>
+          nums.map((num) =>
+            colors.map((color) => (
+              <div style={{ margin: "10px" }}>
+                <MakePindown
+                  key={`${pinType}-${num}-${color}`}
+                  pinType={pinType}
+                  num={num}
+                  color={color}
+                />
+              </div>
+            ))
+          )
+        )}
+      </div>
+      {/* <HomePinSvg />
       <MealPinSvg />
       <PlacePinSvg />
       <Num1PinSvg />
@@ -35,8 +60,8 @@ const MapPinTest = () => {
       <Num5PinSvg />
       <Num6PinSvg />
       <Num7PinSvg />
-      <Num8PinSvg />
-      <h1>여기에 MakePin 컴포넌트를 사용합니다:</h1>
+      <Num8PinSvg /> */}
+      {/* <h1>여기에 MakePin 컴포넌트를 사용합니다:</h1>
       <div className="test" style={{ display: "flex", flexWrap: "wrap" }}>
         <MakePin pinType="home" num={7} color="col5" />
         <div>{"- - -"} </div>
@@ -52,7 +77,7 @@ const MapPinTest = () => {
         <MakePin pinType="place" num={3} color="col4" />
         <MakePin pinType="place" num={4} color="col5" />
         <MakePin pinType="place" num={8} color="col6" />
-      </div>
+      </div> */}
     </>
   );
 };
