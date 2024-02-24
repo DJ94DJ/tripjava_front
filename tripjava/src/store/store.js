@@ -8,8 +8,10 @@ const store = configureStore({
   reducer: {
     auth: authReducer,
     triproute: triprouteReducer,
+
     planner: planneridReducer,
   },
+
 });
 
 export default store;

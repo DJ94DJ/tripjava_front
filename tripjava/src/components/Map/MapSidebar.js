@@ -3,11 +3,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/style.scss';
 import { PiSealCheckFill } from 'react-icons/pi';
-import { removeRoute } from '../../store/actions/triproute';
+import {
+  removeRoute,
+  addSelectedDestination,
+} from '../../store/actions/triproute';
 import { FaXmark } from 'react-icons/fa6';
 import { FaHotel } from 'react-icons/fa';
-import axios from 'axios';
+import { FaPlus } from 'react-icons/fa6';
 
+import axios from 'axios';
 // 날짜 포맷 변경 함수
 function formatDate(dateString) {
   const options = {
@@ -37,18 +41,31 @@ const MapSidebar = ({ startDate, endDate, period }) => {
   const navigate = useNavigate();
   const formattedPeriod = formatPeriod(startDate, endDate);
   const dispatch = useDispatch();
-  const [nearbyDestinations, setNearbyDestinations] = useState([]);
+  const [destinations, setDestinations] = useState({
+    restaurants: [],
+    touristSpots: [],
+  });
+  const [selectedCategory, setSelectedCategory] = useState('touristSpots');
+  const [selectedDestinations, setSelectedDestinations] = useState([]);
 
   // 리덕스 route에 담긴 인덱스 삭제!!
   const handleRemoveRoute = (id) => {
     dispatch(removeRoute(id));
   };
 
+  // 경로 추가 함수
+  const handleAddDestination = (destination) => {
+    setSelectedDestinations((prevDestinations) => [
+      ...prevDestinations,
+      destination,
+    ]);
+    dispatch(addSelectedDestination(destination));
+  };
+
   // 근처 목적지 정보를 불러오는 함수
   const fetchNearbyDestinations = async (id) => {
     const route = routes.find((route) => route.id === id);
     if (!route) return;
-
     try {
       const res = await axios.get(`http://localhost:8080/destination/nearby`, {
         params: {
@@ -56,19 +73,20 @@ const MapSidebar = ({ startDate, endDate, period }) => {
           mapy: route.lat, // 위도
         },
       });
-      // 응답 데이터가 배열인지 확인하고, 그렇지 않으면 빈 배열을 할당
-      const destinations = Array.isArray(res.data) ? res.data : [];
-      console.log('클릭한 숙소 주변 데이터:', res.data);
-      setNearbyDestinations(destinations); // 상태 업데이트
+      // 데이터 구조에 맞게 상태 업데이트
+      setDestinations({
+        restaurants: res.data.restaurants,
+        touristSpots: res.data.touristSpots,
+      });
     } catch (error) {
       console.error('근처 목적지 정보 불러오기 실패:', error);
-      setNearbyDestinations([]); // 오류 발생 시 상태를 빈 배열로 초기화
+      setDestinations({ restaurants: [], touristSpots: [] });
     }
   };
 
   return (
-    <div className="side_menu">
-      <div className="sidebar_content">
+    <>
+      <div className="side_menu">
         <div className="sidebar_header">
           <img
             src="/static/logo_trip_java.svg"
@@ -77,47 +95,88 @@ const MapSidebar = ({ startDate, endDate, period }) => {
             onClick={() => navigate('/')}
           />
         </div>
-        <div className="sidebar_date">{formattedPeriod}</div>
-        <div className="sidebar_hotel">
-          <h3>숙소</h3>
-          <div className="sidebar_hotel_container">
-            {routes.map((route, index) => {
-              // "[한국관광 품질인증/Korea Quality]" 문자열 제거
-              const titleWithoutCertification = route.title
-                .replace('[한국관광 품질인증/Korea Quality]', '')
-                .trim();
+        <div className="sidebar_content">
+          <div className="sidebar_date">
+            <h3>기간</h3>
+            {formattedPeriod}
+          </div>
+          <div className="sidebar_hotel">
+            <h3>숙소</h3>
+            <div className="sidebar_hotel_container">
+              {routes.map((route, index) => {
+                // "[한국관광 품질인증/Korea Quality]" 문자열 제거
+                const titleWithoutCertification = route.title
+                  .replace('[한국관광 품질인증/Korea Quality]', '')
+                  .trim();
 
-              return (
-                <div
-                  key={index}
-                  onClick={() => fetchNearbyDestinations(route.id)}
-                >
-                  {titleWithoutCertification}
-                  {/*  한국관광 품질인증/Korea Quality]이 있을 경우 아이콘 표시 */}
-                  {route.title.includes(
-                    '[한국관광 품질인증/Korea Quality]'
-                  ) && <PiSealCheckFill />}
-                  {/* 삭제 버튼에 title을 인자로 넘기기!! */}
-                  <button onClick={() => handleRemoveRoute(route.id)}>
-                    <FaXmark />
-                  </button>
+                return (
+                  <div
+                    key={index}
+                    onClick={() => fetchNearbyDestinations(route.id)}
+                  >
+                    <h4>
+                      {titleWithoutCertification}
+                      {/*  한국관광 품질인증/Korea Quality]이 있을 경우 아이콘 표시 */}
+                      {route.title.includes(
+                        '[한국관광 품질인증/Korea Quality]'
+                      ) && <PiSealCheckFill />}
+                    </h4>
+                    {/* 삭제 버튼에 title을 인자로 넘기기!! */}
+                    <button onClick={() => handleRemoveRoute(route.id)}>
+                      <FaXmark />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div className="sidebar_route">
+            <h3>일정</h3>
+            <div>
+              {selectedDestinations.map((destination) => (
+                <div key={destination.contentid}>
+                  <h4>{destination.title}</h4>
+                  {/* 필요한 경우 추가 정보 표시 */}
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
         </div>
-        <div className="sidebar_route day1">
-          <h3>일정</h3>
-          <ul></ul>
-        </div>
-        <div className="nearby_menu">
-          {/* 근처 목적지 정보 표시 */}
-          {nearbyDestinations.map((destination) => (
-            <div key={destination.contentid}>{/* 목적지 정보 표시 */}</div>
-          ))}
+      </div>
+      <div className="nearby_menu">
+        <div className="nearby_content">
+          <div className="nearby_header">
+            <h3>추천 장소</h3>
+          </div>
+          <div className="nearby_category">
+            <button onClick={() => setSelectedCategory('touristSpots')}>
+              관광지
+            </button>
+            <button onClick={() => setSelectedCategory('restaurants')}>
+              음식점
+            </button>
+          </div>
+          <div className="nearby_container">
+            <div className="nearby_list">
+              {destinations[selectedCategory].map((destination) => (
+                <div key={destination.contentid} className="nearby_item">
+                  <div className="nearby_imgcontainer">
+                    <img
+                      src={destination.firstimage || '/static/noimage.gif'}
+                      alt={destination.title}
+                    />
+                  </div>
+                  <h4>{destination.title}</h4>
+                  <button onClick={() => handleAddDestination(destination)}>
+                    <FaPlus />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

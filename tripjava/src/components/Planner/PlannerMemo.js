@@ -1,45 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const PlannerMemo = () => {
   const [items, setItems] = useState([]);
-  const [newItem, setNewItem] = useState('');
+  const [newItem, setNewItem] = useState("");
+  const [value, setValue] = useState("");
+
+  useEffect(() => {
+    // 체크리스트 확인
+    axios
+      .get("http://localhost:8080/planner/checklist/select")
+      .then((response) => {
+        setItems(response.data);
+      })
+      .catch((error) => {
+        console.error("There was an error!", error);
+      });
+  }, []);
 
   const addItem = () => {
-    if (newItem.trim() === '') {
+    if (newItem.trim() === "") {
       return;
     }
-    const updatedItems = [...items, { text: newItem, checked: false }];
-    setItems(updatedItems);
-    setNewItem('');
-    fetch('http://localhost:8080/planner', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updatedItems),
-    });
+
+    const ingredient = newItem.split(" ")[0];
+    const newChecklist = { text: newItem, checked: false, ingredient };
+
+    // 체크리스트 저장
+    axios
+      .post("http://localhost:8080/planner/checklist/add", newChecklist)
+      .then((response) => {
+        axios
+          .get("http://localhost:8080/planner/checklist/select")
+          .then((response) => {
+            setItems(response.data);
+          })
+          .catch((error) => {
+            console.error("조회 에러!", error);
+          });
+
+        setNewItem("");
+      });
   };
 
   const toggleItem = (index) => {
     const newItems = [...items];
-    newItems[index].checked = !newItems[index].checked;
+    newItems[index].ingredient_check = !newItems[index].ingredient_check;
     setItems(newItems);
-    fetch(`http://localhost:8080/planner/${index}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newItems[index]),
-    });
+
+    // 체크리스트 수정
+    axios
+      .put(
+        `http://localhost:8080/planner/checklist/${newItems[index].checklist_no}`,
+        newItems[index]
+      )
+      .catch((error) => {
+        console.error("업데이트 에러!", error);
+      });
   };
 
   const deleteItem = (index) => {
     const newItems = [...items];
     newItems.splice(index, 1);
-    setItems(newItems);
-    fetch(`http://localhost:8080/planner/${index}`, {
-      method: 'DELETE',
-    });
+
+    // 체크리스트 삭제
+    axios
+      .delete(
+        `http://localhost:8080/planner/checklist/${items[index].checklist_no}`
+      )
+      .then((response) => {
+        setItems(newItems);
+      })
+      .catch((error) => {
+        console.error("There was an error!", error);
+      });
   };
 
   return (
@@ -54,11 +88,11 @@ const PlannerMemo = () => {
           <div key={index}>
             <input
               type="checkbox"
-              checked={item.checked}
+              checked={item.ingredient_check}
               onChange={() => toggleItem(index)}
             />
             <span onDoubleClick={() => deleteItem(index)} className="item-text">
-              {item.text}
+              {item.ingredient}
             </span>
           </div>
         ))}
@@ -69,7 +103,7 @@ const PlannerMemo = () => {
           value={newItem}
           onChange={(e) => setNewItem(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') {
+            if (e.key === "Enter") {
               addItem();
             }
           }}
