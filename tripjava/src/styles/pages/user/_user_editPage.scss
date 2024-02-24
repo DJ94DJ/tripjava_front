@@ -1,0 +1,61 @@
+.container_edit {
+  display: flex;
+  flex-direction: column;
+  padding: 3em;
+  border-radius: 16px;
+  width: 40%;
+  margin: auto;
+  background-color: white;
+  margin-top: 3rem;
+
+  h2 {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      margin-bottom: 1em;
+
+      input {
+        width: 100%;
+        border-radius: 10px;
+        padding: 0.5em;
+        padding-left: 1em;
+        font-size: 1.2em;
+        background-color: transparent;
+        border: 1px solid rgb(191, 156, 156);
+      }
+      input::placeholder {
+        color: white;
+      }
+      input:focus {
+        outline: 0;
+      }
+    }
+
+    p {
+      color: red;
+      margin-bottom: 1em;
+    }
+
+    button {
+      width: 100%;
+      border-radius: 10px;
+      padding: 0.5em;
+      font-size: 1.2em;
+      cursor: pointer;
+      background-color: var(--main-bgcolor);
+      color: var(--main-black);
+      border: 0;
+
+      &:hover {
+        background-color: var(--main-button);
+        color: #000;
+      }
+    }
+  }
+}
