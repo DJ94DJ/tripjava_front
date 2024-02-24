@@ -198,8 +198,8 @@ const GoogleMapComponent = () => {
         {accommodations.map((marker, index) => (
           <Marker
             icon={{
-              url: '/static/logo_trip_java.svg',
-              scaledSize: new window.google.maps.Size(100, 100),
+              url: '/static/home_marker.svg',
+              scaledSize: new window.google.maps.Size(70, 70),
             }}
             key={index}
             position={{ lat: marker.lat, lng: marker.lng }}
