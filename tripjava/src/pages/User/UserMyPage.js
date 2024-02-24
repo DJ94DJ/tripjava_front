@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setPlannerId } from "../../store/actions/plannerid";
 
 function UserMyPage() {
+  const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const [userInfo, setUserInfo] = useState({}); // 닉네임을 저장할 상태를 만듭니다.
   const [userPlanner, setUserPlanner] = useState([]); // planner를  저장
+  const navigate = useNavigate();
+  const fullState = useSelector((state) => state);
 
   useEffect(() => {
     axios
@@ -29,6 +35,16 @@ function UserMyPage() {
         console.error(error);
       });
   }, [auth.id]);
+
+  const handlePlannerClick = (plannerId) => {
+    console.log("디스패치 전:", plannerId, fullState); // 디스패치 전 상태를 출력합니다.
+
+    dispatch(setPlannerId(plannerId));
+
+    console.log("디스패치 후:", plannerId, fullState); // 디스패치 후 상태를 출력합니다.
+
+    navigate(`/planner`);
+  };
 
   return (
     <>
@@ -66,9 +82,7 @@ function UserMyPage() {
               userPlanner.map((value) => (
                 <h3
                   key={value.planner_no}
-                  onClick={() => {
-                    window.location.href = "/planner";
-                  }}
+                  onClick={() => handlePlannerClick(value.planner_no)} // 여기에서 handlePlannerClick 함수를 호출하며, planner_no를 인자로 전달합니다.
                 >
                   {value.planner_title}
                 </h3>

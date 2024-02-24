@@ -4,6 +4,8 @@ import { useDispatch } from "react-redux"; // 추가: useDispatch 가져오기
 import { setAuth } from "../../store/actions/auth"; // 추가: setAuth 액션 가져오기
 import { useState } from "react";
 import "../../styles/style.scss";
+import Swal from "sweetalert2";
+import "animate.css";
 
 function UserLoginPage() {
   const dispatch = useDispatch(); // 추가: dispatch 함수 가져오기
@@ -41,7 +43,29 @@ function UserLoginPage() {
       // 로그인 성공 처리
     } catch (error) {
       console.error(error);
-      // 로그인 실패 처리
+      Swal.fire({
+        // 로그인 실패 처리
+        icon: "error",
+        title: "로그인에 실패했어요.",
+        showClass: {
+          popup: `
+            animate__animated
+            animate__fadeInUp
+            animate__faster
+          `,
+        },
+        hideClass: {
+          popup: `
+            animate__animated
+            animate__fadeOutDown
+            animate__faster
+          `,
+        },
+        text: `아이디 혹은 비밀번호를 확인해주세요.`,
+        customClass: {
+          popup: "login-fail",
+        },
+      });
     }
   };
 
