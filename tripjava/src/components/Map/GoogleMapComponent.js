@@ -21,7 +21,7 @@ import { PiSealCheckFill } from 'react-icons/pi';
 const svgString = ReactDOMServer.renderToStaticMarkup(<HomePinSvg />);
 const svgUrl = svgToMiniDataURI(svgString);
 
-console.log(' 사진 :', svgUrl);
+// console.log(' 사진 :', svgUrl);
 
 const center = {
   lat: 37.5336766,
