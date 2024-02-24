@@ -17,6 +17,7 @@ import MapMainPage from "./pages/Map/MapMainPage";
 import MainButton from "./components/Main/MainButton";
 import PlannerPage from "./pages/Planner/PlannerPage";
 import MapPinTest from "./pages/Map/MapPinTest";
+import PlannerModal from "./components/Planner/PlannerModal";
 
 // Header 조건부로 렌더링! (planner 페이지에선 헤더 제외)
 const Layout = () => {
@@ -42,6 +43,7 @@ const Layout = () => {
           <Route path="/test" element={<MapPinTest />} />
           {/* 일정 페이지 */}
           <Route path="/planner" element={<PlannerPage />} />
+          <Route path="/plannerModal" element={<PlannerModal />} />
         </Routes>
       </Main>
     </>
