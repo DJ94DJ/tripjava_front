@@ -46,6 +46,11 @@ const triprouteReducer = (state = initialState, action) => {
       };
     case REMOVE_SPOT:
       const { selectedDate, id } = action.payload;
+      // selectedDate에 해당하는 데이터가 없는 경우를 처리
+      if (!state.tripData[selectedDate]) {
+        console.error(`No data found for date: ${selectedDate}`);
+        return state; // 현재 상태를 그대로 반환
+      }
       const updatedSpots = state.tripData[selectedDate].spots.filter(
         (spot) => spot.id !== id
       );

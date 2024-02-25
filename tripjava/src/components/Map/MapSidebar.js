@@ -137,6 +137,7 @@ const MapSidebar = ({ startDate, endDate }) => {
       routes: routes,
       selectedSpots: selectedSpot,
       selectedDates: selectedDate,
+      tabs: tabs,
     };
 
     // Redux 스토어에 tripData 저장
