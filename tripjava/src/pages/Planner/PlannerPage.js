@@ -42,7 +42,7 @@ const PlannerPage = () => {
         </div>
         <h1>여행지 목록</h1>
         <div>
-          <PlannerLine />
+          <PlannerLine plannerId={plannerId} />
         </div>
         <h1>일정표</h1>
         <div>
