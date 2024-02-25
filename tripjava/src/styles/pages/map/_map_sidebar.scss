@@ -5,8 +5,10 @@
   left: 0;
   height: 100vh;
   width: 300px;
+  overflow: scroll;
   .sidebar_content {
     padding: 0 20px 20px 20px;
+    height: 100%;
   }
   .sidebar_header {
     margin-top: 5px;
@@ -16,6 +18,9 @@
     font-size: 14px;
     h3 {
       @include h3-tag;
+    }
+    div {
+      margin: 5px 0 0 3px;
     }
   }
 }
@@ -31,6 +36,26 @@ li {
   svg {
     width: 14px;
     height: 14px;
+  }
+}
+
+.sidebar_tabs {
+  display: flex;
+  button {
+    @include h3-tag;
+    @include main-button;
+    border-radius: 7px !important;
+    font-size: 12.5px !important;
+    margin: 3px 10px 5px 0;
+  }
+}
+
+.sidebar_selecteddate {
+  h4 {
+    margin: 5px 0 5px 3px;
+    font-family: var(--pointfont);
+    font-size: 14px;
+    font-weight: lighter;
   }
 }
 
@@ -52,34 +77,72 @@ li {
       font-size: 14px;
       h4 {
         margin: 0;
-      }
-      svg {
-        margin: 0 1px 0 3px;
-      }
-      button {
-        margin-left: auto;
-        padding-top: 4px;
-        background-color: transparent;
-        border: none;
-
+        vertical-align: middle;
         svg {
-          // @include flex-center;
-          cursor: pointer;
-          color: $map-delete;
+          vertical-align: middle;
+          margin: 0 1px 2px 3px;
         }
+      }
+    }
+    button {
+      margin-left: auto;
+      padding-top: 4px;
+      background-color: transparent;
+      border: none;
+      svg {
+        cursor: pointer;
+        color: $map-delete;
       }
     }
   }
 }
-
 .sidebar_route {
+  overflow: scroll;
   h3 {
     @include h3-tag;
   }
+  div {
+    @include input-box;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    white-space: nowrap;
+    // box-shadow: 0 2px 7px 1px rgba(0, 0, 0, 0.034);
+    // overflow: hidden;
+    // text-overflow: ellipsis;
+    font-size: 14px;
+    h4 {
+      margin: 0;
+    }
+    button {
+      margin-left: auto;
+      padding-top: 4px;
+      background-color: transparent;
+      border: none;
+      svg {
+        cursor: pointer;
+        color: $map-delete;
+      }
+    }
+  }
 }
-
+.sidebar_footter {
+  bottom: 0;
+  display: flex;
+  justify-content: flex;
+  width: 300px;
+  padding: 0 40px 10px 0px;
+  button {
+    @include h3-tag;
+    @include main-button;
+    width: 100%;
+    border-radius: 7px !important;
+    font-size: 12.5px !important;
+    margin: 3px 0 5px 0;
+  }
+}
 //////////// nearby 관련
-
 .nearby_menu {
   @include container;
   z-index: 100;
@@ -99,6 +162,7 @@ li {
     .nearby_category {
       display: flex;
       button {
+        @include h3-tag;
         @include main-button;
         border-radius: 7px !important;
         font-size: 0.8em !important;
