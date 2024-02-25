@@ -4,11 +4,13 @@
   align-items: center;
   justify-content: center;
   height: 50%;
-  width: 50%;
+  width: 40%;
   padding: 3em;
   border-radius: 16px;
   margin: auto;
-  margin-top: 6rem;
+  margin-top: 8rem;
+  color: var(--main-color);
+  background-color: white;
 
   .title {
     font-size: 1.5em;
@@ -37,9 +39,10 @@
         padding-left: 1em;
         font-size: 1.2em;
         background-color: transparent;
-        border: 1px solid white;
+        border: 1px solid var(--main-color);
         margin-top: 1rem;
         text-align: center;
+        color: var(--main-color);
 
         &::placeholder {
           color: white;

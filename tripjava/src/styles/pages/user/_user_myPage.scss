@@ -1,6 +1,10 @@
 .wrap {
+  padding: 3em;
+  border-radius: 16px;
+  width: 55%;
+  margin: auto;
+  margin-top: 3rem;
   @include flex-center;
-  height: 100%;
 
   .myPage-form {
     @include container;
@@ -8,10 +12,16 @@
     // flex-direction: column;
     padding: 3em;
     border: 0;
+    margin: 1rem;
     border: {
       radius: 16px;
       top: 0.5px solid var(--main-white);
       left: 0.5px solid var(--main-white);
+    }
+
+    div {
+      font-size: 18px;
+      margin-top: 7px;
     }
 
     h1 {
