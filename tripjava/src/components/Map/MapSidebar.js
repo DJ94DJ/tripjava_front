@@ -167,7 +167,10 @@ const MapSidebar = ({ startDate, endDate }) => {
           </div>
 
           {tabs.map((tab) => (
-            <div className="sidebar_tabs">
+            <div
+              className="sidebar_tabs"
+              id={formatDate(addDays(startDate, tab - 1))}
+            >
               <div key={tab}>
                 <button
                   onClick={() => handleDayClick(tab)}
@@ -175,11 +178,17 @@ const MapSidebar = ({ startDate, endDate }) => {
                 >
                   {formatDate(addDays(startDate, tab - 1))}
                 </button>
-                <div className="sidebar_selecteddate">
+                <div
+                  className="sidebar_selecteddate"
+                  id={formatDate(addDays(startDate, tab - 1))}
+                >
                   {/* <h4>{formatDate(addDays(startDate, tab - 1))}</h4> */}
                 </div>
               </div>
-              <div className="sidebar_hotel">
+              <div
+                className="sidebar_hotel"
+                id={formatDate(addDays(startDate, tab - 1))}
+              >
                 <h3>숙소</h3>
                 <div className="sidebar_hotel_container">
                   {routes.map((route, index) => {
@@ -205,7 +214,10 @@ const MapSidebar = ({ startDate, endDate }) => {
                   })}
                 </div>
               </div>
-              <div className="sidebar_route">
+              <div
+                className="sidebar_route"
+                id={formatDate(addDays(startDate, tab - 1))}
+              >
                 <h3>일정</h3>
                 {selectedSpot.map((spot, index) => (
                   <div key={index}>
