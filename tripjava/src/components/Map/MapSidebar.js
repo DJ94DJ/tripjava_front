@@ -12,6 +12,7 @@ import {
   removeRoute,
   addRoute,
   removeSpot,
+  saveTripData,
 } from '../../store/actions/triproute';
 import { FaRegFaceSadTear } from 'react-icons/fa6';
 import { v4 as uuidv4 } from 'uuid';
@@ -37,7 +38,7 @@ function addDays(date, days) {
   result.setDate(result.getDate() + days);
   return result;
 }
-
+// 날짜 포맷 변경
 function formatPeriod(startDate, endDate) {
   const startFormat = formatDate(startDate); // "2024.02.22(목)"
   const endFormat = formatDate(endDate); // "2024.02.24(토)"
@@ -59,6 +60,7 @@ const MapSidebar = ({ startDate, endDate }) => {
   const [selectedCategory, setSelectedCategory] = useState('touristSpots');
   const [selectedSpot, setSelectedSpot] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTab, setSelectedTab] = useState(1); // 기본값으로 1일차 탭 선택되게!
 
   const calculatePeriod = (startDate, endDate) => {
     // 문자열을 Date 객체로 변환
@@ -76,7 +78,8 @@ const MapSidebar = ({ startDate, endDate }) => {
   // 일차 버튼을 클릭했을 때 실행되는 함수
   const handleDayClick = (day) => {
     const selectedDayDate = addDays(startDate, day - 1); // 선택된 일차에 해당하는 날짜 계산
-    setSelectedDate(formatDate(selectedDayDate)); // 상태 업데이트
+    setSelectedDate(formatDate(selectedDayDate)); // 날짜 형식으로 상태 업데이트
+    setSelectedTab(day); // 현재 선택된 탭 업데이트
   };
 
   // 근처 목적지 정보를 불러오는 함수
@@ -130,6 +133,21 @@ const MapSidebar = ({ startDate, endDate }) => {
     setSelectedSpot((prevSpots) => prevSpots.filter((spot) => spot.id !== id));
   };
 
+  // 저장 버튼 @@@@@@@@@@@@@@@@@@@@@@@
+  const handleSaveTripData = () => {
+    const currentTripData = {
+      routes: routes,
+      selectedSpots: selectedSpot,
+      selectedDates: selectedDate,
+      tabs: tabs,
+      setSelectedTab: setSelectedTab,
+    };
+    // Redux 스토어에 tripData 저장
+    dispatch(
+      saveTripData({ ...routes, [selectedDate]: { spots: selectedSpot }, tabs })
+    );
+  };
+
   return (
     <>
       <div className="side_menu">
@@ -147,63 +165,75 @@ const MapSidebar = ({ startDate, endDate }) => {
             <div>{formattedPeriod}</div>
             <hr />
           </div>
-          <div className="sidebar_tabs">
-            {tabs.map((tab) => (
-              <button key={tab} onClick={() => handleDayClick(tab)}>
-                {tab}일차
-              </button>
-            ))}
-          </div>
-          {/* 선택된 날짜 표시 */}
-          {selectedDate && (
-            <div className="sidebar_selecteddate">
-              <h4>{selectedDate}</h4>
-            </div>
-          )}
-          {/* 나머지 JSX 마크업 */}
-          <div className="sidebar_hotel">
-            <h3>숙소</h3>
-            <div className="sidebar_hotel_container">
-              {routes.map((route, index) => {
-                // "[한국관광 품질인증/Korea Quality]" 문자열 제거
-                const titleWithoutCertification = route.title
-                  .replace('[한국관광 품질인증/Korea Quality]', '')
-                  .trim();
 
-                return (
-                  <div
-                    key={index}
-                    onClick={() => fetchNearbyDestinations(route.id)}
-                  >
-                    <h4>
-                      {titleWithoutCertification}
-                      {/*  한국관광 품질인증/Korea Quality]이 있을 경우 아이콘 표시 */}
-                      {route.title.includes(
-                        '[한국관광 품질인증/Korea Quality]'
-                      ) && <PiSealCheckFill />}
-                    </h4>
-                    {/* 삭제 버튼에 title을 인자로 넘기기!! */}
-                    <button onClick={() => handleRemoveRoute(route.id)}>
+          {tabs.map((tab) => (
+            <div
+              className="sidebar_tabs"
+              id={formatDate(addDays(startDate, tab - 1))}
+            >
+              <div key={tab}>
+                <button
+                  onClick={() => handleDayClick(tab)}
+                  className="sidebar_date"
+                >
+                  {formatDate(addDays(startDate, tab - 1))}
+                </button>
+                <div
+                  className="sidebar_selecteddate"
+                  id={formatDate(addDays(startDate, tab - 1))}
+                >
+                  {/* <h4>{formatDate(addDays(startDate, tab - 1))}</h4> */}
+                </div>
+              </div>
+              <div
+                className="sidebar_hotel"
+                id={formatDate(addDays(startDate, tab - 1))}
+              >
+                <h3>숙소</h3>
+                <div className="sidebar_hotel_container">
+                  {routes.map((route, index) => {
+                    const titleWithoutCertification = route.title
+                      .replace('[한국관광 품질인증/Korea Quality]', '')
+                      .trim();
+                    return (
+                      <div
+                        key={index}
+                        onClick={() => fetchNearbyDestinations(route.id)}
+                      >
+                        <h4>
+                          {titleWithoutCertification}
+                          {route.title.includes(
+                            '[한국관광 품질인증/Korea Quality]'
+                          ) && <PiSealCheckFill />}
+                        </h4>
+                        <button onClick={() => handleRemoveRoute(route.id)}>
+                          <FaXmark />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <div
+                className="sidebar_route"
+                id={formatDate(addDays(startDate, tab - 1))}
+              >
+                <h3>일정</h3>
+                {selectedSpot.map((spot, index) => (
+                  <div key={index}>
+                    <h4>{spot.title}</h4>
+                    <button
+                      onClick={() => handleRemoveSpot(selectedDate, spot.id)}
+                    >
                       <FaXmark />
                     </button>
                   </div>
-                );
-              })}
-            </div>
-          </div>
-          <div className="sidebar_route">
-            <h3>일정</h3>
-            {selectedSpot.map((spot, index) => (
-              <div key={index}>
-                <h4>{spot.title}</h4>
-                <button onClick={() => handleRemoveSpot(selectedDate, spot.id)}>
-                  <FaXmark />
-                </button>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
           <div className="sidebar_footter">
-            <button>저장</button>
+            <button onClick={handleSaveTripData}>저장</button>
           </div>
         </div>
       </div>
