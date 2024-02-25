@@ -3,6 +3,7 @@ export const ADD_ROUTE = 'ADD_ROUTE';
 export const RESET_ROUTE = 'RESET_ROUTE';
 export const REMOVE_ROUTE = 'REMOVE_ROUTE';
 export const REMOVE_SPOT = 'REMOVE_SPOT';
+export const SAVE_TRIP_DATA = 'SAVE_TRIP_DATA';
 
 // 경로 추가
 export const addRoute = (route) => ({
@@ -30,4 +31,10 @@ export const addSpot = (selectedDate, spot) => ({
 export const removeSpot = (selectedDate, id) => ({
   type: REMOVE_SPOT,
   payload: { selectedDate, id },
+});
+
+// tripData 저장
+export const saveTripData = (tripData) => ({
+  type: SAVE_TRIP_DATA,
+  payload: tripData,
 });

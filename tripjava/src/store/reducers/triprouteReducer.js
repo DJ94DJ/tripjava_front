@@ -3,6 +3,7 @@ import {
   RESET_ROUTE,
   REMOVE_ROUTE,
   REMOVE_SPOT,
+  SAVE_TRIP_DATA,
 } from '../actions/triproute';
 
 const initialState = {
@@ -58,6 +59,13 @@ const triprouteReducer = (state = initialState, action) => {
           },
         },
       };
+
+    case SAVE_TRIP_DATA:
+      return {
+        ...state,
+        tripData: action.payload,
+      };
+
     default:
       return state;
   }
