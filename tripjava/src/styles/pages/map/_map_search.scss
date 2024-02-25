@@ -1,15 +1,20 @@
 .search_container {
   position: absolute;
-  top: 20px;
-  left: 50%;
+  top: 25px;
+  left: calc(50% + 300px);
   transform: translate(-50%);
   z-index: 100;
-  width: 300px;
+  width: 330px;
 
   .combobox_input {
+    border-radius: 10px;
     width: 100%;
     padding: 0.5rem;
     border: none;
-    background-color: #edd9ab;
+    background-color: var(--main-white);
+    padding-left: 15px;
+    &:focus {
+      outline: none;
+    }
   }
 }
