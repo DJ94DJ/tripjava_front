@@ -1,7 +1,16 @@
 .locate {
   position: absolute;
-  top: 22.5px;
-  left: 70%;
+  top: 33px;
+  left: calc(50% + 444px);
   transform: translate(-50%);
-  z-index: 100;
+  z-index: 103;
+}
+
+button.locate {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  svg {
+    color: #e98d58;
+  }
 }

@@ -16,6 +16,8 @@ import {
 } from '../../store/actions/triproute';
 import { FaRegFaceSadTear } from 'react-icons/fa6';
 import { v4 as uuidv4 } from 'uuid';
+import { GoTriangleRight } from 'react-icons/go';
+import { GoTriangleLeft } from 'react-icons/go';
 
 // 날짜 포맷 변경 함수
 function formatDate(dateString) {
@@ -61,6 +63,13 @@ const MapSidebar = ({ startDate, endDate }) => {
   const [selectedSpot, setSelectedSpot] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTab, setSelectedTab] = useState(1); // 기본값으로 1일차 탭 선택되게!
+  // @nayounghye : 사이드바 접기 관련
+  const [nearbyMenuOpen, setNearbyMenuOpen] = useState(true); // 초기값은 메뉴를 열린 상태로 설정
+
+  // @nayounghye : 사이드바 접기 관련
+  const toggleNearbyMenu = () => {
+    setNearbyMenuOpen(!nearbyMenuOpen);
+  };
 
   const calculatePeriod = (startDate, endDate) => {
     // 문자열을 Date 객체로 변환
@@ -238,49 +247,72 @@ const MapSidebar = ({ startDate, endDate }) => {
         </div>
       </div>
 
-      <div className="nearby_menu">
-        <div className="nearby_content">
-          <div className="nearby_header">
-            <h3>추천 장소</h3>
-          </div>
-          <div className="nearby_category">
-            <button onClick={() => setSelectedCategory('touristSpots')}>
-              관광지
-            </button>
-            <button onClick={() => setSelectedCategory('restaurants')}>
-              음식점
-            </button>
-          </div>
-          <div className="nearby_container">
-            {destinations[selectedCategory].length === 0 ? (
-              <div
-                className="no-data-message"
-                style={{ fontSize: 14, fontWeight: 'bold' }}
-              >
-                주변 추천 장소가 없습니다.
-                <FaRegFaceSadTear />
-              </div>
-            ) : (
-              <div className="nearby_list">
-                {destinations[selectedCategory].map((destination) => (
-                  <div key={destination.contentid} className="nearby_item">
-                    <div className="nearby_imgcontainer">
-                      <img
-                        src={destination.firstimage || '/static/noimage.gif'}
-                        alt={destination.title}
-                      />
+      {/* @nayounghye : 사이드바 접기 관련 */}
+      {/* 메뉴 토글 버튼 */}
+      <button
+        className="nearby_toggle"
+        onClick={toggleNearbyMenu}
+        style={{
+          left: nearbyMenuOpen ? '594px' : '294px',
+          top: '50%',
+          transform: 'translateY(-50%)', // 버튼을 세로 중앙에 위치
+          position: 'absolute',
+          zIndex: '100',
+          backgroundColor: 'var(--main-white)',
+          border: 'none',
+          height: '35px',
+          width: '25px',
+          padding: '0',
+        }}
+      >
+        {nearbyMenuOpen ? <GoTriangleRight /> : <GoTriangleLeft />}
+      </button>
+      {/* 조건부 렌더링을 사용하여 메뉴 표시 여부 제어 */}
+      {nearbyMenuOpen && (
+        <div className="nearby_menu">
+          <div className="nearby_content">
+            <div className="nearby_header">
+              <h3>추천 장소</h3>
+            </div>
+            <div className="nearby_category">
+              <button onClick={() => setSelectedCategory('touristSpots')}>
+                관광지
+              </button>
+              <button onClick={() => setSelectedCategory('restaurants')}>
+                음식점
+              </button>
+            </div>
+            <div className="nearby_container">
+              {destinations[selectedCategory].length === 0 ? (
+                <div
+                  className="no-data-message"
+                  style={{ fontSize: 14, fontWeight: 'bold' }}
+                >
+                  주변 추천 장소가 없습니다.
+                  <FaRegFaceSadTear />
+                </div>
+              ) : (
+                <div className="nearby_list">
+                  {destinations[selectedCategory].map((destination) => (
+                    <div key={destination.contentid} className="nearby_item">
+                      <div className="nearby_imgcontainer">
+                        <img
+                          src={destination.firstimage || '/static/noimage.gif'}
+                          alt={destination.title}
+                        />
+                      </div>
+                      <h4>{destination.title}</h4>
+                      <button onClick={() => handleAddSpot(destination)}>
+                        <FaPlus />
+                      </button>
                     </div>
-                    <h4>{destination.title}</h4>
-                    <button onClick={() => handleAddSpot(destination)}>
-                      <FaPlus />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

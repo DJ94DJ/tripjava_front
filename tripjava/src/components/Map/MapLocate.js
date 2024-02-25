@@ -1,5 +1,6 @@
 // Locate.js
 import React from 'react';
+import { FaLocationArrow } from 'react-icons/fa';
 
 export function MapLocate({ panTo }) {
   return (
@@ -18,7 +19,7 @@ export function MapLocate({ panTo }) {
         );
       }}
     >
-      현재 위치
+      <FaLocationArrow />
     </button>
   );
 }

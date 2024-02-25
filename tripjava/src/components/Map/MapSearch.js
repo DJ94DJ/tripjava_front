@@ -35,7 +35,7 @@ export function MapSearch({ panTo }) {
           value={value}
           onChange={(e) => setValue(e.target.value)}
           disabled={!ready}
-          placeholder="Search your location"
+          placeholder="장소, 버스, 지하철, 주소를 검색해보세요!"
         />
         <ComboboxPopover>
           <ComboboxList>
