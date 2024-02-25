@@ -12,6 +12,7 @@ import {
   removeRoute,
   addRoute,
   removeSpot,
+  saveTripData,
 } from '../../store/actions/triproute';
 import { FaRegFaceSadTear } from 'react-icons/fa6';
 import { v4 as uuidv4 } from 'uuid';
@@ -130,6 +131,18 @@ const MapSidebar = ({ startDate, endDate }) => {
     setSelectedSpot((prevSpots) => prevSpots.filter((spot) => spot.id !== id));
   };
 
+  // 저장 버튼 @@@@@@@@@@@@@@@@@@@@@@@
+  const handleSaveTripData = () => {
+    const currentTripData = {
+      routes: routes,
+      selectedSpots: selectedSpot,
+      selectedDates: selectedDate,
+    };
+
+    // Redux 스토어에 tripData 저장
+    dispatch(saveTripData(currentTripData));
+  };
+
   return (
     <>
       <div className="side_menu">
@@ -203,7 +216,7 @@ const MapSidebar = ({ startDate, endDate }) => {
             ))}
           </div>
           <div className="sidebar_footter">
-            <button>저장</button>
+            <button onClick={handleSaveTripData}>저장</button>
           </div>
         </div>
       </div>
