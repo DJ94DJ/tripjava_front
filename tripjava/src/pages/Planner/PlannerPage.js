@@ -42,11 +42,11 @@ const PlannerPage = () => {
         </div>
         <h1>여행지 목록</h1>
         <div>
-          <PlannerLine />
+          <PlannerLine planner_no={plannerId} />
         </div>
         <h1>일정표</h1>
         <div>
-          <PlannerTable planner_no={plannerId} />{" "}
+          <PlannerTable planner_no={plannerId} />
           {/* 가져온 plannerId를 PlannerTable 컴포넌트에 전달합니다. */}
         </div>
       </div>
