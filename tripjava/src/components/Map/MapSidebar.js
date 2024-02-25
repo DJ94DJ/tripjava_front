@@ -187,12 +187,6 @@ const MapSidebar = ({ startDate, endDate }) => {
                 >
                   {formatDate(addDays(startDate, tab - 1))}
                 </button>
-                <div
-                  className="sidebar_selecteddate"
-                  id={formatDate(addDays(startDate, tab - 1))}
-                >
-                  {/* <h4>{formatDate(addDays(startDate, tab - 1))}</h4> */}
-                </div>
               </div>
               <div
                 className="sidebar_hotel"
