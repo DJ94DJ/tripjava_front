@@ -1,9 +1,11 @@
+import { PiExportLight } from 'react-icons/pi';
 import { v4 as uuidv4 } from 'uuid';
 export const ADD_ROUTE = 'ADD_ROUTE';
 export const RESET_ROUTE = 'RESET_ROUTE';
 export const REMOVE_ROUTE = 'REMOVE_ROUTE';
 export const REMOVE_SPOT = 'REMOVE_SPOT';
-export const SAVE_TRIP_DATA = 'SAVE_TRIP_DATA';
+export const ALL_TRIP_DATA = 'ALL_TRIP_DATA';
+export const TODAY_TRIP_DATA = 'TODAY_TRIP_DATA';
 
 // 경로 추가
 export const addRoute = (route) => ({
@@ -33,8 +35,14 @@ export const removeSpot = (selectedDate, id) => ({
   payload: { selectedDate, id },
 });
 
+// 날짜별 숙소, 관광지, 음식점 추가
+export const todayTripData = (tripData) => ({
+  type: TODAY_TRIP_DATA,
+  payload: tripData,
+});
+
 // tripData 저장
-export const saveTripData = (tripData) => ({
-  type: SAVE_TRIP_DATA,
+export const allTripData = (tripData) => ({
+  type: ALL_TRIP_DATA,
   payload: tripData,
 });
