@@ -16,7 +16,7 @@ const TestPlannerTable2 = ({ planner_no }) => {
       .get(`http://localhost:8080/planner/trip-route/${planner_no}`)
       .then((response) => {
         console.log("컴포넌트~여행 정보 요청 응답: ", response.data);
-        setPlannerData(response.data); // 응답에서 받아온 데이터를 상태에 저장합니다.
+        setPlannerData(response.data);
         const startDay = new Date(response.data.start_day);
         const endDay = new Date(response.data.end_day);
         const days = (endDay - startDay) / (1000 * 60 * 60 * 24) + 1;  // 여행 일수를 계산합니다.
@@ -29,62 +29,79 @@ const TestPlannerTable2 = ({ planner_no }) => {
 
   const handleSave = (newItinerary) => {
     setItineraries(prev => [...prev, newItinerary]);
-    setShowModal(false);  // 일정을 저장한 후에는 모달을 숨깁니다.
+    setShowModal(false);  // 일정 저장 후 모달 숨김
     // setSelectedDate(null);  // 선택된 날짜를 초기화합니다.
   };
 
-// 수정필요!!
-  // useEffect(() => {
-  //   findItineraries();
-  // }, []);
-
-
-    // 수정필요!!
-  // const findItineraries = () => {
-  //   axios.get('http://localhost:8080/itinerary/select')
-  //     .then((res) => {
-  //       setItineraries(res.data);
-  //       console.log('여행일정 정보 다 받아오기 성공: ', res.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error('여행일정 정보 받아오기 실패! 다시 시도하세요', error);
-  //     });
-  // };
-
-
-
-//   const getItineraryForTime = (dayNumber, hour) => {
-//     console.log("데이터스트링",dayNumber);
+  // 모달에서 일정 저장 후 바로 table에 반영될 수 있게 해줌
+  useEffect(() => {
+    const handleItinerarySaved = () => {
+      findItineraries();
+    };
+    const eventName = `itinerarySaved_${planner_no}`;
+    window.addEventListener(eventName, handleItinerarySaved);
+    return () => {
+      window.removeEventListener(eventName, handleItinerarySaved);
+    };
+  }, [planner_no]);
   
-//     const itinerary = itineraries.find(it => {
-//       console.log("잇 데이타:",it.today_no);
-//       if (it.today_no.today_no !== dayNumber) {
-//         return false;  // 날짜가 다른 경우 건너뜁니다.
-//       }
-//       // 'HH:MM' 형식의 시간을 분으로 변환합니다.
-//       const startMinutes = it.start_time.split(':').reduce((acc, val) => acc * 60 + Number(val));
-//       const endMinutes = it.end_time.split(':').reduce((acc, val) => acc * 60 + Number(val));
-//       const currentMinutes = hour * 60;
-//       // 현재 시간이 시작 시간과 종료 시간 사이인지 확인합니다.
-//       console.log("시작시간",startMinutes,"종료시간", endMinutes,"현재시간", currentMinutes);
-//       return currentMinutes >= startMinutes && currentMinutes < endMinutes;
-//     });
+  
 
-//   console.log('찾은 일정 요기 있니?:', itinerary);
+  useEffect(() => {
+    findItineraries();
+  }, []);
 
-//   return itinerary ? itinerary.planner_title : null;
-// };
+
+  
+  const findItineraries = () => {
+    axios.get('http://localhost:8080/itinerary/select')
+      .then((res) => {
+        setItineraries(res.data);
+        console.log('여행일정 정보 다 받아오기 성공: ', res.data);
+      })
+      .catch((error) => {
+        console.error('여행일정 정보 받아오기 실패! 다시 시도하세요', error);
+      });
+  };
+
+
+
+  const getItineraryForTime = (dayNumber, hour) => {
+    const itinerary = itineraries.find(it => {
+      console.log("잇???",it)
+      const today_no = it.today_no?.today_no;
+      if (today_no === undefined || Number(today_no) !== dayNumber) {
+        return false;
+      }
+      
+      // 'HH:MM' 형식의 시간에서 'HH' 부분만 추출
+      const startHour = Number(it.start_time.split(':')[0]);
+      const endHour = Number(it.end_time.split(':')[0]);
+      // 현재 시간이 시작 시간과 종료 시간 사이인지 확인
+      return hour >= startHour && hour < endHour;
+    });
+  
+    // console.log("제발 담겨라",itinerary);
+    // if (itinerary) {
+    //   console.log("itinerary.planner_title: ", itinerary.planner_title);
+    // }
+    
+    // return itinerary ? itinerary.planner_title : null;
+    return itinerary ? itinerary.planner_title || 'No Title' : null;
+
+  };
+  
 
 
   const createDailyTable = (date, dayNumber) => {
     const hours = [];
     for (let i = 0; i < 24; i++) {
-      // const itinerary = getItineraryForTime(date, i);  // 해당 시간에 일정이 있는지 확인.
+      const itinerary = getItineraryForTime(dayNumber, i);  // 해당 시간에 일정이 있는지 확인.
       hours.push(
         <tr key={i}>
           <td style={{ border: "1px solid black", padding: "5px" }}>{i}시</td>
           <td style={{ border: "1px solid black", padding: "5px" }}>
-            {/* {itinerary ? itinerary.planner_title : ''} */}
+            {itinerary || ''}
             </td>
         </tr>
       );
@@ -154,6 +171,7 @@ const TestPlannerTable2 = ({ planner_no }) => {
           startDay={plannerData.start_day}
           endDay={plannerData.end_day}
           onSave={handleSave}
+          planner_no={planner_no}
         />
       }
     </div>

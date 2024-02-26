@@ -4,7 +4,7 @@ import Draggable from "react-draggable";
 import { useNavigate } from "react-router-dom";
 import "../../styles/pages/planner/_planner_modal.scss";
 
-const TestModal = ({ selectedDate,days,startDay,selectedDayNumber, endDay, onClose, onSave }) => {
+const TestModal = ({ selectedDate,days,startDay,selectedDayNumber, endDay, onClose, onSave, planner_no }) => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [itinerary, setItinerary] = useState([]);
@@ -28,6 +28,9 @@ const TestModal = ({ selectedDate,days,startDay,selectedDayNumber, endDay, onClo
       setItinerary(res.data);
       onSave({ date: selectedDate, time: newItinerary.start_time, itinerary: res.data });  // onSave를 호출하여 정보를 저장합니다.
       setShowModal(false);
+
+      // 저장시 바로 reload 할 수 있게끔
+    window.dispatchEvent(new CustomEvent(`itinerarySaved_${planner_no}`));
     })
     .catch((error) => {
       console.error("생성 오류! 다시 시도하세요", error);
