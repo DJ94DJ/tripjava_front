@@ -175,6 +175,44 @@ const MapSidebar = ({ startDate, endDate }) => {
             <hr />
           </div>
 
+          <div className="sidebar_hotel">
+            {/* <h3>숙소</h3> */}
+            <div className="sidebar_hotel_container">
+              {routes.map((route, index) => {
+                const titleWithoutCertification = route.title
+                  .replace('[한국관광 품질인증/Korea Quality]', '')
+                  .trim();
+                return (
+                  <div
+                    key={index}
+                    onClick={() => fetchNearbyDestinations(route.id)}
+                  >
+                    <h4>
+                      {titleWithoutCertification}
+                      {route.title.includes(
+                        '[한국관광 품질인증/Korea Quality]'
+                      ) && <PiSealCheckFill />}
+                    </h4>
+                    <button onClick={() => handleRemoveRoute(route.id)}>
+                      <FaXmark />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div className="sidebar_route">
+            {/* <h3>일정</h3> */}
+            {selectedSpot.map((spot, index) => (
+              <div key={index}>
+                <h4>{spot.title}</h4>
+                <button onClick={() => handleRemoveSpot(selectedDate, spot.id)}>
+                  <FaXmark />
+                </button>
+              </div>
+            ))}
+          </div>
+
           {tabs.map((tab) => (
             <div
               className="sidebar_tabs"
@@ -187,54 +225,12 @@ const MapSidebar = ({ startDate, endDate }) => {
                 >
                   {formatDate(addDays(startDate, tab - 1))}
                 </button>
-              </div>
-              <div
-                className="sidebar_hotel"
-                id={formatDate(addDays(startDate, tab - 1))}
-              >
                 <h3>숙소</h3>
-                <div className="sidebar_hotel_container">
-                  {routes.map((route, index) => {
-                    const titleWithoutCertification = route.title
-                      .replace('[한국관광 품질인증/Korea Quality]', '')
-                      .trim();
-                    return (
-                      <div
-                        key={index}
-                        onClick={() => fetchNearbyDestinations(route.id)}
-                      >
-                        <h4>
-                          {titleWithoutCertification}
-                          {route.title.includes(
-                            '[한국관광 품질인증/Korea Quality]'
-                          ) && <PiSealCheckFill />}
-                        </h4>
-                        <button onClick={() => handleRemoveRoute(route.id)}>
-                          <FaXmark />
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div
-                className="sidebar_route"
-                id={formatDate(addDays(startDate, tab - 1))}
-              >
                 <h3>일정</h3>
-                {selectedSpot.map((spot, index) => (
-                  <div key={index}>
-                    <h4>{spot.title}</h4>
-                    <button
-                      onClick={() => handleRemoveSpot(selectedDate, spot.id)}
-                    >
-                      <FaXmark />
-                    </button>
-                  </div>
-                ))}
               </div>
             </div>
           ))}
+
           <div className="sidebar_footter">
             <button onClick={handleSaveTripData}>저장</button>
           </div>
