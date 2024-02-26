@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import TestModal from "./TestModal";
 
-const TestPlannerTable2 = ({ planner_no }) => {
+const TestPlannerTable3 = ({ planner_no }) => {
   const [plannerData, setPlannerData] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null); // 선택 날짜 저장
@@ -10,10 +10,6 @@ const TestPlannerTable2 = ({ planner_no }) => {
   const [days, setDays] = useState(0);
   const [itineraries, setItineraries] = useState([]); // 일정 저장
   const [selectedDayNumber, setSelectedDayNumber] = useState(1); // 선택된 날짜가 여행의 몇 번째 날인지 저장
-  const [selectedDateTime, setSelectedDateTime] = useState({
-    date: null,
-    hour: null,
-  }); // 선택된 날짜와 시간을 저장하는 상태
 
   // 이전에 있던 병합을 제거하고 새로운 병합을 추가하는 함수입니다.
   const mergeCells = () => {
@@ -30,67 +26,30 @@ const TestPlannerTable2 = ({ planner_no }) => {
       // currentCell이 undefined이거나 textContent가 빈 문자열이면 무시합니다.
       if (!currentCell || !currentCell.textContent) return;
 
+      // // 백엔드에서 받아온 일정을 확인하여, currentCell에 해당하는 일정이 삭제되었으면 복원합니다.
+      // const itinerary = itineraries.find(
+      //   (it) => it.planner_title === currentCell.textContent
+      // );
+      // if (!itinerary) {
+      //   currentCell.style.display = "";
+      //   currentCell.rowSpan = 1;
+      //   return;
+      // }
+
       if (lastCell && lastCell.textContent === currentCell.textContent) {
         count++;
         lastCell.rowSpan = count;
         currentCell.style.display = "none";
-        currentCell.classList.add("merged"); // 현재 셀에 'merged' 클래스 추가
       } else {
         lastCell = currentCell;
-        lastCell.classList.add("merged");
         count = 1;
       }
     });
   };
 
-  // 백엔드에서 Itinerary 전체를 가져오는 함수입니다.
-  const fetchItineraries = async () => {
-    try {
-      const res = await axios.get("http://localhost:8080/itinerary/select");
-      console.log("전체불러와", res);
-      return res.data;
-    } catch (error) {
-      console.error("일정 불러오기 오류! 다시 시도하세요", error);
-    }
-  };
-
-  // 삭제 버튼을 추가하는 함수입니다.
-  const addDeleteButton = (itineraries) => {
-    itineraries.forEach((itinerary) => {
-      const cell = Array.from(document.querySelectorAll(".merged")).find(
-        (cell) => cell.textContent === itinerary.planner_title
-      );
-      if (cell && !cell.querySelector("button")) {
-        const deleteButton = document.createElement("button");
-        deleteButton.innerText = "삭제";
-        deleteButton.addEventListener("click", () =>
-          handleDelete(itinerary.itinerary_no)
-        );
-        cell.appendChild(deleteButton);
-      }
-    });
-  };
-
-  // 일정을 삭제하는 함수입니다.
-  const handleDelete = (itineraryId) => {
-    axios
-      .delete(`http://localhost:8080/itinerary/del/${itineraryId}`)
-      .then((res) => {
-        console.log("일정 삭제 성공: ", res.data);
-        // 삭제가 성공하면 모달을 닫거나 다시 로드하는 등의 동작을 수행할 수 있습니다.
-      })
-      .catch((error) => {
-        console.error("삭제 오류! 다시 시도하세요", error);
-      });
-  };
-
-  // 일정이 변경될 때마다 셀 병합을 다시 실행하고, 백엔드에서 Itinerary 전체를 가져온 후 삭제 버튼을 추가합니다.
+  // 일정이 변경될 때마다 병합을 다시 실행합니다.
   useEffect(() => {
-    const timeoutId = setTimeout(async () => {
-      mergeCells();
-      const itineraries = await fetchItineraries();
-      addDeleteButton(itineraries);
-    }, 200);
+    const timeoutId = setTimeout(mergeCells, 20);
     return () => clearTimeout(timeoutId);
   }, [itineraries /* 백엔드에서 받아온 일정을 나타내는 상태 */]);
 
@@ -114,11 +73,6 @@ const TestPlannerTable2 = ({ planner_no }) => {
     setItineraries((prev) => [...prev, newItinerary]);
     setShowModal(false); // 일정 저장 후 모달 숨김
     // setSelectedDate(null);  // 선택된 날짜를 초기화합니다.
-  };
-
-  const handleTimeClick = (date, hour) => {
-    setSelectedDateTime({ date, hour }); // 선택된 날짜와 시간을 함께 설정
-    setShowModal(true);
   };
 
   // 모달에서 일정 저장 후 바로 table에 반영될 수 있게 해줌
@@ -151,7 +105,7 @@ const TestPlannerTable2 = ({ planner_no }) => {
 
   const getItineraryForTime = (dayNumber, hour) => {
     const itinerary = itineraries.find((it) => {
-      // console.log("잇???", it);
+      console.log("잇???", it);
       const today_no = it.today_no?.today_no;
       if (today_no === undefined || Number(today_no) !== dayNumber) {
         return false;
@@ -164,6 +118,12 @@ const TestPlannerTable2 = ({ planner_no }) => {
       return hour >= startHour && hour < endHour;
     });
 
+    // console.log("제발 담겨라",itinerary);
+    // if (itinerary) {
+    //   console.log("itinerary.planner_title: ", itinerary.planner_title);
+    // }
+
+    // return itinerary ? itinerary.planner_title : null;
     return itinerary ? itinerary.planner_title || "No Title" : null;
   };
 
@@ -173,20 +133,8 @@ const TestPlannerTable2 = ({ planner_no }) => {
       const itinerary = getItineraryForTime(dayNumber, i); // 해당 시간에 일정이 있는지 확인.
       hours.push(
         <tr key={i}>
-          <td
-            style={{ border: "1px solid black", padding: "5px" }}
-            onClick={() => {
-              handleTimeClick(date, i);
-            }}
-          >
-            {i}시
-          </td>
-          <td
-            style={{ border: "1px solid black", padding: "5px" }}
-            onClick={() => {
-              handleTimeClick(date, i);
-            }}
-          >
+          <td style={{ border: "1px solid black", padding: "5px" }}>{i}시</td>
+          <td style={{ border: "1px solid black", padding: "5px" }}>
             {itinerary || ""}
           </td>
         </tr>
@@ -195,10 +143,9 @@ const TestPlannerTable2 = ({ planner_no }) => {
 
     return (
       <table
-        className="day-table"
         style={{
           borderCollapse: "collapse",
-          minWidth: "250px",
+          width: "100%",
           marginBottom: "20px",
         }}
       >
@@ -207,29 +154,19 @@ const TestPlannerTable2 = ({ planner_no }) => {
             <th
               colSpan={2}
               style={{ border: "1px solid black", padding: "5px" }}
+              onClick={() => {
+                setSelectedDate(date);
+                setSelectedDayNumber(dayNumber); // 선택된 날짜가 여행의 몇 번째 날인지
+                setShowModal(true);
+              }}
             >
               {date.toLocaleDateString()}
+              <div>click!</div>
             </th>
           </tr>
           <tr>
-            <th
-              style={{
-                width: "20%",
-                border: "1px solid black",
-                padding: "5px",
-              }}
-            >
-              시간
-            </th>
-            <th
-              style={{
-                width: "80%",
-                border: "1px solid black",
-                padding: "5px",
-              }}
-            >
-              계획
-            </th>
+            <th style={{ border: "1px solid black", padding: "5px" }}>시간</th>
+            <th style={{ border: "1px solid black", padding: "5px" }}>계획</th>
           </tr>
         </thead>
         <tbody>{hours}</tbody>
@@ -241,8 +178,9 @@ const TestPlannerTable2 = ({ planner_no }) => {
     if (plannerData) {
       const startDay = new Date(plannerData.start_day);
       const endDay = new Date(plannerData.end_day);
-      const days = (endDay - startDay) / (1000 * 60 * 60 * 24) + 1;
+      const days = (endDay - startDay) / (1000 * 60 * 60 * 24) + 1; // 여행 일수를 계산합니다.
 
+      // 각 날짜에 대한 표를 생성합니다.
       const tables = [];
       for (let i = 0; i < days; i++) {
         const date = new Date(startDay);
@@ -262,7 +200,6 @@ const TestPlannerTable2 = ({ planner_no }) => {
           selectedDate={selectedDate}
           selectedHour={selectedHour}
           selectedDayNumber={selectedDayNumber} // 선택 날짜 여행의 몇 번째 날인지
-          selectedDateTime={selectedDateTime} // 시간을 눌렀을 때 날짜까지 같이 받아올 수 있음
           onClose={() => setShowModal(false)}
           days={days}
           startDay={plannerData.start_day}
@@ -275,4 +212,4 @@ const TestPlannerTable2 = ({ planner_no }) => {
   );
 };
 
-export default TestPlannerTable2;
+export default TestPlannerTable3;

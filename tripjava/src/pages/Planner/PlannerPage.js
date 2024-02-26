@@ -6,6 +6,7 @@ import PlannerLine from "../../components/Planner/PlannerLine";
 import PlannerTable from "../../components/Planner/PlannerTable";
 import KakaoShare from "../../components/Planner/KakaoShare";
 import TestPlannerTable2 from "../../components/Planner/TestPlannerTable2";
+import TestPlannerTable3 from "../../components/Planner/TestPlannerTable3";
 
 import { clearPlannerId } from "../../store/actions/plannerid";
 import { useDispatch, useSelector } from "react-redux";
