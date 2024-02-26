@@ -33,6 +33,11 @@ const TestPlannerTable2 = ({ planner_no }) => {
     // setSelectedDate(null);  // 선택된 날짜를 초기화합니다.
   };
 
+  const handleTimeClick = (date, hour) => {
+    setSelectedDateTime({ date, hour }); // 선택된 날짜와 시간을 함께 설정
+    setShowModal(true);
+  };
+
   // 모달에서 일정 저장 후 바로 table에 반영될 수 있게 해줌
   useEffect(() => {
     const handleItinerarySaved = () => {
@@ -76,12 +81,6 @@ const TestPlannerTable2 = ({ planner_no }) => {
       return hour >= startHour && hour < endHour;
     });
 
-    // console.log("제발 담겨라",itinerary);
-    // if (itinerary) {
-    //   console.log("itinerary.planner_title: ", itinerary.planner_title);
-    // }
-
-    // return itinerary ? itinerary.planner_title : null;
     return itinerary ? itinerary.planner_title || "No Title" : null;
   };
 
@@ -91,7 +90,14 @@ const TestPlannerTable2 = ({ planner_no }) => {
       const itinerary = getItineraryForTime(dayNumber, i); // 해당 시간에 일정이 있는지 확인.
       hours.push(
         <tr key={i}>
-          <td style={{ border: "1px solid black", padding: "5px" }}>{i}시</td>
+          <td
+            style={{ border: "1px solid black", padding: "5px" }}
+            onClick={() => {
+              handleTimeClick(date, i);
+            }}
+          >
+            {i}시
+          </td>
           <td style={{ border: "1px solid black", padding: "5px" }}>
             {itinerary || ""}
           </td>
@@ -112,18 +118,15 @@ const TestPlannerTable2 = ({ planner_no }) => {
             <th
               colSpan={2}
               style={{ border: "1px solid black", padding: "5px" }}
-              onClick={() => {
-                setSelectedDate(date);
-                setSelectedDayNumber(dayNumber); // 선택된 날짜가 여행의 몇 번째 날인지
-                setShowModal(true);
-              }}
             >
               {date.toLocaleDateString()}
-              <div>click!</div>
             </th>
           </tr>
           <tr>
-            <th style={{ border: "1px solid black", padding: "5px" }}>시간</th>
+            <th style={{ border: "1px solid black", padding: "5px" }}>
+              시간
+              <div>click!</div>
+            </th>
             <th style={{ border: "1px solid black", padding: "5px" }}>계획</th>
           </tr>
         </thead>
@@ -136,9 +139,8 @@ const TestPlannerTable2 = ({ planner_no }) => {
     if (plannerData) {
       const startDay = new Date(plannerData.start_day);
       const endDay = new Date(plannerData.end_day);
-      const days = (endDay - startDay) / (1000 * 60 * 60 * 24) + 1; // 여행 일수를 계산합니다.
+      const days = (endDay - startDay) / (1000 * 60 * 60 * 24) + 1;
 
-      // 각 날짜에 대한 표를 생성합니다.
       const tables = [];
       for (let i = 0; i < days; i++) {
         const date = new Date(startDay);
@@ -158,6 +160,7 @@ const TestPlannerTable2 = ({ planner_no }) => {
           selectedDate={selectedDate}
           selectedHour={selectedHour}
           selectedDayNumber={selectedDayNumber} // 선택 날짜 여행의 몇 번째 날인지
+          selectedDateTime={selectedDateTime} // 시간을 눌렀을 때 날짜까지 같이 받아올 수 있음
           onClose={() => setShowModal(false)}
           days={days}
           startDay={plannerData.start_day}

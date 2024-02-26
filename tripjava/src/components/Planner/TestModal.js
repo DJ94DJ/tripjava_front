@@ -4,7 +4,7 @@ import Draggable from "react-draggable";
 import { useNavigate } from "react-router-dom";
 import "../../styles/pages/planner/_planner_modal.scss";
 
-const TestModal = ({ selectedDate,days,startDay,selectedDayNumber, endDay, onClose, onSave, planner_no }) => {
+const TestModal = ({ selectedDateTime, days, startDay, endDay, onClose, onSave, planner_no, itineraryId }) => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [itinerary, setItinerary] = useState([]);
@@ -17,71 +17,116 @@ const TestModal = ({ selectedDate,days,startDay,selectedDayNumber, endDay, onClo
     price: ""
   });
 
+  const [startTime, setStartTime] = useState("");
+
+  const getDayNumberFromDate = (selectedDate) => {
+    const startDate = new Date(startDay);
+    const currentDate = new Date(selectedDate);
+  
+    const diffInTime = currentDate.getTime() - startDate.getTime();
+    const diffInDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24));
+  
+    return diffInDays + 1;
+  };
+
+  const handleDelete = () => {
+    axios.delete(`http://localhost:8080/itinerary/del/${itineraryId}`)
+      .then((res) => {
+        console.log("일정 삭제 성공: ", res.data);
+        // 삭제가 성공하면 모달을 닫거나 다시 로드하는 등의 동작을 수행할 수 있습니다.
+        onClose(); // 모달 닫기
+      })
+      .catch((error) => {
+        console.error("삭제 오류! 다시 시도하세요", error);
+      });
+  };
+
+
   const closeAlert = () => {
     setShowModal(false);
   };
 
   const handleSave = () => {
+    const date = new Date(startDay);
+    date.setDate(date.getDate() + Number(newItinerary.today_no.today_no) - 1);
+    const newStartTime = `${date.toISOString().substring(0, 10)} ${startTime}`;
+  
+    setNewItinerary(prev => ({ ...prev, start_time: newStartTime }));
     axios.post("http://localhost:8080/itinerary/add", newItinerary)
     .then((res) => {
       console.log("여행일정 정보 생성: ", res.data);
       setItinerary(res.data);
-      onSave({ date: selectedDate, time: newItinerary.start_time, itinerary: res.data });  // onSave를 호출하여 정보를 저장합니다.
+      onSave({ date: selectedDateTime.date, time: newItinerary.start_time, itinerary: res.data });
       setShowModal(false);
-
-      // 저장시 바로 reload 할 수 있게끔
-    window.dispatchEvent(new CustomEvent(`itinerarySaved_${planner_no}`));
+  
+      window.dispatchEvent(new CustomEvent(`itinerarySaved_${planner_no}`));
     })
     .catch((error) => {
       console.error("생성 오류! 다시 시도하세요", error);
     });
-    // navigate("/planner");
-    // setShowModal(false);
   };
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
   
-    switch (name) {
-      case 'today_no':
-        setNewItinerary(prev => {
-          const date = new Date(startDay);
-          date.setDate(date.getDate() + Number(value) - 1);
-  
-          return {
-            ...prev, 
-            today_no: { today_no: Number(value) }, 
-            start_time: date.toISOString().substring(0, 10) // date를 YYYY-MM-DD 형식의 문자열로 변환
-          };
-        });
-        break;
-  
-      case 'start_time_input':
-        setNewItinerary(prev => ({ ...prev, start_time: value }));
-        break;
-  
-      case 'end_time_input':
-        setNewItinerary(prev => ({ ...prev, end_time: value }));
-        break;
-  
-      default:
-        setNewItinerary({ ...newItinerary, [name]: value });
-        break;
+    if (name === "start_time_input") {
+      setStartTime(value);
+      setNewItinerary(prev => {
+        const newEndTime = Number(value) + 1;
+        return { 
+          ...prev, 
+          start_time: `${value}`,
+          end_time: `${newEndTime}`
+        };
+      });
+    }
+
+    if (name === "end_time_input") {
+      if (Number(value) <= Number(startTime)) {
+        alert("종료 시간은 시작 시간보다 커야 합니다.");
+        return;
+      }
+      setNewItinerary(prev => ({ ...prev, end_time: `${value}` }));
+    }
+
+    // 시작 시간이 변경될 때 end_time을 업데이트
+    if (name === "start_time_input") {
+      const newEndTime = Number(value) + 1;
+      setNewItinerary(prev => ({ ...prev, end_time: `${newEndTime}` }));
+    }
+
+    if (name !== "start_time_input" && name !== "end_time_input") {
+      setNewItinerary({ ...newItinerary, [name]: value });
     }
   };
+
+  // table에서 선택한 시간에 따라 기존에 선택했던 값 reset해줌
+  useEffect(() => {
+    if (selectedDateTime) {
+      const selectedHour = selectedDateTime.hour;
+      setStartTime(selectedHour);
+      setNewItinerary(prev => ({
+        ...prev, 
+        start_time: `${selectedHour}`,
+        end_time: `${Number(selectedHour) + 1}`
+      }));
+    }
+  }, [selectedDateTime?.hour, newItinerary.today_no.today_no]);
   
 
   useEffect(() => {
-    setShowModal(true);
-  }, [selectedDate]);
-
+    if (selectedDateTime) {
+      setShowModal(true);
+    }
+  }, [selectedDateTime?.date]);
 
   useEffect(() => {
-    // 모달이 열리면 선택된 날짜가 여행의 몇 번째 날인지 자동으로 선택
-    setNewItinerary(prev => ({ ...prev, today_no: { today_no: selectedDayNumber } }));
-  }, [selectedDayNumber]);
-
+    if (selectedDateTime) {
+      const selectedDayNumber = getDayNumberFromDate(selectedDateTime.date);
+      setNewItinerary(prev => ({ ...prev, today_no: { today_no: selectedDayNumber } }));
+      setShowModal(true);
+    }
+  }, [selectedDateTime?.date]);
 
   return showModal ? (
     <Draggable>
@@ -91,21 +136,24 @@ const TestModal = ({ selectedDate,days,startDay,selectedDayNumber, endDay, onClo
         </button>
         <br />
         <div className="input_container">
-          <select
-            name="today_no"
-            value={newItinerary.today_no.today_no}  // 선택 일자를 지정
-            onChange={handleChange}
-          >
-            <option value="">날짜 선택</option>
-            {[...Array(days)].map((_, i) => 
-            <option key={i} value={i + 1}>{i + 1}일차</option>)}
-            
-          </select>
+          <h3>{newItinerary.today_no.today_no}일차</h3>
 
         <div className="time_input">
-           <input type="time" name="start_time_input" onChange={handleChange} />
-          <input type="time" name="end_time_input" onChange={handleChange} />
-            
+          <div className="start_timp_div">
+            <div>시작 시간 : </div>
+            <input className="" type="number" name="start_time_input" value={startTime} 
+            min="0" max="23"
+            onChange={handleChange} />
+          </div>
+
+          <div className="end_timp_div">
+            <div>종료 시간 : </div>
+            <input type="number" name="end_time_input" min={Number(startTime) + 1}
+            max="24"
+            value={newItinerary.end_time ? newItinerary.end_time : Number(startTime) + 1}
+            onChange={handleChange} />
+          </div>
+
         </div>
           <input
             className="plannerTitle_input"
@@ -136,7 +184,7 @@ const TestModal = ({ selectedDate,days,startDay,selectedDayNumber, endDay, onClo
           <button className="save_alert" onClick={handleSave}>
             저장
           </button>
-          <button className="delete_alert" onClick={() => navigate("/planner")}>
+          <button className="delete_alert" onClick={handleDelete}>
             삭제
           </button>
         </div>

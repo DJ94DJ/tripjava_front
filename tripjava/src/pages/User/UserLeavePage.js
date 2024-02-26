@@ -14,6 +14,9 @@ function UserLeavePage() {
 
   // 컴포넌트가 렌더링될 때 사용자 정보를 조회합니다.
   useEffect(() => {
+    if (auth.id === null) {
+      return;
+    }
     axios
       .get(`http://localhost:8080/user?id=${auth.id}`)
       .then((response) => {

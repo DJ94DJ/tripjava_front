@@ -40,7 +40,7 @@ const PlannerPage = () => {
         <h1>(지역명) 여행 ?박</h1>
         <div className="pins_and_block">
           <PlannerPins />
-          <PlannerMemo />
+          <PlannerMemo planner_no={plannerId} />
         </div>
         <h1>여행지 목록</h1>
         <div>
@@ -49,7 +49,7 @@ const PlannerPage = () => {
         <h1>일정표</h1>
         <div>
           {/* <PlannerTable planner_no={plannerId} /> */}
-          <TestPlannerTable3 planner_no={plannerId} />
+          <TestPlannerTable2 planner_no={plannerId} />
           {/* 가져온 plannerId를 PlannerTable 컴포넌트에 전달합니다. */}
         </div>
       </div>
