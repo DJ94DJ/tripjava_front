@@ -1,7 +1,7 @@
 .wrap {
   padding: 3em;
   border-radius: 16px;
-  width: 55%;
+  width: 80%;
   margin: auto;
   margin-top: 3rem;
   @include flex-center;
@@ -17,6 +17,20 @@
       radius: 16px;
       top: 0.5px solid var(--main-white);
       left: 0.5px solid var(--main-white);
+    }
+
+    .delete-part {
+      display: flex;
+      align-items: center;
+    }
+
+    .delete-btn {
+      width: 70px;
+      height: 50px;
+      font-size: 15px;
+      padding: 2px;
+      margin: 10px;
+      font-weight: bold;
     }
 
     div {
@@ -95,6 +109,7 @@
       background-color: var(--main-bgcolor);
       color: var(--main-black);
       border: transparent;
+      font-weight: bold;
       &:hover {
         background-color: var(--main-button);
         color: #000;
