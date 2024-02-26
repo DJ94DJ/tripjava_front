@@ -106,7 +106,11 @@ const TestPlannerTable2 = ({ planner_no }) => {
           >
             {i}시
           </td>
-          <td style={{ border: "1px solid black", padding: "5px" }}>
+          <td style={{ border: "1px solid black", padding: "5px" }}
+           onClick={() => {
+            handleTimeClick(date, i)
+          }}
+          >
             {itinerary || ''}
             </td>
         </tr>
