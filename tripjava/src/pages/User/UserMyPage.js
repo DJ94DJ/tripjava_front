@@ -46,6 +46,21 @@ function UserMyPage() {
     navigate(`/planner`);
   };
 
+  const deletePlanner = (plannerId) => {
+    axios
+      .delete(`http://localhost:8080/planner?planner_no=${plannerId}`)
+      .then((response) => {
+        console.log(response);
+        // 성공적으로 삭제했다면 상태에서 해당 계획을 제거합니다.
+        setUserPlanner(
+          userPlanner.filter((planner) => planner.planner_no !== plannerId)
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   return (
     <>
       <br></br> <br></br>
@@ -80,16 +95,21 @@ function UserMyPage() {
           <div className="tourlist">
             {userPlanner &&
               userPlanner.map((value) => (
-                <h3
-                  key={value.planner_no}
-                  onClick={() => handlePlannerClick(value.planner_no)} // 여기에서 handlePlannerClick 함수를 호출하며, planner_no를 인자로 전달합니다.
-                >
-                  {value.planner_title}
-                </h3>
+                <div key={value.planner_no} className="delete-part">
+                  <h3
+                    key={value.planner_no}
+                    onClick={() => handlePlannerClick(value.planner_no)}
+                  >
+                    {value.planner_title}
+                  </h3>
+                  <button
+                    onClick={() => deletePlanner(value.planner_no)}
+                    className="delete-btn"
+                  >
+                    삭제
+                  </button>
+                </div>
               ))}
-            <h3>그냥 넣어둔 리스트1</h3>
-            <h3>그냥 넣어둔 리스트2</h3>
-            <h3>그냥 넣어둔 리스트3</h3>
           </div>
           <div className="container_map_img"></div>
         </div>
