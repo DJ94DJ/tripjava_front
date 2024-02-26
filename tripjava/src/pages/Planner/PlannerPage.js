@@ -6,6 +6,7 @@ import PlannerLine from "../../components/Planner/PlannerLine";
 import PlannerTable from "../../components/Planner/PlannerTable";
 import KakaoShare from "../../components/Planner/KakaoShare";
 import TestPlannerTable2 from "../../components/Planner/TestPlannerTable2";
+import TestPlannerTable3 from "../../components/Planner/TestPlannerTable3";
 
 import { clearPlannerId } from "../../store/actions/plannerid";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,7 +49,7 @@ const PlannerPage = () => {
         <h1>일정표</h1>
         <div>
           {/* <PlannerTable planner_no={plannerId} /> */}
-          <TestPlannerTable2 planner_no={plannerId}/>
+          <TestPlannerTable3 planner_no={plannerId} />
           {/* 가져온 plannerId를 PlannerTable 컴포넌트에 전달합니다. */}
         </div>
       </div>
