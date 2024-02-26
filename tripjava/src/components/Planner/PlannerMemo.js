@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const PlannerMemo = () => {
+const PlannerMemo = ({ planner_no }) => {
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState("");
-  const [value, setValue] = useState("");
 
   useEffect(() => {
     // 체크리스트 확인
     axios
-      .get("http://localhost:8080/planner/checklist/select")
+      .get(`http://localhost:8080/planner/checklist/select/${planner_no}`)
       .then((response) => {
         setItems(response.data);
       })
@@ -24,14 +23,22 @@ const PlannerMemo = () => {
     }
 
     const ingredient = newItem.split(" ")[0];
-    const newChecklist = { text: newItem, checked: false, ingredient };
+    const newChecklist = {
+      text: newItem,
+      checked: false,
+      ingredient,
+      planner_no,
+    };
 
     // 체크리스트 저장
     axios
-      .post("http://localhost:8080/planner/checklist/add", newChecklist)
+      .post(
+        `http://localhost:8080/planner/checklist/add/${planner_no}`,
+        newChecklist
+      )
       .then((response) => {
         axios
-          .get("http://localhost:8080/planner/checklist/select")
+          .get(`http://localhost:8080/planner/checklist/select/${planner_no}`)
           .then((response) => {
             setItems(response.data);
           })
