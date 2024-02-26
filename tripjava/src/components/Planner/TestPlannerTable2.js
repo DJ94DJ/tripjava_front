@@ -10,6 +10,52 @@ const TestPlannerTable2 = ({ planner_no }) => {
   const [days, setDays] = useState(0);
   const [itineraries, setItineraries] = useState([]); // 일정 저장
   const [selectedDayNumber, setSelectedDayNumber] = useState(1); // 선택된 날짜가 여행의 몇 번째 날인지 저장
+  const [selectedDateTime, setSelectedDateTime] = useState({
+    date: null,
+    hour: null,
+  }); // 선택된 날짜와 시간을 저장하는 상태
+
+  // 이전에 있던 병합을 제거하고 새로운 병합을 추가하는 함수입니다.
+  const mergeCells = () => {
+    const table = document.querySelector(".test_PlannerTable");
+    if (!table) return;
+
+    const rows = Array.from(table.getElementsByTagName("tr"));
+    let lastCell = null;
+    let count = 1;
+
+    rows.forEach((row, rowIndex) => {
+      const currentCell = row.getElementsByTagName("td")[1];
+
+      // currentCell이 undefined이거나 textContent가 빈 문자열이면 무시합니다.
+      if (!currentCell || !currentCell.textContent) return;
+
+      // // 백엔드에서 받아온 일정을 확인하여, currentCell에 해당하는 일정이 삭제되었으면 복원합니다.
+      // const itinerary = itineraries.find(
+      //   (it) => it.planner_title === currentCell.textContent
+      // );
+      // if (!itinerary) {
+      //   currentCell.style.display = "";
+      //   currentCell.rowSpan = 1;
+      //   return;
+      // }
+
+      if (lastCell && lastCell.textContent === currentCell.textContent) {
+        count++;
+        lastCell.rowSpan = count;
+        currentCell.style.display = "none";
+      } else {
+        lastCell = currentCell;
+        count = 1;
+      }
+    });
+  };
+
+  // 일정이 변경될 때마다 병합을 다시 실행합니다.
+  useEffect(() => {
+    const timeoutId = setTimeout(mergeCells, 20);
+    return () => clearTimeout(timeoutId);
+  }, [itineraries /* 백엔드에서 받아온 일정을 나타내는 상태 */]);
 
   useEffect(() => {
     axios
