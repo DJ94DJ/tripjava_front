@@ -19,14 +19,30 @@
     box-shadow: 0 2px 7px 1px rgba(0, 0, 0, 0.3);
   }
   
-  .planner_alert select,
-  .planner_alert .plannerDetails_input,
-  .planner_alert .price_input {
-    border: none;
+  .input_container {
+    .time_input {
+      .start_timp_div,
+      .end_timp_div {
+        input {
+          border: none;
+        }
+      }
+    }
+    .plannerTitle_input,
+    .plannerDetails_input,
+    .price_input {
+      border: none;
+    }
   }
 
-  .alert input[type="date"],
-  .alert input[type="text"],
+
+  .start_timp_div,
+  .end_timp_div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .alert textarea {
     width: 100%;
     padding: 10px;
