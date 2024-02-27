@@ -56,8 +56,11 @@ const TestModalLily = ({
   };
 
   const handleSave = () => {
+    // console.log("데이즈",days)
     const date = new Date(startDay);
-    date.setDate(date.getDate() + Number(newItinerary.today_no.today_no) - 1);
+    console.log("데이트" ,date);
+    date.setDate(date.getDate() + Number(days) - 1);
+    // date.setDate(date.getDate() + Number(newItinerary.today_no.today_no) - 1);
     const newStartTime = `${date.toISOString().substring(0, 10)} ${startTime}`;
 
     setNewItinerary((prev) => ({ ...prev, start_time: newStartTime }));
@@ -152,7 +155,6 @@ const TestModalLily = ({
         <br />
         <div className="input_container">
           <h3>{newItinerary.today_no.today_no}일차</h3>
-
           <div className="time_input">
             <div className="start_timp_div">
               <div>시작 시간 : </div>

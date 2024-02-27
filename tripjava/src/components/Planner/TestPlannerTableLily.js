@@ -109,6 +109,7 @@ const TestPlannerTableLily = ({ planner_no }) => {
 
   useEffect(() => {
     axios
+    // http://localhost:8080/plan/today-no/{planner_no}/{days}
       .get(`http://localhost:8080/planner/trip-route/${planner_no}`)
       .then((response) => {
         console.log("컴포넌트~여행 정보 요청 응답: ", response.data);
@@ -117,10 +118,17 @@ const TestPlannerTableLily = ({ planner_no }) => {
         const endDay = new Date(response.data.end_day);
         const days = (endDay - startDay) / (1000 * 60 * 60 * 24) + 1; // 여행 일수를 계산합니다.
         setDays(days); // 여행 일수를 상태에 저장합니다.
+        axios
+          .get(`http://localhost:8080/plan/today-no/${planner_no}/${days}`)
+          .then((response) => {
+            console.log("숫자 잘 들어오냐??", response.data)
+        })
       })
       .catch((error) => {
         console.error("여행 정보를 가져오는 동안 오류 발생: ", error);
       });
+
+    
 
     // 모달에서 일정 저장 후 바로 table에 반영될 수 있게 해줌
     const handleItinerarySaved = () => {
