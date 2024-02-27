@@ -237,14 +237,29 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
       planner_title: '여행 일정',
       days: 1,
       userid: userId,
-      plans: Object.values(tripData).flatMap((day) =>
-        Array.isArray(day.selectedRoute)
+      //   plans: Object.values(tripData).flatMap((day) =>
+      //     Array.isArray(day.selectedRoute)
+      //       ? day.selectedRoute.map((route) => ({
+      //           contentid: route.contentid,
+      //           type: day.selectedDay,
+      //         }))
+      //       : []
+      //   ),
+      // };
+      plans: Object.values(tripData).flatMap((day) => [
+        ...(Array.isArray(day.selectedRoute)
           ? day.selectedRoute.map((route) => ({
               contentid: route.contentid,
-              type: day.selectedDay,
+              type: day.selectedDay, // 혹은 다른 식별자
             }))
-          : []
-      ),
+          : []),
+        ...(Array.isArray(day.selectedSpot)
+          ? day.selectedSpot.map((spot) => ({
+              contentid: spot.contentid,
+              type: day.selectedDay, // 혹은 다른 식별자
+            }))
+          : []),
+      ]),
     };
     console.log('sendTripData:', sendTripData);
     try {
