@@ -44,16 +44,16 @@ const TestPlannerTableLily = ({ planner_no }) => {
     });
   };
 
-  // 백엔드에서 Itinerary 전체를 가져오는 함수입니다.
-  const fetchItineraries = async () => {
-    try {
-      const res = await axios.get("http://localhost:8080/itinerary/select");
-      console.log("전체불러와", res);
-      return res.data;
-    } catch (error) {
-      console.error("일정 불러오기 오류! 다시 시도하세요", error);
-    }
-  };
+  // // 백엔드에서 Itinerary 전체를 가져오는 함수입니다.
+  // const fetchItineraries = async () => {
+  //   try {
+  //     const res = await axios.get("http://localhost:8080/itinerary/select");
+  //     console.log("전체불러와", res);
+  //     return res.data;
+  //   } catch (error) {
+  //     console.error("일정 불러오기 오류! 다시 시도하세요", error);
+  //   }
+  // };
 
   // 삭제 버튼을 추가하는 함수입니다.
   const addDeleteButton = (itineraries) => {
@@ -148,7 +148,7 @@ const TestPlannerTableLily = ({ planner_no }) => {
 
   const findItineraries = () => {
     axios
-      .get("http://localhost:8080/itinerary/select")
+      .get(`http://localhost:8080/itinerary/select/${planner_no}`)
       .then((res) => {
         setItineraries(res.data);
         console.log("aaaa 2");
