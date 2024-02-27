@@ -426,15 +426,22 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
       {/* 조건부 렌더링을 사용하여 메뉴 표시 여부 제어 */}
       {nearbyMenuOpen && (
         <div className="nearby_menu">
+          <div className="nearby_margin">
+            <div></div>
+          </div>
           <div className="nearby_content">
-            <div className="nearby_header">
-              <h3>추천 장소</h3>
-            </div>
+            <div className="nearby_header">추천 장소</div>
             <div className="nearby_category">
-              <button onClick={() => setSelectedCategory('touristSpots')}>
+              <button
+                className="nearby_spot btn1"
+                onClick={() => setSelectedCategory('touristSpots')}
+              >
                 관광지
               </button>
-              <button onClick={() => setSelectedCategory('restaurants')}>
+              <button
+                className="nearby_spot btn2"
+                onClick={() => setSelectedCategory('restaurants')}
+              >
                 음식점
               </button>
             </div>
