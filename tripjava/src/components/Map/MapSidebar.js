@@ -209,6 +209,7 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
     setSelectedSpot((prevSpots) => prevSpots.filter((spot) => spot.id !== id));
   };
 
+  // 일정 저장 버튼@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
   const handleSaveTripData = async () => {
     // tripData를 기반으로 서버 요청 형식에 맞는 객체 생성
     const sendTripData = {
@@ -228,7 +229,10 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
     };
     console.log('sendTripData:', sendTripData);
     try {
-      const res = await axios.post('http://localhost:8080/planner/trip-route');
+      const res = await axios.post(
+        'http://localhost:8080/planner/trip-route',
+        sendTripData
+      );
       console.log('Server res:', res.data);
     } catch (error) {
       console.error('Error posting trip data:', error);
