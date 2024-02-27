@@ -5,13 +5,13 @@
 
   .signup-form {
     @include container;
-
+    min-width: 350px;
     // transform: translateY(-5rem);
     // flex-direction: column;
     padding: 3em;
     margin-top: 200em;
     margin-bottom: 100em;
-    width: 100%;
+    width: 350px;
     border: 0;
     border: {
       radius: 16px;
@@ -123,6 +123,7 @@
 
     .guide {
       text-align: right;
+      font-size: small;
       margin-left: auto;
       color: #000;
     }
