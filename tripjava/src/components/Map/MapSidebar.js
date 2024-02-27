@@ -48,6 +48,16 @@ function formatPeriod(startDate, endDate) {
   return `${startFormat} ~ ${endFormat}`;
 }
 
+// 백엔드 보내는용 날짜 변경 (YYYY-MM-DD)
+function formatToISODate(dateString) {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  // 월과 일이 10보다 작을 때 앞에 '0'을 추가하여 2자리로 만듭니다.
+  const month = ('0' + (date.getMonth() + 1)).slice(-2);
+  const day = ('0' + date.getDate()).slice(-2);
+  return `${year}-${month}-${day}`;
+}
+
 const MapSidebar = ({ startDate, endDate, routes }) => {
   const userId = useSelector((state) => state.auth.id);
   // Redux 스토어에서 마커 정보 갖고오기!
@@ -213,8 +223,8 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
   const handleSaveTripData = async () => {
     // tripData를 기반으로 서버 요청 형식에 맞는 객체 생성
     const sendTripData = {
-      start_day: formatDate(startDate),
-      end_day: formatDate(endDate),
+      start_day: formatToISODate(startDate),
+      end_day: formatToISODate(endDate),
       planner_title: '여행 일정',
       days: 1,
       userid: userId,
@@ -269,11 +279,7 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
           </div>
           <div className="sidebar_route">
             <h3 id={date}>일정</h3>
-            {/* <div className="sidebar_route_container"></div> */}
           </div>
-          {/* <button key={`button-${i}`} onClick={() => handleButtonClick(date)}>
-            {`저장`}
-          </button> */}
         </>
       );
       elements.push(buttonElement);
