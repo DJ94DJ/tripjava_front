@@ -73,8 +73,11 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
     //   selectedDay: 1,
     // },
   });
-  const [tripRoute, setTripRoute] = useState([]);
+  const [title, setTitle] = useState('여행 일정(1)');
 
+  function handleTitle(e) {
+    setTitle(e.target.value);
+  }
   // 날짜 눌렀을 때 누른 곳에 해당하는 TripData에 routes, spot들어가도록 설정
   useEffect(() => {
     console.log('selectedDay ', selectedDay);
@@ -120,10 +123,6 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
   //     console.log('숙소 삭제!');
   //   }
   // }, [tripData.selectedRoute]);
-
-  useEffect(() => {
-    console.log('여행 경로 저장 잘 되냐???', tripRoute);
-  }, [tripRoute]);
 
   // tripData 확인용!!!!!
   useEffect(() => {
@@ -234,7 +233,7 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
     const sendTripData = {
       start_day: formatToISODate(startDate),
       end_day: formatToISODate(endDate),
-      planner_title: '여행 일정',
+      planner_title: title,
       days: 1,
       userid: userId,
 
@@ -293,9 +292,11 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
             {date}
           </button>
           <div>
+            <div className="sidebar_hotel">
+              <h3 id={date}>숙소</h3>
+            </div>
             {routeDetail.map((index) => (
               <div className="sidebar_hotel">
-                <h3 id={date}>숙소</h3>
                 <div className="sidebar_hotel_container" key={index}>
                   <div onClick={() => fetchNearbyDestinations(routes.id)}>
                     <h4> {routeDetail.length != 0 && routeDetail[0].title}</h4>
@@ -372,10 +373,16 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
           />
         </div>
         <div className="sidebar_content">
+          <div className="sidebar_name">
+            <input
+              type="text"
+              placeholder="여행 일정(1)"
+              onChange={handleTitle}
+            ></input>
+          </div>
           <div className="sidebar_date">
             <h3>여행 기간</h3>
             <div>{formattedPeriod}</div>
-            <hr />
           </div>
           <div className="sidebar_tabs">
             <div className="sidebar_selecteddate">{renderDateTabs}</div>

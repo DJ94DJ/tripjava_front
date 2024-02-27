@@ -1,3 +1,21 @@
+.sidebar_name {
+  width: 100%;
+  input {
+    width: 100%;
+    height: 40px;
+    appearance: none;
+    border: none;
+    outline: none;
+    border-bottom: 0.2em solid #a5b075;
+    background: rgba(#a5b075, 0.6);
+    border-radius: 5px 5px 0 0;
+    padding: 0.4em;
+    color: #2d2013;
+    font-size: 19px;
+    font-family: var(--pointfont);
+  }
+}
+
 .side_menu {
   @include container;
   z-index: 100;
@@ -12,8 +30,10 @@
   }
   .sidebar_header {
     margin-top: 5px;
+    height: 65px;
   }
   .sidebar_date {
+    margin: 10px 0 5px 0;
     font-family: var(--pointfont);
     font-size: 14px;
     h3 {
@@ -51,15 +71,6 @@ li {
       font-size: 12.5px !important;
       margin: 3px 10px 5px 0;
     }
-  }
-}
-
-.sidebar_selecteddate {
-  h4 {
-    margin: 5px 0 5px 3px;
-    font-family: var(--pointfont);
-    font-size: 14px;
-    font-weight: lighter;
   }
 }
 
@@ -132,18 +143,26 @@ li {
   }
 }
 .sidebar_footter {
+  border-top: 0.2em solid #a5b074be;
+  margin-top: 10px;
   bottom: 0;
   display: flex;
   justify-content: flex;
-  width: 300px;
-  padding: 0 40px 10px 0px;
+
   button {
     @include h3-tag;
-    @include main-button;
     width: 100%;
+
+    @include main-button;
+    margin: 8px 0 0 0 !important;
+    font-size: 19px !important;
     border-radius: 7px !important;
-    font-size: 12.5px !important;
-    margin: 3px 0 5px 0;
+    font-size: 15px !important;
+    background-color: rgba(#a5b075, 0.6) !important;
+    &:hover {
+      background-color: #a5b075 !important;
+      color: #000 !important;
+    }
   }
 }
 //////////// nearby 관련
