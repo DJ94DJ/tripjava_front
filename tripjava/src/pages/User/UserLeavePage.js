@@ -40,34 +40,49 @@ function UserLeavePage() {
       return;
     }
 
+    const dataToSend = { id: auth.id, email: userEmail }; // 보낼 데이터를 상수로 선언
+    console.log("Data to Send:", dataToSend); // 콘솔에 데이터 출력
+
     axios
-      .delete(`http://localhost:8080/user`, { data: { id: auth.id, email } })
+      .delete(`http://localhost:8080/user`, {
+        data: dataToSend,
+      })
       .then((response) => {
-        console.log(response);
+        console.log("Response Status:", response.status); // 응답 상태 코드 출력
+        console.log("Response Data:", response.data); // 응답 데이터 출력
         dispatch(logout());
         navigate("/");
       })
       .catch((error) => {
-        console.error(error);
+        console.error("Error Message:", error.message); // 에러 메시지 출력
       });
   };
 
   return (
-    <div className="userLeavePage">
-      <h2 className="title">계정 삭제하기</h2>
-      <p className="description">
-        계정을 삭제하시려면 하단에 기입된 귀하의 이메일을 직접 입력하세요.
-      </p>
-      <p>{userEmail}</p>
-      <form className="userLeaveForm" onSubmit={handleSubmit}>
-        <label className="emailInput">
-          <input type="email" value={email} onChange={handleChange} />
-        </label>
+    <div className="backdrop">
+      <div className="userLeavePage">
+        <div>
+          <h2 className="title">계정 삭제하기</h2>
+          <p className="description">
+            계정삭제 확인을 위해 <br />
+            하단에 기입된 귀하의 이메일을 직접 입력하세요.
+          </p>
+          <p>{userEmail}</p>
+          <form className="userLeaveForm" onSubmit={handleSubmit}>
+            <label className="emailInput">
+              <input type="email" value={email} onChange={handleChange} />
+            </label>
 
-        <button className="deleteButton" type="submit" disabled={!isMatching}>
-          계정 삭제
-        </button>
-      </form>
+            <button
+              className="deleteButton"
+              type="submit"
+              disabled={!isMatching}
+            >
+              계정 삭제
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

@@ -65,53 +65,57 @@ function UserMyPage() {
     <>
       <br></br> <br></br>
       <div className="wrap">
-        <div className="myPage-form">
-          <h2>계정정보</h2>
-          <div>ID: {userInfo.id}</div>
-          <div>Password: ⦁⦁⦁⦁⦁⦁⦁⦁</div>
-          <div>Email: {userInfo.email}</div>
-          <div>Nickname: {userInfo.nickname}</div>
-          <button
-            className="button_Edit"
-            type="button"
-            onClick={() => {
-              window.location.href = "/edit";
-            }}
-          >
-            회원정보 수정
-          </button>
-          <button
-            className="button_Leave"
-            type="button"
-            onClick={() => {
-              window.location.href = "/leave";
-            }}
-          >
-            탈퇴하기
-          </button>
+        <div className="myPage-form mypage">
+          <div className="box">
+            <h2>계정정보</h2>
+            <div>ID: {userInfo.id}</div>
+            <div>Password: ⦁⦁⦁⦁⦁⦁⦁⦁</div>
+            <div>Email: {userInfo.email}</div>
+            <div>Nickname: {userInfo.nickname}</div>
+            <button
+              className="button_Edit"
+              type="button"
+              onClick={() => {
+                window.location.href = "/edit";
+              }}
+            >
+              회원정보 수정
+            </button>
+            <button
+              className="button_Leave"
+              type="button"
+              onClick={() => {
+                window.location.href = "/leave";
+              }}
+            >
+              탈퇴하기
+            </button>
+          </div>
         </div>
         <div className="myPage-form">
           <h2>나의 여행계획</h2>
           <div className="tourlist">
-            {userPlanner &&
-              userPlanner.map((value) => (
-                <div key={value.planner_no} className="delete-part">
-                  <h3
-                    key={value.planner_no}
-                    onClick={() => handlePlannerClick(value.planner_no)}
-                  >
-                    {value.planner_title}
-                  </h3>
-                  <button
-                    onClick={() => deletePlanner(value.planner_no)}
-                    className="delete-btn"
-                  >
-                    삭제
-                  </button>
-                </div>
-              ))}
+            <div className="box">
+              {userPlanner &&
+                userPlanner.map((value) => (
+                  <div key={value.planner_no} className="delete-part">
+                    <h3
+                      key={value.planner_no}
+                      onClick={() => handlePlannerClick(value.planner_no)}
+                    >
+                      {value.planner_title}
+                    </h3>
+                    <button
+                      onClick={() => deletePlanner(value.planner_no)}
+                      className="delete-btn"
+                    >
+                      삭제
+                    </button>
+                  </div>
+                ))}
+            </div>
+            <div className="container_map_img"></div>
           </div>
-          <div className="container_map_img"></div>
         </div>
       </div>
     </>
