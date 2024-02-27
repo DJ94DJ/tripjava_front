@@ -215,6 +215,7 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
       start_day: formatDate(startDate),
       end_day: formatDate(endDate),
       planner_title: '여행 일정',
+      days: 1,
       userid: userId,
       plans: Object.values(tripData).flatMap((day) =>
         Array.isArray(day.selectedRoute)
