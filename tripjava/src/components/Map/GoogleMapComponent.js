@@ -41,7 +41,7 @@ const GoogleMapComponent = ({ startDate, setRoutes }) => {
 
   const onMarkerClick = (marker) => {
     setRoutes([{ ...marker, id: uuidv4() }]);
-    console.log('마커 정보 로깅:', marker);
+    // console.log('마커 정보 로깅:', marker);
   };
 
   const { isLoaded } = useJsApiLoader({
