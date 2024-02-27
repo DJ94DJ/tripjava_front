@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/style.scss';
 import { PiSealCheckFill } from 'react-icons/pi';
@@ -41,7 +41,7 @@ function formatPeriod(startDate, endDate) {
   return `${startFormat} ~ ${endFormat}`;
 }
 
-// 백엔드 보내는용 날짜 변경 (YYYY-MM-DD)
+// 백엔드 보내는용 날짜 변경 함수(YYYY-MM-DD)
 function formatToISODate(dateString) {
   const date = new Date(dateString);
   const year = date.getFullYear();
@@ -53,11 +53,9 @@ function formatToISODate(dateString) {
 
 const MapSidebar = ({ startDate, endDate, routes }) => {
   const userId = useSelector((state) => state.auth.id);
-
   // console.log('스토어에서 가져온 마커 정보 로깅:', routes);
   const navigate = useNavigate();
   const formattedPeriod = formatPeriod(startDate, endDate);
-  const dispatch = useDispatch();
   const [destinations, setDestinations] = useState({
     restaurants: [],
     touristSpots: [],
@@ -65,8 +63,8 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
   const [selectedCategory, setSelectedCategory] = useState('touristSpots');
   const [selectedSpot, setSelectedSpot] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedDay, setSelectedDay] = useState(1); // 기본값으로 1일차 탭 선택되게!
-  const [nearbyMenuOpen, setNearbyMenuOpen] = useState(true); // 초기값은 메뉴를 열린 상태로 설정
+  const [selectedDay, setSelectedDay] = useState(1); // 기본값: 첫날 날짜
+  const [nearbyMenuOpen, setNearbyMenuOpen] = useState(true); // 메뉴열림 닫힘, 기본값 : 열림
   const [tripData, setTripData] = useState({
     // 1: {
     //   selectedDate: null,
@@ -77,18 +75,29 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
   });
   const [tripRoute, setTripRoute] = useState([]);
 
+  // 날짜 눌렀을 때 누른 곳에 해당하는 TripData에 routes, spot들어가도록 설정
   useEffect(() => {
-    // 현재 선택된 일차에 대한 routes 상태 업데이트
     console.log('selectedDay ', selectedDay);
     setTripData((prevTripData) => ({
       ...prevTripData,
       [selectedDay]: {
         ...prevTripData[selectedDay],
         selectedRoute: routes,
+        selectedSpot: selectedSpot,
       },
     }));
   }, [routes]);
-  console.log('routes ', routes);
+
+  // useEffect(() => {
+  //   console.log('selectedDay ', selectedDay);
+  //   setTripData((prevTripData) => ({
+  //     ...prevTripData,
+  //     [selectedDay]: {
+  //       ...prevTripData[selectedDay],
+  //       selectedSpot: selectedSpot,
+  //     },
+  //   }));
+  // }, [routes]);
 
   // useEffect(() => {
   //   setTripData((prevTripData) => ({
@@ -167,6 +176,7 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
         },
       });
       console.log('숙소 근처 데이터 갖고 와지는지 확인', res.data);
+
       // 데이터가 있는지 확인하고 상태 업데이트
       if (res.data && res.data.restaurants && res.data.touristSpots) {
         setDestinations({
@@ -188,17 +198,31 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
   const handleRemoveRoute = (id) => {};
 
   const handleAddSpot = (spot) => {
+    console.log('spot', spot);
     // 각 spot에 고유한 id 부여
     const spotWithId = { ...spot, id: uuidv4() };
-    setSelectedSpot((prevSpots) => [...prevSpots, spotWithId]);
 
-    setTripData((prevTripData) => ({
-      ...prevTripData,
-      selectedSpot: [...prevTripData.selectedSpot, spotWithId],
-    }));
-    // handleRemoveSpot(tripData.selectedDate, spotWithId.id);
+    // 여기서 currentSelectedDay는 현재 선택된 날짜를 나타내며,
+    // 예를 들어 "1", "2" 등의 값을 가질 수 있습니다.
+    // 이 값을 어떻게 결정하는지에 따라 다를 수 있으므로, 적절히 설정해야 합니다.
+    const currentSelectedDay = selectedDay; // 예시 값을 사용합니다. 실제로는 동적으로 결정되어야 합니다.
+
+    setTripData((prevTripData) => {
+      // 현재 선택된 날짜의 selectedSpot 배열 찾기
+      const existingSpots = prevTripData[currentSelectedDay].selectedSpot ?? [];
+      // 새 spot 추가
+      const updatedSpots = [...existingSpots, spotWithId];
+
+      // 전체 tripData 상태 업데이트
+      return {
+        ...prevTripData,
+        [currentSelectedDay]: {
+          ...prevTripData[currentSelectedDay],
+          selectedSpot: updatedSpots,
+        },
+      };
+    });
   };
-
   // 리덕스랑 장소 삭제 !
   const handleRemoveSpot = (selectedDate, id) => {
     console.log('Spot삭제 함수 인자들 잘 들어가지나 쳌', selectedDate, id); // 값을 확인하기 위한 로그
@@ -262,7 +286,7 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
               <h3 id={date}>숙소</h3>
               <div className="sidebar_hotel_container">
                 <div onClick={() => fetchNearbyDestinations(routes.id)}>
-                  <h4>{detail.length != 0 && detail[0].title}</h4>
+                  {detail.length != 0 && detail[0].title}
                   <button onClick={() => handleRemoveRoute(routes.id)}>
                     <FaXmark />
                   </button>
@@ -276,18 +300,6 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
         </div>
       );
       elements.push(tabElement);
-
-      // <div key={index} onClick={() => fetchNearbyDestinations(route.id)}>
-      //   <h4>
-      //     {titleWithoutCertification}
-      //     {route.title.includes('[한국관광 품질인증/Korea Quality]') && (
-      //       <PiSealCheckFill />
-      //     )}
-      //   </h4>
-      // <button onClick={() => handleRemoveRoute(route.id)}>
-      //   <FaXmark />
-      // </button>
-      // </div>;
 
       // 각 탭 아래에 위치할 버튼 생성
       // const buttonElement = (
@@ -366,16 +378,16 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
           <div className="sidebar_tabs">
             <div className="sidebar_selecteddate">{renderDateTabs}</div>
           </div>
-          <div className="sidebar_hotel_container"></div>
-          {selectedSpot.map((spot, index) => (
-            <div key={index}>
-              <h4>{spot.title}</h4>
-              <button onClick={() => handleRemoveSpot(selectedDate, spot.id)}>
-                <FaXmark />
-              </button>
-            </div>
-          ))}
-          {/* </div> */}
+          <div className="sidebar_hotel_container">
+            {selectedSpot.map((spot, index) => (
+              <div key={index}>
+                <h4>{spot.title}</h4>
+                <button onClick={() => handleRemoveSpot(selectedDate, spot.id)}>
+                  <FaXmark />
+                </button>
+              </div>
+            ))}
+          </div>
           <div className="sidebar_footter">
             <button onClick={handleSaveTripData}>일정 저장</button>
           </div>
