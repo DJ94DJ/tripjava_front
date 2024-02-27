@@ -153,19 +153,6 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
     }));
   };
 
-  // 일차 버튼을 클릭했을 때 실행되는 함수
-  // const handleDayClick = (day) => {
-  //   const selectedDayDate = addDays(startDate, day - 1); // 선택된 일차에 해당하는 날짜 계산
-  //   setSelectedDate(formatDate(selectedDayDate)); // 날짜 형식으로 상태 업데이트
-  //   setSelectedDay(day); // 현재 선택된 탭 업데이트
-  //   // 수정중 ...
-  //   setTripData((prevTripData) => ({
-  //     ...prevTripData,
-  //     selectedDate: formatDate(selectedDayDate),
-  //     selectedDay: day,
-  //   }));
-  // };
-
   // 근처 목적지 정보를 불러오는 함수
   const fetchNearbyDestinations = async (id) => {
     const route = routes.find((route) => route.id === id);
@@ -222,64 +209,30 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
     setSelectedSpot((prevSpots) => prevSpots.filter((spot) => spot.id !== id));
   };
 
-  async function handleSaveTripData(tripData) {
-    let plans = [];
-    Object.keys(tripData).forEach((day) => {
-      // 여기서 dayData가 null이 아닌지 확인하고, null이면 기본값을 제공합니다.
-      const dayData = tripData[day] || { selectedRoute: [], selectedSpot: [] }; // 기본값 설정
-      // 'selectedRoute'와 'selectedSpot'이 null일 경우 빈 배열로 처리
-      const selectedRoute = dayData.selectedRoute || [];
-      const selectedSpot = dayData.selectedSpot || [];
-
-      selectedRoute.forEach((route) => {
-        selectedSpot.forEach((spot) => {
-          // 여기서 route와 spot이 null인 경우를 고려하여 처리합니다.
-          plans.push({
-            routeContentId: route ? route.contentid : null,
-            spotContentId: spot ? spot.contentid : null,
-            type: selectedDay,
-          });
-        });
-      });
-    });
-
-    // 변환된 데이터를 서버로 보내는 부분
-    const sendData = {
+  const handleSaveTripData = async () => {
+    // tripData를 기반으로 서버 요청 형식에 맞는 객체 생성
+    const sendTripData = {
       start_day: formatDate(startDate),
       end_day: formatDate(endDate),
       planner_title: '여행 일정',
       userid: userId,
-      plans: plans,
+      plans: Object.values(tripData).flatMap((day) =>
+        Array.isArray(day.selectedRoute)
+          ? day.selectedRoute.map((route) => ({
+              contentid: route.contentid,
+              type: day.selectedDay,
+            }))
+          : []
+      ),
     };
-    console.log('sendData 모있냐!!!', sendData);
+    console.log('sendTripData:', sendTripData);
     try {
-      const res = await axios.post(
-        `http://localhost:8080/planner/trip-route`,
-        sendData
-      );
-      console.log('일정 저장 성공', res.data);
+      const res = await axios.post('http://localhost:8080/planner/trip-route');
+      console.log('Server res:', res.data);
     } catch (error) {
-      console.error('일정 저장 실패', error);
+      console.error('Error posting trip data:', error);
     }
-  }
-
-  // 저장 소희님 버전
-  // const handleAddTrip = (tab) => {
-  //   // 새로운 tripData 생성
-  //   const newTripData = {
-  //     selectedDate: null,
-  //     selectedRoute: null,
-  //     selectedSpot: [],
-  //     selectedTab: tab,
-  //   };
-  //   //  ! state에 일정별 데이터 저장인데 이건 없앨 예정!
-  //   // 업데이트된 tripData를 tripRoute에 추가
-  //   // setTripRoute((prevTripRoute) => [...prevTripRoute, tripData]);
-  //   // tripData 초기화 -> 이건 필요
-  //   setTripData(newTripData);
-  //   // handleRemoveSpot(tripData.selectedDate, spotWithId.id);
-  //   // ! 중간 저장시 state에 저장되어 있던 것들이 지워지는거 넣어놔야함.
-  // };
+  };
 
   // 여행 기간별 날짜 구현 함수
   function renderDateTabs(startDate, endDate) {
@@ -329,45 +282,10 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
     // 여기에 버튼 클릭 시 실행할 로직을 추가합니다.
     // 예를 들어, 클릭된 날짜에 대한 정보를 처리하거나, 다른 컴포넌트에 데이터를 전달할 수 있습니다.
   }
+
   return (
     <>
       <div className="side_menu">
-        {tripData.selectedRoute?.map((route, index) => {
-          const titleWithoutCertification = route.title
-            .replace('[한국관광 품질인증/Korea Quality]', '')
-            .trim();
-          return (
-            <div key={index} onClick={() => fetchNearbyDestinations(route.id)}>
-              <h4>
-                {titleWithoutCertification}
-                {route.title.includes('[한국관광 품질인증/Korea Quality]') && (
-                  <PiSealCheckFill />
-                )}
-              </h4>
-              <button onClick={() => handleRemoveRoute(route.id)}>
-                <FaXmark />
-              </button>
-            </div>
-          );
-        })}
-        {tripData.selectedRoute?.map((route, index) => {
-          const titleWithoutCertification = route.title
-            .replace('[한국관광 품질인증/Korea Quality]', '')
-            .trim();
-          return (
-            <div key={index} onClick={() => fetchNearbyDestinations(route.id)}>
-              <h4>
-                {titleWithoutCertification}
-                {route.title.includes('[한국관광 품질인증/Korea Quality]') && (
-                  <PiSealCheckFill />
-                )}
-              </h4>
-              <button onClick={() => handleRemoveRoute(route.id)}>
-                <FaXmark />
-              </button>
-            </div>
-          );
-        })}
         {tripData.selectedRoute?.map((route, index) => {
           const titleWithoutCertification = route.title
             .replace('[한국관광 품질인증/Korea Quality]', '')
@@ -402,24 +320,9 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
             <hr />
           </div>
           <div className="sidebar_tabs">
-            {/* <div key={tab}> */}
-
-            {/* <button
-              onClick={() => handleDayClick(tab)}
-              className="sidebar_date"
-            ></button> */}
             <div className="sidebar_selecteddate">
-              {/* <h4>{formatDate(addDays(startDate, tab - 1))}</h4> */}
               {renderDateTabs(startDate, endDate)}
             </div>
-            {/* 
-            <div className="sidebar_hotel" id={formatDate(selectedDate)}>
-              <h3 id={formatDate(selectedDate) + '숙소'}>숙소</h3>
-            </div>
-            <div className="sidebar_route" id={formatDate(selectedDate)}>
-              <h3 id={formatDate(selectedDate) + '일정'}>일정</h3>
-            </div>
-            <button onClick={() => handleAddTrip}>중간 저장</button> */}
           </div>
 
           {/* <div className="sidebar_hotel">
