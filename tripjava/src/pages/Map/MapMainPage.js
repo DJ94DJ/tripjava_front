@@ -14,11 +14,21 @@ const MapMainPage = () => {
     (region) => region.name === selectedRegionName
   );
 
+  const [routes, setRoutes] = useState([]);
+
   return (
     <>
       <MapAuth />
-      <MapSidebar startDate={startDate} endDate={endDate} period={period} />
-      <GoogleMapComponent selectedLocation={selectedRegion} />
+      <MapSidebar
+        startDate={startDate}
+        endDate={endDate}
+        period={period}
+        routes={routes}
+      />
+      <GoogleMapComponent
+        selectedLocation={selectedRegion}
+        setRoutes={setRoutes}
+      />
     </>
   );
 };

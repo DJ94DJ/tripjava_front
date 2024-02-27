@@ -17,6 +17,7 @@ import MapStyle from './MapStyle';
 import { useDispatch, useSelector } from 'react-redux';
 import { addRoute, addSpot } from '../../store/actions/triproute';
 import { PiSealCheckFill } from 'react-icons/pi';
+import { v4 as uuidv4 } from 'uuid';
 
 const svgString = ReactDOMServer.renderToStaticMarkup(<HomePinSvg />);
 const svgUrl = svgToMiniDataURI(svgString);
@@ -28,7 +29,7 @@ const center = {
   lng: 126.9632199,
 };
 
-const GoogleMapComponent = ({ startDate }) => {
+const GoogleMapComponent = ({ startDate, setRoutes }) => {
   const location = useLocation();
   const [markers, setMarkers] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -39,8 +40,9 @@ const GoogleMapComponent = ({ startDate }) => {
   const [selectedDate, setSelectedDate] = useState(null);
 
   const onMarkerClick = (marker) => {
-    // console.log('마커 정보 로깅:', marker);
-    dispatch(addRoute(marker));
+    setRoutes([{ ...marker, id: uuidv4() }]);
+    console.log('마커 정보 로깅:', marker);
+    // dispatch(addRoute(marker));
     // dispatch(addSpot(selectedDate, marker));
   };
 

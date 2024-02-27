@@ -3,7 +3,8 @@ import {
   RESET_ROUTE,
   REMOVE_ROUTE,
   REMOVE_SPOT,
-  SAVE_TRIP_DATA,
+  TODAY_TRIP_DATA,
+  ALL_TRIP_DATA,
 } from '../actions/triproute';
 
 const initialState = {
@@ -65,7 +66,35 @@ const triprouteReducer = (state = initialState, action) => {
         },
       };
 
-    case SAVE_TRIP_DATA:
+    // case TODAY_TRIP_DATA:
+    //   return {
+    //     ...state,
+    //     tripData: action.payload,
+    //   };
+
+    case 'TODAY_TRIP_DATA':
+      const { selectedToday, selectedRoute, selectedSpot } = action.payload;
+      // 이미 저장된 날짜의 데이터가 있는지 확인
+      const existingDateData = state.tripData[selectedToday] || {};
+
+      // 새로운 데이터와 기존 데이터를 병합
+      const updatedDateData = {
+        ...existingDateData,
+        selectedRoute: selectedRoute || existingDateData.selectedRoute,
+        selectedSpot: selectedSpot
+          ? [...(existingDateData.selectedSpot || []), ...selectedSpot]
+          : existingDateData.selectedSpot,
+      };
+
+      return {
+        ...state,
+        tripData: {
+          ...state.tripData,
+          [selectedToday]: updatedDateData,
+        },
+      };
+
+    case ALL_TRIP_DATA:
       return {
         ...state,
         tripData: action.payload,

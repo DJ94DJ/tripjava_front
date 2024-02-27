@@ -10,14 +10,15 @@ import axios from 'axios';
 import {
   addSpot,
   removeRoute,
-  addRoute,
+  todayTripData,
   removeSpot,
-  saveTripData,
+  allTripData,
 } from '../../store/actions/triproute';
 import { FaRegFaceSadTear } from 'react-icons/fa6';
 import { v4 as uuidv4 } from 'uuid';
 import { GoTriangleRight } from 'react-icons/go';
 import { GoTriangleLeft } from 'react-icons/go';
+import { setAuth } from '../../store/actions/auth';
 
 // 날짜 포맷 변경 함수
 function formatDate(dateString) {
@@ -47,11 +48,11 @@ function formatPeriod(startDate, endDate) {
   return `${startFormat} ~ ${endFormat}`;
 }
 
-const MapSidebar = ({ startDate, endDate }) => {
+const MapSidebar = ({ startDate, endDate, routes }) => {
+  const userId = useSelector((state) => state.auth.id);
   // Redux 스토어에서 마커 정보 갖고오기!
-  const routes = useSelector((state) => state.triproute.routes);
+  // const routes = useSelector((state) => state.triproute.routes);
   // console.log('스토어에서 가져온 마커 정보 로깅:', routes);
-  // console.log('sidebar/period 확인 : ', period);
   const navigate = useNavigate();
   const formattedPeriod = formatPeriod(startDate, endDate);
   const dispatch = useDispatch();
@@ -62,9 +63,60 @@ const MapSidebar = ({ startDate, endDate }) => {
   const [selectedCategory, setSelectedCategory] = useState('touristSpots');
   const [selectedSpot, setSelectedSpot] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTab, setSelectedTab] = useState(1); // 기본값으로 1일차 탭 선택되게!
-  // @nayounghye : 사이드바 접기 관련
+  const [selectedDay, setSelectedDay] = useState(1); // 기본값으로 1일차 탭 선택되게!
   const [nearbyMenuOpen, setNearbyMenuOpen] = useState(true); // 초기값은 메뉴를 열린 상태로 설정
+  const [tripData, setTripData] = useState({
+    1: {
+      selectedDate: null,
+      selectedRoute: null,
+      selectedSpot: [],
+      selectedDay: 1,
+    },
+  });
+  const [tripRoute, setTripRoute] = useState([]);
+
+  useEffect(() => {
+    // 현재 선택된 일차에 대한 routes 상태 업데이트
+    console.log('selectedDay ', selectedDay);
+    setTripData((prevTripData) => ({
+      ...prevTripData,
+      [selectedDay]: {
+        ...prevTripData[selectedDay],
+        selectedRoute: routes,
+      },
+    }));
+  }, [routes, selectedDay]);
+
+  useEffect(() => {
+    setTripData((prevTripData) => ({
+      ...prevTripData,
+      selectedRoute: routes,
+    }));
+    // 리덕스 삭제
+    // dispatch(removeRoute(tripData.selectedRoute[0].id));
+    console.log('TripData에 숙소들감 check');
+  }, [routes]);
+
+  // 삭제
+  // useEffect(() => {
+  //   if (tripData.selectedRoute && tripData.selectedRoute.length > 0) {
+  //     dispatch(
+  //       removeRoute(
+  //         tripData.selectedRoute[tripData.selectedRoute.length - 1].id
+  //       )
+  //     );
+  //     console.log('숙소 삭제!');
+  //   }
+  // }, [tripData.selectedRoute]);
+
+  useEffect(() => {
+    console.log('여행 경로 저장 잘 되냐???', tripRoute);
+  }, [tripRoute]);
+
+  // tripData 확인용!!!!!
+  useEffect(() => {
+    console.log('tripData changed:', tripData);
+  }, [tripData]);
 
   // @nayounghye : 사이드바 접기 관련
   const toggleNearbyMenu = () => {
@@ -84,11 +136,21 @@ const MapSidebar = ({ startDate, endDate }) => {
   const period = calculatePeriod(startDate, endDate);
   const tabs = Array.from({ length: period }, (_, i) => i + 1);
 
-  // 일차 버튼을 클릭했을 때 실행되는 함수
   const handleDayClick = (day) => {
     const selectedDayDate = addDays(startDate, day - 1); // 선택된 일차에 해당하는 날짜 계산
-    setSelectedDate(formatDate(selectedDayDate)); // 날짜 형식으로 상태 업데이트
-    setSelectedTab(day); // 현재 선택된 탭 업데이트
+    const formattedDate = formatDate(selectedDayDate); // 날짜 형식으로 상태 업데이트
+    setSelectedDay(day);
+
+    setTripData((prevTripData) => ({
+      ...prevTripData,
+      [day]: {
+        ...prevTripData[day],
+        selectedDate: formattedDate,
+        selectedDay: day,
+        selectedRoute: [],
+        selectedSpot: [],
+      },
+    }));
   };
 
   // 근처 목적지 정보를 불러오는 함수
@@ -102,7 +164,7 @@ const MapSidebar = ({ startDate, endDate }) => {
           mapy: route.lat, // 위도
         },
       });
-      console.log('숙소 근처 데이터 갖고 와지는지 확인', res.data);
+      // console.log('숙소 근처 데이터 갖고 와지는지 확인', res.data);
       // 데이터가 있는지 확인하고 상태 업데이트
       if (res.data && res.data.restaurants && res.data.touristSpots) {
         setDestinations({
@@ -133,6 +195,11 @@ const MapSidebar = ({ startDate, endDate }) => {
     setSelectedSpot((prevSpots) => [...prevSpots, spotWithId]);
     // spot 정보를 리덕스 스토어에 저장
     dispatch(addSpot(selectedDate, spotWithId));
+    setTripData((prevTripData) => ({
+      ...prevTripData,
+      selectedSpot: [...prevTripData.selectedSpot, spotWithId],
+    }));
+    // handleRemoveSpot(tripData.selectedDate, spotWithId.id);
   };
 
   // 리덕스랑 장소 삭제 !
@@ -142,24 +209,107 @@ const MapSidebar = ({ startDate, endDate }) => {
     setSelectedSpot((prevSpots) => prevSpots.filter((spot) => spot.id !== id));
   };
 
-  // 저장 버튼 @@@@@@@@@@@@@@@@@@@@@@@
-  const handleSaveTripData = () => {
-    const currentTripData = {
-      routes: routes,
-      selectedSpots: selectedSpot,
-      selectedDates: selectedDate,
-      tabs: tabs,
-      setSelectedTab: setSelectedTab,
+  // 일정 저장 버튼@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  const handleSaveTripData = async () => {
+    // tripData를 기반으로 서버 요청 형식에 맞는 객체 생성
+    const sendTripData = {
+      start_day: formatDate(startDate),
+      end_day: formatDate(endDate),
+      planner_title: '여행 일정',
+      days: 1,
+      userid: userId,
+      plans: Object.values(tripData).flatMap((day) =>
+        Array.isArray(day.selectedRoute)
+          ? day.selectedRoute.map((route) => ({
+              contentid: route.contentid,
+              type: day.selectedDay,
+            }))
+          : []
+      ),
     };
-    // Redux 스토어에 tripData 저장
-    dispatch(
-      saveTripData({ ...routes, [selectedDate]: { spots: selectedSpot }, tabs })
-    );
+    console.log('sendTripData:', sendTripData);
+    try {
+      const res = await axios.post(
+        'http://localhost:8080/planner/trip-route',
+        sendTripData
+      );
+      console.log('Server res:', res.data);
+    } catch (error) {
+      console.error('Error posting trip data:', error);
+    }
   };
+
+  // 여행 기간별 날짜 구현 함수
+  function renderDateTabs(startDate, endDate) {
+    const period = calculatePeriod(startDate, endDate);
+    let elements = []; // 탭과 버튼을 포함할 배열
+
+    for (let i = 0; i < period; i++) {
+      const date = formatDate(addDays(startDate, i));
+
+      // 각 탭 생성
+      const tabElement = (
+        <div key={`tab-${i}`} className="sidebar_tabs">
+          <button
+            onClick={() => handleDayClick(i + 1)}
+            className="sidebar_date"
+          >
+            {date}
+          </button>
+        </div>
+      );
+      elements.push(tabElement);
+
+      // 각 탭 아래에 위치할 버튼 생성
+      const buttonElement = (
+        <>
+          <div className="sidebar_hotel">
+            <h3 id={date}>숙소</h3>
+            <div className="sidebar_hotel_container"></div>
+          </div>
+          <div className="sidebar_route">
+            <h3 id={date}>일정</h3>
+            {/* <div className="sidebar_route_container"></div> */}
+          </div>
+          {/* <button key={`button-${i}`} onClick={() => handleButtonClick(date)}>
+            {`저장`}
+          </button> */}
+        </>
+      );
+      elements.push(buttonElement);
+    }
+
+    return elements;
+  }
+
+  function handleButtonClick(date) {
+    console.log(`${date} 버튼 클릭됨`);
+    // 여기에 버튼 클릭 시 실행할 로직을 추가합니다.
+    // 예를 들어, 클릭된 날짜에 대한 정보를 처리하거나, 다른 컴포넌트에 데이터를 전달할 수 있습니다.
+  }
 
   return (
     <>
       <div className="side_menu">
+        {tripData.selectedRoute?.map((route, index) => {
+          const titleWithoutCertification = route.title
+            .replace('[한국관광 품질인증/Korea Quality]', '')
+            .trim();
+          return (
+            <div key={index} onClick={() => fetchNearbyDestinations(route.id)}>
+              <h4>
+                {titleWithoutCertification}
+                {route.title.includes('[한국관광 품질인증/Korea Quality]') && (
+                  <PiSealCheckFill />
+                )}
+              </h4>
+              <button onClick={() => handleRemoveRoute(route.id)}>
+                <FaXmark />
+              </button>
+            </div>
+          );
+        })}
+
         <div className="sidebar_header">
           <img
             src="/static/logo_trip_java.svg"
@@ -174,75 +324,29 @@ const MapSidebar = ({ startDate, endDate }) => {
             <div>{formattedPeriod}</div>
             <hr />
           </div>
+          <div className="sidebar_tabs">
+            <div className="sidebar_selecteddate">
+              {renderDateTabs(startDate, endDate)}
+            </div>
+          </div>
 
-          {tabs.map((tab) => (
-            <div
-              className="sidebar_tabs"
-              id={formatDate(addDays(startDate, tab - 1))}
-            >
-              <div key={tab}>
-                <button
-                  onClick={() => handleDayClick(tab)}
-                  className="sidebar_date"
-                >
-                  {formatDate(addDays(startDate, tab - 1))}
-                </button>
-                <div
-                  className="sidebar_selecteddate"
-                  id={formatDate(addDays(startDate, tab - 1))}
-                >
-                  {/* <h4>{formatDate(addDays(startDate, tab - 1))}</h4> */}
-                </div>
-              </div>
-              <div
-                className="sidebar_hotel"
-                id={formatDate(addDays(startDate, tab - 1))}
-              >
-                <h3>숙소</h3>
-                <div className="sidebar_hotel_container">
-                  {routes.map((route, index) => {
-                    const titleWithoutCertification = route.title
-                      .replace('[한국관광 품질인증/Korea Quality]', '')
-                      .trim();
-                    return (
-                      <div
-                        key={index}
-                        onClick={() => fetchNearbyDestinations(route.id)}
-                      >
-                        <h4>
-                          {titleWithoutCertification}
-                          {route.title.includes(
-                            '[한국관광 품질인증/Korea Quality]'
-                          ) && <PiSealCheckFill />}
-                        </h4>
-                        <button onClick={() => handleRemoveRoute(route.id)}>
-                          <FaXmark />
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div
-                className="sidebar_route"
-                id={formatDate(addDays(startDate, tab - 1))}
-              >
-                <h3>일정</h3>
-                {selectedSpot.map((spot, index) => (
-                  <div key={index}>
-                    <h4>{spot.title}</h4>
-                    <button
-                      onClick={() => handleRemoveSpot(selectedDate, spot.id)}
-                    >
-                      <FaXmark />
-                    </button>
-                  </div>
-                ))}
-              </div>
+          {/* <div className="sidebar_hotel">
+            <h3>숙소</h3> */}
+          <div className="sidebar_hotel_container"></div>
+          {/* </div> */}
+          {/* <div className="sidebar_route">
+            <h3>일정</h3> */}
+          {selectedSpot.map((spot, index) => (
+            <div key={index}>
+              <h4>{spot.title}</h4>
+              <button onClick={() => handleRemoveSpot(selectedDate, spot.id)}>
+                <FaXmark />
+              </button>
             </div>
           ))}
+          {/* </div> */}
           <div className="sidebar_footter">
-            <button onClick={handleSaveTripData}>저장</button>
+            <button onClick={handleSaveTripData}>일정 저장</button>
           </div>
         </div>
       </div>
