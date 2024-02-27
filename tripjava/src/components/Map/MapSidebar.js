@@ -18,6 +18,7 @@ import { FaRegFaceSadTear } from 'react-icons/fa6';
 import { v4 as uuidv4 } from 'uuid';
 import { GoTriangleRight } from 'react-icons/go';
 import { GoTriangleLeft } from 'react-icons/go';
+import { setAuth } from '../../store/actions/auth';
 
 // 날짜 포맷 변경 함수
 function formatDate(dateString) {
@@ -47,11 +48,11 @@ function formatPeriod(startDate, endDate) {
   return `${startFormat} ~ ${endFormat}`;
 }
 
-const MapSidebar = ({ startDate, endDate }) => {
+const MapSidebar = ({ startDate, endDate, routes }) => {
+  const userId = useSelector((state) => state.auth.id);
   // Redux 스토어에서 마커 정보 갖고오기!
-  const routes = useSelector((state) => state.triproute.routes);
+  // const routes = useSelector((state) => state.triproute.routes);
   // console.log('스토어에서 가져온 마커 정보 로깅:', routes);
-  // console.log('sidebar/period 확인 : ', period);
   const navigate = useNavigate();
   const formattedPeriod = formatPeriod(startDate, endDate);
   const dispatch = useDispatch();
@@ -71,46 +72,12 @@ const MapSidebar = ({ startDate, endDate }) => {
       selectedSpot: [],
       selectedDay: 1,
     },
-    2: {
-      selectedDate: null,
-      selectedRoute: null,
-      selectedSpot: [],
-      selectedDay: 2,
-    },
-    //똥꼬쇼 시작
-    // selectedDate: null,
-    // selectedRoute: null,
-    // selectedSpot: [],
-    // selectedDay: 1,
   });
-  // const [tripData2, setTripData2] = useState({
-  //   selectedDate: null,
-  //   selectedRoute: null,
-  //   selectedSpot: [],
-  //   selectedDay: 2,
-  // });
-  // const [tripData3, setTripData3] = useState({
-  //   selectedDate: null,
-  //   selectedRoute: null,
-  //   selectedSpot: [],
-  //   selectedDay: 3,
-  // });
-  // const [tripData4, setTripData4] = useState({
-  //   selectedDate: null,
-  //   selectedRoute: null,
-  //   selectedSpot: [],
-  //   selectedDay: 4,
-  // });
-  // const [tripData5, setTripData5] = useState({
-  //   selectedDate: null,
-  //   selectedRoute: null,
-  //   selectedSpot: [],
-  //   selectedDay: 5,
-  // });
   const [tripRoute, setTripRoute] = useState([]);
 
   useEffect(() => {
     // 현재 선택된 일차에 대한 routes 상태 업데이트
+    console.log('selectedDay ', selectedDay);
     setTripData((prevTripData) => ({
       ...prevTripData,
       [selectedDay]: {
@@ -149,11 +116,6 @@ const MapSidebar = ({ startDate, endDate }) => {
   // tripData 확인용!!!!!
   useEffect(() => {
     console.log('tripData changed:', tripData);
-    // console.log('tripData2 changed:', tripData2);
-    // console.log('tripData3 changed:', tripData3);
-    // console.log('tripData4 changed:', tripData4);
-    // console.log('tripData5 changed:', tripData5);
-    // console.log(tripData.selectedRoute);
   }, [tripData]);
 
   // @nayounghye : 사이드바 접기 관련
@@ -177,6 +139,7 @@ const MapSidebar = ({ startDate, endDate }) => {
   const handleDayClick = (day) => {
     const selectedDayDate = addDays(startDate, day - 1); // 선택된 일차에 해당하는 날짜 계산
     const formattedDate = formatDate(selectedDayDate); // 날짜 형식으로 상태 업데이트
+    setSelectedDay(day);
 
     setTripData((prevTripData) => ({
       ...prevTripData,
@@ -184,7 +147,7 @@ const MapSidebar = ({ startDate, endDate }) => {
         ...prevTripData[day],
         selectedDate: formattedDate,
         selectedDay: day,
-        selectedRoute: routes,
+        selectedRoute: [],
         selectedSpot: [],
       },
     }));
@@ -259,44 +222,47 @@ const MapSidebar = ({ startDate, endDate }) => {
     setSelectedSpot((prevSpots) => prevSpots.filter((spot) => spot.id !== id));
   };
 
-  // 저장 버튼 @@@@@@@@@@@@@@@@@@@@@@@
-  const handleSaveTripData = () => {
-    const currentTripData = {
-      routes: routes,
-      selectedSpots: selectedSpot,
-      selectedDates: selectedDate,
-      tabs: tabs,
-      setSelectedDay: setSelectedDay,
-    };
-    // Redux 스토어에 tripData 저장
-    dispatch(
-      allTripData({ ...routes, [selectedDate]: { spots: selectedSpot }, tabs })
-    );
-  };
+  async function handleSaveTripData(tripData) {
+    let plans = [];
+    Object.keys(tripData).forEach((day) => {
+      // 여기서 dayData가 null이 아닌지 확인하고, null이면 기본값을 제공합니다.
+      const dayData = tripData[day] || { selectedRoute: [], selectedSpot: [] }; // 기본값 설정
+      // 'selectedRoute'와 'selectedSpot'이 null일 경우 빈 배열로 처리
+      const selectedRoute = dayData.selectedRoute || [];
+      const selectedSpot = dayData.selectedSpot || [];
 
-  // 삭제는 for문으로 해당 배열을 삭제하게..
-  const handleAddTrip = () => {
-    // 현재 선택된 일자, 경로, 장소 등을 포함하는 tripData 객체 생성
-    const dayTripData = {
-      [selectedDate]: {
-        selectedRoute: tripData.selectedRoute,
-        selectedSpot: tripData.selectedSpot,
-      },
-    };
-
-    // Redux 스토어에 현재 일자의 tripData 저장
-    dispatch(todayTripData(dayTripData));
-
-    // 선택된 일자의 상태를 초기화하여 다음 일자의 계획을 세울 수 있도록 준비
-    // 여기에서는 예시로 selectedDate와 selectedSpot만 초기화하였으나,
-    // 필요에 따라 다른 상태들도 초기화할 수 있습니다.
-    setTripData({
-      selectedDate: null,
-      selectedRoute: [],
-      selectedSpot: [],
-      selectedDay: null,
+      selectedRoute.forEach((route) => {
+        selectedSpot.forEach((spot) => {
+          // 여기서 route와 spot이 null인 경우를 고려하여 처리합니다.
+          plans.push({
+            routeContentId: route ? route.contentid : null,
+            spotContentId: spot ? spot.contentid : null,
+            type: selectedDay,
+          });
+        });
+      });
     });
-  };
+
+    // 변환된 데이터를 서버로 보내는 부분
+    const sendData = {
+      start_day: formatDate(startDate),
+      end_day: formatDate(endDate),
+      planner_title: '여행 일정',
+      userid: userId,
+      plans: plans,
+    };
+    console.log('sendData 모있냐!!!', sendData);
+    try {
+      const res = await axios.post(
+        `http://localhost:8080/planner/trip-route`,
+        sendData
+      );
+      console.log('일정 저장 성공', res.data);
+    } catch (error) {
+      console.error('일정 저장 실패', error);
+    }
+  }
+
   // 저장 소희님 버전
   // const handleAddTrip = (tab) => {
   //   // 새로운 tripData 생성
@@ -384,7 +350,7 @@ const MapSidebar = ({ startDate, endDate }) => {
             </div>
           );
         })}
-        {/* {tripData2.selectedRoute?.map((route, index) => {
+        {tripData.selectedRoute?.map((route, index) => {
           const titleWithoutCertification = route.title
             .replace('[한국관광 품질인증/Korea Quality]', '')
             .trim();
@@ -402,7 +368,7 @@ const MapSidebar = ({ startDate, endDate }) => {
             </div>
           );
         })}
-        {tripData3.selectedRoute?.map((route, index) => {
+        {tripData.selectedRoute?.map((route, index) => {
           const titleWithoutCertification = route.title
             .replace('[한국관광 품질인증/Korea Quality]', '')
             .trim();
@@ -420,42 +386,6 @@ const MapSidebar = ({ startDate, endDate }) => {
             </div>
           );
         })}
-        {tripData4.selectedRoute?.map((route, index) => {
-          const titleWithoutCertification = route.title
-            .replace('[한국관광 품질인증/Korea Quality]', '')
-            .trim();
-          return (
-            <div key={index} onClick={() => fetchNearbyDestinations(route.id)}>
-              <h4>
-                {titleWithoutCertification}
-                {route.title.includes('[한국관광 품질인증/Korea Quality]') && (
-                  <PiSealCheckFill />
-                )}
-              </h4>
-              <button onClick={() => handleRemoveRoute(route.id)}>
-                <FaXmark />
-              </button>
-            </div>
-          );
-        })}
-        {tripData5.selectedRoute?.map((route, index) => {
-          const titleWithoutCertification = route.title
-            .replace('[한국관광 품질인증/Korea Quality]', '')
-            .trim();
-          return (
-            <div key={index} onClick={() => fetchNearbyDestinations(route.id)}>
-              <h4>
-                {titleWithoutCertification}
-                {route.title.includes('[한국관광 품질인증/Korea Quality]') && (
-                  <PiSealCheckFill />
-                )}
-              </h4>
-              <button onClick={() => handleRemoveRoute(route.id)}>
-                <FaXmark />
-              </button>
-            </div>
-          );
-        })} */}
 
         <div className="sidebar_header">
           <img
@@ -494,29 +424,7 @@ const MapSidebar = ({ startDate, endDate }) => {
 
           {/* <div className="sidebar_hotel">
             <h3>숙소</h3> */}
-          <div className="sidebar_hotel_container">
-            {/* {routes.map((route, index) => {
-              const titleWithoutCertification = route.title
-                .replace('[한국관광 품질인증/Korea Quality]', '')
-                .trim();
-              return (
-                <div
-                  key={index}
-                  onClick={() => fetchNearbyDestinations(route.id)}
-                >
-                  <h4>
-                    {titleWithoutCertification}
-                    {route.title.includes(
-                      '[한국관광 품질인증/Korea Quality]'
-                    ) && <PiSealCheckFill />}
-                  </h4>
-                  <button onClick={() => handleRemoveRoute(route.id)}>
-                    <FaXmark />
-                  </button>
-                </div>
-              );
-            })} */}
-          </div>
+          <div className="sidebar_hotel_container"></div>
           {/* </div> */}
           {/* <div className="sidebar_route">
             <h3>일정</h3> */}
