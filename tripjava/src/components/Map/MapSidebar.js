@@ -91,39 +91,6 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
     }));
   }, [routes]);
 
-  // useEffect(() => {
-  //   console.log('selectedDay ', selectedDay);
-  //   setTripData((prevTripData) => ({
-  //     ...prevTripData,
-  //     [selectedDay]: {
-  //       ...prevTripData[selectedDay],
-  //       selectedSpot: selectedSpot,
-  //     },
-  //   }));
-  // }, [routes]);
-
-  // useEffect(() => {
-  //   setTripData((prevTripData) => ({
-  //     ...prevTripData,
-  //     selectedRoute: routes,
-  //   }));
-  //   // 리덕스 삭제
-  //   // dispatch(removeRoute(tripData.selectedRoute[0].id));
-  //   console.log('TripData에 숙소들감 check');
-  // }, [routes]);
-
-  // 삭제
-  // useEffect(() => {
-  //   if (tripData.selectedRoute && tripData.selectedRoute.length > 0) {
-  //     dispatch(
-  //       removeRoute(
-  //         tripData.selectedRoute[tripData.selectedRoute.length - 1].id
-  //       )
-  //     );
-  //     console.log('숙소 삭제!');
-  //   }
-  // }, [tripData.selectedRoute]);
-
   // tripData 확인용!!!!!
   useEffect(() => {
     console.log('tripData changed:', tripData);
@@ -216,11 +183,6 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
       };
     });
   };
-  // 장소 삭제 ! - 기존
-  // const handleRemoveSpot = (selectedDate, id) => {
-  //   console.log('Spot삭제 함수 인자들 잘 들어가지나 쳌', selectedDate, id); // 값을 확인하기 위한 로그
-  //   setSelectedSpot((prevSpots) => prevSpots.filter((spot) => spot.id !== id));
-  // };
 
   // 일정 저장 버튼@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
   const handleSaveTripData = async () => {
@@ -332,18 +294,6 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
     return elements;
   }, [tripData]);
 
-  // 기존 삭제 방식
-  // {
-  //   selectedSpot.map((spot, index) => (
-  //     <div key={index}>
-  //       <h4>{spot.title}</h4>
-  //       <button onClick={() => handleRemoveSpot(selectedDate, spot.id)}>
-  //         <FaXmark />
-  //       </button>
-  //     </div>
-  //   ));
-  // }
-
   const handleRemoveSpot = (id, spotId) => {
     // tripData의 복사본을 생성하기..!
     const updatedTripDataSpot = { ...tripData };
@@ -384,24 +334,6 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
 
   return (
     <>
-      {/* {tripData.selectedRoute?.map((route, index) => {
-          const titleWithoutCertification = route.title
-            .replace('[한국관광 품질인증/Korea Quality]', '')
-            .trim();
-          return (
-            <div key={index} onClick={() => fetchNearbyDestinations(route.id)}>
-              <h4>
-                {titleWithoutCertification}
-                {route.title.includes('[한국관광 품질인증/Korea Quality]') && (
-                  <PiSealCheckFill />
-                )}
-              </h4>
-              <button onClick={() => handleRemoveRoute(route.id)}>
-                <FaXmark />
-              </button>
-            </div>
-          );
-        })} */}
       <div className="side_menu">
         <div className="sidebar_header">
           <img
