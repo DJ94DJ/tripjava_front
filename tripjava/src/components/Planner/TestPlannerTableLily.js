@@ -173,6 +173,7 @@ const TestPlannerTableLily = ({ planner_no }) => {
     const itinerary = itineraries.find((it) => {
       // console.log("잇???", it);
       const today_type = it.today_no?.today_type;
+      setSelectedDayNumber(today_type);
       if (today_type === undefined || Number(today_type) !== dayNumber) {
         return false;
       }
@@ -294,6 +295,7 @@ const TestPlannerTableLily = ({ planner_no }) => {
           endDay={plannerData.end_day}
           onSave={handleSave}
           planner_no={planner_no}
+          todayNums={todayNums}
         />
       )}
     </div>
