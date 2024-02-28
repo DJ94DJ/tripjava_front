@@ -225,6 +225,7 @@ const GoogleMapComponent = ({ startDate, setRoutes, tripData }) => {
               setSelected(marker);
               onMarkerClick(marker);
             }}
+            animation={window.google.maps.Animation.DROP}
           >
             {/* 선택된 마커에 대해서만 InfoWindow 표시 */}
             {selected && selected.time === marker.time && (
@@ -277,6 +278,7 @@ const GoogleMapComponent = ({ startDate, setRoutes, tripData }) => {
                   : '/static/default_icon.svg', // 그 외 기본 아이콘
               scaledSize: new window.google.maps.Size(50, 50),
             }}
+            animation={window.google.maps.Animation.DROP}
           />
         ))}
       </GoogleMap>

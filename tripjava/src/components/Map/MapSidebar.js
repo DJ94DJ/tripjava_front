@@ -250,10 +250,32 @@ const MapSidebar = ({ startDate, endDate, routes, setTripData, tripData }) => {
           >
             {date}
           </button>
+          {/* {tripData.selectedRoute?.map((route, index) => {
+      //         const titleWithoutCertification = route.title
+      //           .replace('[한국관광 품질인증/Korea Quality]', '')
+      //           .trim();
+      //         return (
+      //           <div
+      //             key={index}
+      //             onClick={() => fetchNearbyDestinations(route.id)}
+      //           >
+      //             <h4>
+      //               {titleWithoutCertification}
+      //               {route.title.includes(
+      //                 '[한국관광 품질인증/Korea Quality]'
+      //               ) && <PiSealCheckFill />}
+      //             </h4>
+      //             <button onClick={() => handleRemoveRoute(route.id)}>
+      //               <FaXmark />
+      //             </button>
+      //           </div>
+      //         );
+      //       })} */}
           <div>
             <div className="sidebar_hotel">
               <h3 id={date}>숙소</h3>
-            </div>{' '}
+            </div>
+
             <div className="sidebar_hotel">
               {routeDetail.map((route, id, routes) => (
                 <div className="sidebar_hotel_container" key={id}>
