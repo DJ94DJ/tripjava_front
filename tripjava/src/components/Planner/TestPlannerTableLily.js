@@ -14,6 +14,7 @@ const TestPlannerTableLily = ({ planner_no }) => {
     date: null,
     hour: null,
   }); // 선택된 날짜와 시간을 저장하는 상태
+  const [todayNums, setTodayNums] = useState([]);
 
   // 이전에 있던 병합을 제거하고 새로운 병합을 추가하는 함수입니다.
   const mergeCells = () => {
@@ -122,6 +123,7 @@ const TestPlannerTableLily = ({ planner_no }) => {
           .get(`http://localhost:8080/plan/today-no/${planner_no}/${days}`)
           .then((response) => {
             console.log("숫자 잘 들어오냐??", response.data)
+            setTodayNums(response.data);
         })
       })
       .catch((error) => {
@@ -170,8 +172,8 @@ const TestPlannerTableLily = ({ planner_no }) => {
   const getItineraryForTime = (dayNumber, hour) => {
     const itinerary = itineraries.find((it) => {
       // console.log("잇???", it);
-      const today_no = it.today_no?.today_no;
-      if (today_no === undefined || Number(today_no) !== dayNumber) {
+      const today_type = it.today_no?.today_type;
+      if (today_type === undefined || Number(today_type) !== dayNumber) {
         return false;
       }
 
