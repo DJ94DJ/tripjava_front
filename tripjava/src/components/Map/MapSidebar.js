@@ -51,9 +51,9 @@ function formatToISODate(dateString) {
   return `${year}-${month}-${day}`;
 }
 
-const MapSidebar = ({ startDate, endDate, routes }) => {
+const MapSidebar = ({ startDate, endDate, routes, setTripData, tripData }) => {
   const userId = useSelector((state) => state.auth.id);
-  // console.log('스토어에서 가져온 마커 정보 로깅:', routes);
+  // console.log('마커 정보 로깅:', routes);
   const navigate = useNavigate();
   const formattedPeriod = formatPeriod(startDate, endDate);
   const [destinations, setDestinations] = useState({
@@ -62,25 +62,26 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
   });
   const [selectedCategory, setSelectedCategory] = useState('touristSpots');
   const [selectedSpot, setSelectedSpot] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDay, setSelectedDay] = useState(1); // 기본값: 첫날 날짜
   const [nearbyMenuOpen, setNearbyMenuOpen] = useState(true); // 메뉴열림 닫힘, 기본값 : 열림
-  const [tripData, setTripData] = useState({
-    // 1: {
-    //   selectedDate: null,
-    //   selectedRoute: null,
-    //   selectedSpot: [],
-    //   selectedDay: 1,
-    // },
-  });
+  // const [tripData, setTripData] = useState({
+  //   // 1: {
+  //   //   selectedDate: null,
+  //   //   selectedRoute: null,
+  //   //   selectedSpot: [],
+  //   //   selectedDay: 1,
+  //   // },
+  // });
   const [title, setTitle] = useState('여행 일정(1)');
 
+  // 여행 일정 입력 함수
   function handleTitle(e) {
     setTitle(e.target.value);
   }
+
   // 날짜 눌렀을 때 누른 곳에 해당하는 TripData에 routes, spot들어가도록 설정
   useEffect(() => {
-    console.log('selectedDay ', selectedDay);
+    // console.log('selectedDay ', selectedDay);
     setTripData((prevTripData) => ({
       ...prevTripData,
       [selectedDay]: {
@@ -141,7 +142,7 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
           mapy: route.lat, // 위도
         },
       });
-      console.log('숙소 근처 데이터 갖고 와지는지 확인', res.data);
+      // console.log('숙소 근처 데이터 갖고 와지는지 확인', res.data);
 
       // 데이터가 있는지 확인하고 상태 업데이트
       if (res.data && res.data.restaurants && res.data.touristSpots) {
@@ -218,6 +219,8 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
     } catch (error) {
       console.error('포스트 에러:', error);
     }
+
+    navigate(`/mypage`);
   };
 
   // 여행 기간별 날짜 구현 함수
@@ -229,7 +232,7 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
     for (let i = 0; i < period; i++) {
       const date = formatDate(addDays(startDate, i));
       // const detail = detailInfo[String(i + 1)];
-      console.log('tripData[String(i + 1)]', tripData[i + 1]);
+      // console.log('tripData[String(i + 1)]', tripData[i + 1]);
       const routeDetail = tripData[String(i + 1)]
         ? tripData[String(i + 1)].selectedRoute
         : [];

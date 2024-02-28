@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import {
   useJsApiLoader,
   GoogleMap,
@@ -14,8 +14,6 @@ import ReactDOMServer from 'react-dom/server';
 import svgToMiniDataURI from 'mini-svg-data-uri';
 import axios from 'axios';
 import MapStyle from './MapStyle';
-import { useDispatch, useSelector } from 'react-redux';
-import { addRoute, addSpot } from '../../store/actions/triproute';
 import { PiSealCheckFill } from 'react-icons/pi';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -29,15 +27,30 @@ const center = {
   lng: 126.9632199,
 };
 
-const GoogleMapComponent = ({ startDate, setRoutes }) => {
+const GoogleMapComponent = ({ startDate, setRoutes, tripData }) => {
   const location = useLocation();
   const [markers, setMarkers] = useState([]);
   const [selected, setSelected] = useState(null);
   const mapRef = useRef();
   const [accommodations, setAccommodations] = useState([]); // 숙소 데이터 상태
   const selectedLocation = location.state?.selectedLocation;
-  const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(null);
+  const [map, setMap] = useState(null);
+
+  // tripData에서 모든 selectedSpot의 위치 데이터를 추출하기!!
+  const allSelectedSpots = Object.values(tripData).flatMap(
+    (day) => day.selectedSpot
+  );
+  console.log('위치 데이터 추출', allSelectedSpots);
+
+  const onUnmount = React.useCallback(function callback(map) {
+    setMap(null);
+  }, []);
+
+  useEffect(() => {
+    console.log('여기는 gmc 잘 보이세요?', tripData);
+    console.log('위치 데이터 갖고오기', tripData.selectedSpot);
+  }, [tripData]); // tripData가 변경될 때마다 이 useEffect가 실행됨
 
   const onMarkerClick = (marker) => {
     setRoutes([{ ...marker, id: uuidv4() }]);
@@ -247,9 +260,32 @@ const GoogleMapComponent = ({ startDate, setRoutes }) => {
             )}
           </Marker>
         ))}
+        {allSelectedSpots.map((spot) => (
+          <Marker
+            key={spot.id}
+            position={{
+              lat: parseFloat(spot.mapy),
+              lng: parseFloat(spot.mapx),
+            }}
+            icon={{
+              // contenttypeid 값에 따라 다른 아이콘 URL 설정
+              url:
+                spot.contenttypeid === '39'
+                  ? '/static/meal_marker.svg' // contenttypeid가 39일 경우
+                  : spot.contenttypeid === '12'
+                  ? '/static/place_marker.svg' // contenttypeid가 12일 경우
+                  : '/static/default_icon.svg', // 그 외 기본 아이콘
+              scaledSize: new window.google.maps.Size(50, 50),
+            }}
+          />
+        ))}
       </GoogleMap>
     </>
   );
 };
 
+// contenttypeid
+// 12 : 관광지
+// 32 : 숙소
+// 39 : 음식점
 export default GoogleMapComponent;
