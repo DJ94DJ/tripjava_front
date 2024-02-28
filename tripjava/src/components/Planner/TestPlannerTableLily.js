@@ -16,15 +16,53 @@ const TestPlannerTableLily = ({ planner_no }) => {
   }); // 선택된 날짜와 시간을 저장하는 상태
   const [todayNums, setTodayNums] = useState([]);
 
-  // 이전에 있던 병합을 제거하고 새로운 병합을 추가하는 함수입니다.
+  // // 이전에 있던 병합을 제거하고 새로운 병합을 추가하는 함수입니다.
+  // const mergeCells = () => {
+  //   const table = document.querySelector(".test_PlannerTable");
+
+  //   if (!table) return;
+
+  //   const rows = Array.from(table.getElementsByTagName("tr"));
+  //   let lastCell = null;
+  //   let count = 1;
+
+  //   rows.forEach((row, rowIndex) => {
+  //     const currentCell = row.getElementsByTagName("td")[1];
+
+  //     // currentCell이 undefined이거나 textContent가 빈 문자열이면 무시합니다.
+  //     if (!currentCell || !currentCell.textContent) return;
+
+  //     if (lastCell && lastCell.textContent === currentCell.textContent) {
+  //       count++;
+  //       lastCell.rowSpan = count;
+  //       currentCell.style.display = "none";
+  //       currentCell.classList.add("merged"); // 현재 셀에 'merged' 클래스 추가
+  //     } else {
+  //       lastCell = currentCell;
+  //       lastCell.classList.add("merged");
+  //       count = 1;
+  //     }
+  //   });
+  // };
+
   const mergeCells = () => {
     const table = document.querySelector(".test_PlannerTable");
 
     if (!table) return;
 
     const rows = Array.from(table.getElementsByTagName("tr"));
-    let lastCell = null;
-    let count = 1;
+    let lastText = null;
+    let matchedClass = null;
+    let colorMap = new Map();
+
+    const getRandomColor = () => {
+      const letters = "0123456789ABCDEF";
+      let color = "#";
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    };
 
     rows.forEach((row, rowIndex) => {
       const currentCell = row.getElementsByTagName("td")[1];
@@ -32,16 +70,35 @@ const TestPlannerTableLily = ({ planner_no }) => {
       // currentCell이 undefined이거나 textContent가 빈 문자열이면 무시합니다.
       if (!currentCell || !currentCell.textContent) return;
 
-      if (lastCell && lastCell.textContent === currentCell.textContent) {
-        count++;
-        lastCell.rowSpan = count;
-        currentCell.style.display = "none";
-        currentCell.classList.add("merged"); // 현재 셀에 'merged' 클래스 추가
+      if (!colorMap.has(currentCell.textContent)) {
+        const colorClass = `color_${rowIndex}`; // 색상 클래스명
+        colorMap.set(currentCell.textContent, colorClass);
+        currentCell.classList.add(colorClass); // 색상 클래스명 부여
       } else {
-        lastCell = currentCell;
-        lastCell.classList.add("merged");
-        count = 1;
+        currentCell.classList.add(colorMap.get(currentCell.textContent)); // 색상 클래스명 부여
       }
+
+      if (lastText && lastText === currentCell.textContent) {
+        currentCell.style.opacity = "0"; // 텍스트 투명도를 0으로 설정
+        currentCell.classList.add(matchedClass); // 동일한 클래스명 부여
+      } else {
+        lastText = currentCell.textContent;
+        matchedClass = `matched_${rowIndex}`; // 일치하는 셀들에게 부여될 클래스명
+        currentCell.classList.add(matchedClass);
+      }
+    });
+
+    // 색상 설정
+    let style = document.createElement("style");
+    document.head.appendChild(style);
+    let styleSheet = style.sheet;
+
+    colorMap.forEach((colorClass, text) => {
+      const colorStyle = getRandomColor(); // 랜덤 색상
+      styleSheet.insertRule(
+        `.${colorClass} { background-color: ${colorStyle}; }`,
+        styleSheet.cssRules.length
+      );
     });
   };
 
@@ -110,7 +167,7 @@ const TestPlannerTableLily = ({ planner_no }) => {
 
   useEffect(() => {
     axios
-    // http://localhost:8080/plan/today-no/{planner_no}/{days}
+      // http://localhost:8080/plan/today-no/{planner_no}/{days}
       .get(`http://localhost:8080/planner/trip-route/${planner_no}`)
       .then((response) => {
         console.log("컴포넌트~여행 정보 요청 응답: ", response.data);
@@ -122,15 +179,13 @@ const TestPlannerTableLily = ({ planner_no }) => {
         axios
           .get(`http://localhost:8080/plan/today-no/${planner_no}/${days}`)
           .then((response) => {
-            console.log("숫자 잘 들어오냐??", response.data)
+            console.log("숫자 잘 들어오냐??", response.data);
             setTodayNums(response.data);
-        })
+          });
       })
       .catch((error) => {
         console.error("여행 정보를 가져오는 동안 오류 발생: ", error);
       });
-
-    
 
     // 모달에서 일정 저장 후 바로 table에 반영될 수 있게 해줌
     const handleItinerarySaved = () => {
@@ -234,6 +289,7 @@ const TestPlannerTableLily = ({ planner_no }) => {
           </tr>
           <tr>
             <th
+              className="times"
               style={{
                 width: "20%",
                 border: "1px solid black",
@@ -243,6 +299,7 @@ const TestPlannerTableLily = ({ planner_no }) => {
               시간
             </th>
             <th
+              className="plans"
               style={{
                 width: "80%",
                 border: "1px solid black",
@@ -253,7 +310,7 @@ const TestPlannerTableLily = ({ planner_no }) => {
             </th>
           </tr>
         </thead>
-        <tbody>{hours}</tbody>
+        <tbody className="hourscell">{hours}</tbody>
       </table>
     );
   };

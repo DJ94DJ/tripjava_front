@@ -8,6 +8,34 @@
 
 .day-table {
   background-color: rgb(147, 216, 112);
+
+  td {
+    background-color: rgb(90, 42, 138);
+    &.merged {
+      background-color: rgb(205, 49, 59);
+    }
+  }
+
+  .times {
+    background-color: rgb(54, 107, 229);
+  }
+
+  .plans {
+    background-color: rgb(129, 165, 248);
+  }
+
+  thead {
+    th {
+      background-color: rgb(38, 93, 11);
+    }
+    tr {
+      background-color: rgb(90, 42, 138);
+    }
+
+    tbody {
+      background-color: rgb(171, 111, 231);
+    } // 아무일도 안일어남
+  }
 }
 
 .selected {

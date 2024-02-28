@@ -55,7 +55,7 @@ export default function Header() {
                 <li onClick={() => navigate("/mypage")}>
                   {auth.nickname}님, 환영합니다! 💖
                 </li>
-                {/* <li onClick={onLogout}>로그아웃</li> */}
+                <li onClick={onLogout}>로그아웃</li>
               </>
             ) : (
               <li onClick={() => navigate("/login")}>로그인</li> // 로그인하지 않은 경우 또는 닉네임이 없는 경우
