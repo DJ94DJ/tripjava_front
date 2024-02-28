@@ -51,9 +51,9 @@ function formatToISODate(dateString) {
   return `${year}-${month}-${day}`;
 }
 
-const MapSidebar = ({ startDate, endDate, routes }) => {
+const MapSidebar = ({ startDate, endDate, routes, setTripData, tripData }) => {
   const userId = useSelector((state) => state.auth.id);
-  // console.log('스토어에서 가져온 마커 정보 로깅:', routes);
+  // console.log('마커 정보 로깅:', routes);
   const navigate = useNavigate();
   const formattedPeriod = formatPeriod(startDate, endDate);
   const [destinations, setDestinations] = useState({
@@ -62,25 +62,26 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
   });
   const [selectedCategory, setSelectedCategory] = useState('touristSpots');
   const [selectedSpot, setSelectedSpot] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDay, setSelectedDay] = useState(1); // 기본값: 첫날 날짜
   const [nearbyMenuOpen, setNearbyMenuOpen] = useState(true); // 메뉴열림 닫힘, 기본값 : 열림
-  const [tripData, setTripData] = useState({
-    // 1: {
-    //   selectedDate: null,
-    //   selectedRoute: null,
-    //   selectedSpot: [],
-    //   selectedDay: 1,
-    // },
-  });
+  // const [tripData, setTripData] = useState({
+  //   // 1: {
+  //   //   selectedDate: null,
+  //   //   selectedRoute: null,
+  //   //   selectedSpot: [],
+  //   //   selectedDay: 1,
+  //   // },
+  // });
   const [title, setTitle] = useState('여행 일정(1)');
 
+  // 여행 일정 입력 함수
   function handleTitle(e) {
     setTitle(e.target.value);
   }
+
   // 날짜 눌렀을 때 누른 곳에 해당하는 TripData에 routes, spot들어가도록 설정
   useEffect(() => {
-    console.log('selectedDay ', selectedDay);
+    // console.log('selectedDay ', selectedDay);
     setTripData((prevTripData) => ({
       ...prevTripData,
       [selectedDay]: {
@@ -90,39 +91,6 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
       },
     }));
   }, [routes]);
-
-  // useEffect(() => {
-  //   console.log('selectedDay ', selectedDay);
-  //   setTripData((prevTripData) => ({
-  //     ...prevTripData,
-  //     [selectedDay]: {
-  //       ...prevTripData[selectedDay],
-  //       selectedSpot: selectedSpot,
-  //     },
-  //   }));
-  // }, [routes]);
-
-  // useEffect(() => {
-  //   setTripData((prevTripData) => ({
-  //     ...prevTripData,
-  //     selectedRoute: routes,
-  //   }));
-  //   // 리덕스 삭제
-  //   // dispatch(removeRoute(tripData.selectedRoute[0].id));
-  //   console.log('TripData에 숙소들감 check');
-  // }, [routes]);
-
-  // 삭제
-  // useEffect(() => {
-  //   if (tripData.selectedRoute && tripData.selectedRoute.length > 0) {
-  //     dispatch(
-  //       removeRoute(
-  //         tripData.selectedRoute[tripData.selectedRoute.length - 1].id
-  //       )
-  //     );
-  //     console.log('숙소 삭제!');
-  //   }
-  // }, [tripData.selectedRoute]);
 
   // tripData 확인용!!!!!
   useEffect(() => {
@@ -174,7 +142,7 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
           mapy: route.lat, // 위도
         },
       });
-      console.log('숙소 근처 데이터 갖고 와지는지 확인', res.data);
+      // console.log('숙소 근처 데이터 갖고 와지는지 확인', res.data);
 
       // 데이터가 있는지 확인하고 상태 업데이트
       if (res.data && res.data.restaurants && res.data.touristSpots) {
@@ -216,11 +184,6 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
       };
     });
   };
-  // 장소 삭제 ! - 기존
-  // const handleRemoveSpot = (selectedDate, id) => {
-  //   console.log('Spot삭제 함수 인자들 잘 들어가지나 쳌', selectedDate, id); // 값을 확인하기 위한 로그
-  //   setSelectedSpot((prevSpots) => prevSpots.filter((spot) => spot.id !== id));
-  // };
 
   // 일정 저장 버튼@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
   const handleSaveTripData = async () => {
@@ -256,6 +219,8 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
     } catch (error) {
       console.error('포스트 에러:', error);
     }
+
+    navigate(`/mypage`);
   };
 
   // 여행 기간별 날짜 구현 함수
@@ -267,7 +232,7 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
     for (let i = 0; i < period; i++) {
       const date = formatDate(addDays(startDate, i));
       // const detail = detailInfo[String(i + 1)];
-      console.log('tripData[String(i + 1)]', tripData[i + 1]);
+      // console.log('tripData[String(i + 1)]', tripData[i + 1]);
       const routeDetail = tripData[String(i + 1)]
         ? tripData[String(i + 1)].selectedRoute
         : [];
@@ -332,18 +297,6 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
     return elements;
   }, [tripData]);
 
-  // 기존 삭제 방식
-  // {
-  //   selectedSpot.map((spot, index) => (
-  //     <div key={index}>
-  //       <h4>{spot.title}</h4>
-  //       <button onClick={() => handleRemoveSpot(selectedDate, spot.id)}>
-  //         <FaXmark />
-  //       </button>
-  //     </div>
-  //   ));
-  // }
-
   const handleRemoveSpot = (id, spotId) => {
     // tripData의 복사본을 생성하기..!
     const updatedTripDataSpot = { ...tripData };
@@ -384,24 +337,6 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
 
   return (
     <>
-      {/* {tripData.selectedRoute?.map((route, index) => {
-          const titleWithoutCertification = route.title
-            .replace('[한국관광 품질인증/Korea Quality]', '')
-            .trim();
-          return (
-            <div key={index} onClick={() => fetchNearbyDestinations(route.id)}>
-              <h4>
-                {titleWithoutCertification}
-                {route.title.includes('[한국관광 품질인증/Korea Quality]') && (
-                  <PiSealCheckFill />
-                )}
-              </h4>
-              <button onClick={() => handleRemoveRoute(route.id)}>
-                <FaXmark />
-              </button>
-            </div>
-          );
-        })} */}
       <div className="side_menu">
         <div className="sidebar_header">
           <img
