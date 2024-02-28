@@ -5,13 +5,16 @@
   height: 100%;
   overflow-y: auto;
   padding-top: 20rem;
+  
+ 
   padding-bottom: 5rem;
   align-items: flex-start;
 
   .myPage-form {
     @include container;
-    // display: flex;
-    // transform: translateY(-5rem);
+    
+    display: flex;
+    transform: translateY(-5rem);
     padding: 3em;
     border: 0;
     width: 350px;
@@ -20,6 +23,9 @@
     margin: 1rem;
 
     .tourlist {
+      @include flex-between;
+      width: 105%;
+      flex-direction: column;
     }
 
     border: {
@@ -29,7 +35,13 @@
     }
 
     &.mypage {
-      height: 500px;
+      @include flex-center;
+      height: 400px;
+    }
+
+    &.tours {
+      // background-color: aqua;
+      flex-direction: column;
     }
 
     .delete-part {
@@ -142,6 +154,8 @@
     }
   }
   @media (max-width: 768px) {
+    @include flex-center;
+    padding-top: 30rem;
     flex-direction: column;
   }
 }
