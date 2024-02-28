@@ -36,20 +36,20 @@ const GoogleMapComponent = ({ startDate, setRoutes, tripData }) => {
   const selectedLocation = location.state?.selectedLocation;
   const [selectedDate, setSelectedDate] = useState(null);
   const [map, setMap] = useState(null);
+  const [markerAnimation, setMarkerAnimation] = useState(null);
 
   // tripData에서 모든 selectedSpot의 위치 데이터를 추출하기!!
   const allSelectedSpots = Object.values(tripData).flatMap(
     (day) => day.selectedSpot
   );
-  console.log('위치 데이터 추출', allSelectedSpots);
+  // console.log('위치 데이터 추출', allSelectedSpots);
 
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null);
-  }, []);
-
+  const allSelectedRoutes = Object.values(tripData).flatMap(
+    (day) => day.selectedRoute
+  );
   useEffect(() => {
-    console.log('여기는 gmc 잘 보이세요?', tripData);
-    console.log('위치 데이터 갖고오기', tripData.selectedSpot);
+    // console.log('여기는 gmc 잘 보이세요?', tripData);
+    // console.log('위치 데이터 갖고오기', tripData.selectedSpot);
   }, [tripData]); // tripData가 변경될 때마다 이 useEffect가 실행됨
 
   const onMarkerClick = (marker) => {
@@ -196,6 +196,12 @@ const GoogleMapComponent = ({ startDate, setRoutes, tripData }) => {
     }
   }, [startDate]);
 
+  const toggleBounce = () => {
+    setMarkerAnimation((prevAnimation) =>
+      prevAnimation === null ? window.google.maps.Animation.BOUNCE : null
+    );
+  };
+
   if (!isLoaded) return 'Loading Maps';
   return (
     <>
@@ -225,6 +231,7 @@ const GoogleMapComponent = ({ startDate, setRoutes, tripData }) => {
               setSelected(marker);
               onMarkerClick(marker);
             }}
+            animation={2}
           >
             {/* 선택된 마커에 대해서만 InfoWindow 표시 */}
             {selected && selected.time === marker.time && (
@@ -275,6 +282,20 @@ const GoogleMapComponent = ({ startDate, setRoutes, tripData }) => {
                   : spot.contenttypeid === '12'
                   ? '/static/place_marker.svg' // contenttypeid가 12일 경우
                   : '/static/default_icon.svg', // 그 외 기본 아이콘
+              scaledSize: new window.google.maps.Size(50, 50),
+            }}
+            animation={2}
+          />
+        ))}
+        {allSelectedRoutes.map((route) => (
+          <Marker
+            key={route.id}
+            position={{
+              lat: parseFloat(route.lat),
+              lng: parseFloat(route.lng),
+            }}
+            icon={{
+              url: '/static/selected_home_marker.svg',
               scaledSize: new window.google.maps.Size(50, 50),
             }}
           />
