@@ -194,17 +194,34 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
     }
   };
 
-  const handleRemoveRoute = (id) => {};
+  const handleRemoveRoute = (selectedDay, routeId) => {
+    // 특정 일자(dayId)의 selectedRoute 배열에서 특정 routeId를 제거
+    if (tripData[selectedDay]) {
+      const updatedSelectedRoute = tripData[selectedDay].selectedRoute.filter(
+        (route) => route.id !== routeId
+      );
+
+      // 업데이트된 selectedRoute 배열로 객체를 업데이트
+      const updatedTripData = {
+        ...tripData,
+        [selectedDay]: {
+          ...tripData[selectedDay],
+          selectedRoute: updatedSelectedRoute,
+        },
+      };
+
+      // 업데이트된 전체 객체로 상태를 설정
+      setTripData(updatedTripData);
+    } else {
+      console.error(`selectedDay ${selectedDay} not found in tripData`);
+    }
+  };
 
   const handleAddSpot = (spot) => {
     console.log('spot', spot);
     // 각 spot에 고유한 id 부여
     const spotWithId = { ...spot, id: uuidv4() };
-
-    // 여기서 currentSelectedDay는 현재 선택된 날짜를 나타내며,
-    // 예를 들어 "1", "2" 등의 값을 가질 수 있습니다.
-    // 이 값을 어떻게 결정하는지에 따라 다를 수 있으므로, 적절히 설정해야 합니다.
-    const currentSelectedDay = selectedDay; // 예시 값을 사용합니다. 실제로는 동적으로 결정되어야 합니다.
+    const currentSelectedDay = selectedDay;
 
     setTripData((prevTripData) => {
       // 현재 선택된 날짜의 selectedSpot 배열 찾기
@@ -222,11 +239,11 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
       };
     });
   };
-  // 리덕스랑 장소 삭제 !
-  const handleRemoveSpot = (selectedDate, id) => {
-    console.log('Spot삭제 함수 인자들 잘 들어가지나 쳌', selectedDate, id); // 값을 확인하기 위한 로그
-    setSelectedSpot((prevSpots) => prevSpots.filter((spot) => spot.id !== id));
-  };
+  // 장소 삭제 ! - 기존
+  // const handleRemoveSpot = (selectedDate, id) => {
+  //   console.log('Spot삭제 함수 인자들 잘 들어가지나 쳌', selectedDate, id); // 값을 확인하기 위한 로그
+  //   setSelectedSpot((prevSpots) => prevSpots.filter((spot) => spot.id !== id));
+  // };
 
   // 일정 저장 버튼@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
   const handleSaveTripData = async () => {
@@ -300,7 +317,12 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
                 <div className="sidebar_hotel_container" key={index}>
                   <div onClick={() => fetchNearbyDestinations(routes.id)}>
                     <h4> {routeDetail.length != 0 && routeDetail[0].title}</h4>
-                    <button onClick={() => handleRemoveRoute(routes.id)}>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation(); // 이벤트 버블링 방지
+                        handleRemoveRoute(routes.id);
+                      }}
+                    >
                       <FaXmark />
                     </button>
                   </div>
@@ -309,14 +331,14 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
             ))}
           </div>
           <div className="sidebar_route">
-            <h3 id={date}>일정</h3>
+            <h3>장소</h3>
             {/* 일정 원본 */}
             {/* <h4>{SpotDetail.length != 0 && SpotDetail[0].title}</h4> */}
-            {spotDetail.map((spot, index) => (
+            {spotDetail.map((spot, id) => (
               // <div className="sidebar_route_container">
-              <div key={index} className="sidebar_route_container">
+              <div key={id} id={id} className="sidebar_route_container">
                 <h4>{spot.title}</h4>
-                <button onClick={() => handleRemoveSpot()}>
+                <button onClick={() => handleRemoveSpot(date, spot.id)}>
                   <FaXmark />
                 </button>
               </div>
@@ -342,6 +364,26 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
   //     </div>
   //   ));
   // }
+
+  // 시도중
+  const handleRemoveSpot = (id, spotId) => {
+    // tripData의 복사본을 생성합니다.
+    const updatedTripData = { ...tripData };
+
+    // tripData의 모든 날짜(키)를 순회합니다.
+    Object.keys(updatedTripData).forEach((id) => {
+      // 각 날짜의 selectedSpot 배열에서 spotId와 일치하지 않는 요소만 필터링합니다.
+      const filteredSpots = updatedTripData[id].selectedSpot.filter(
+        (spot) => spot.id !== spotId
+      );
+
+      // 업데이트된 selectedSpot 배열로 해당 날짜의 객체를 업데이트합니다.
+      updatedTripData[id].selectedSpot = filteredSpots;
+    });
+
+    // 전체 tripData 상태를 업데이트합니다.
+    setTripData(updatedTripData);
+  };
 
   return (
     <>
