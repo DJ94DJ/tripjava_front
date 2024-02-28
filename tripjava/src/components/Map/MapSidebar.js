@@ -194,29 +194,6 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
     }
   };
 
-  const handleRemoveRoute = (selectedDay, routeId) => {
-    // 특정 일자(dayId)의 selectedRoute 배열에서 특정 routeId를 제거
-    if (tripData[selectedDay]) {
-      const updatedSelectedRoute = tripData[selectedDay].selectedRoute.filter(
-        (route) => route.id !== routeId
-      );
-
-      // 업데이트된 selectedRoute 배열로 객체를 업데이트
-      const updatedTripData = {
-        ...tripData,
-        [selectedDay]: {
-          ...tripData[selectedDay],
-          selectedRoute: updatedSelectedRoute,
-        },
-      };
-
-      // 업데이트된 전체 객체로 상태를 설정
-      setTripData(updatedTripData);
-    } else {
-      console.error(`selectedDay ${selectedDay} not found in tripData`);
-    }
-  };
-
   const handleAddSpot = (spot) => {
     console.log('spot', spot);
     // 각 spot에 고유한 id 부여
@@ -311,24 +288,26 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
           <div>
             <div className="sidebar_hotel">
               <h3 id={date}>숙소</h3>
-            </div>
-            {routeDetail.map((index) => (
-              <div className="sidebar_hotel">
-                <div className="sidebar_hotel_container" key={index}>
+            </div>{' '}
+            <div className="sidebar_hotel">
+              {routeDetail.map((route, id, routes) => (
+                <div className="sidebar_hotel_container" key={id}>
                   <div onClick={() => fetchNearbyDestinations(routes.id)}>
                     <h4> {routeDetail.length != 0 && routeDetail[0].title}</h4>
                     <button
+                      // 클릭이벤트 버블링방지
                       onClick={(e) => {
-                        e.stopPropagation(); // 이벤트 버블링 방지
-                        handleRemoveRoute(routes.id);
+                        e.stopPropagation();
+                        // onClick={() => {
+                        handleRemoveRoute(date, route.id);
                       }}
                     >
                       <FaXmark />
                     </button>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
           <div className="sidebar_route">
             <h3>장소</h3>
@@ -365,24 +344,42 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
   //   ));
   // }
 
-  // 시도중
   const handleRemoveSpot = (id, spotId) => {
-    // tripData의 복사본을 생성합니다.
-    const updatedTripData = { ...tripData };
+    // tripData의 복사본을 생성하기..!
+    const updatedTripDataSpot = { ...tripData };
 
-    // tripData의 모든 날짜(키)를 순회합니다.
-    Object.keys(updatedTripData).forEach((id) => {
-      // 각 날짜의 selectedSpot 배열에서 spotId와 일치하지 않는 요소만 필터링합니다.
-      const filteredSpots = updatedTripData[id].selectedSpot.filter(
+    // tripData의 모든 날짜(키)를 순회하게..
+    Object.keys(updatedTripDataSpot).forEach((id) => {
+      // 각 날짜의 selectedSpot 배열에서 spotId와 일치하지 않는 요소만 필터링!
+      const filteredSpots = updatedTripDataSpot[id].selectedSpot.filter(
         (spot) => spot.id !== spotId
       );
 
-      // 업데이트된 selectedSpot 배열로 해당 날짜의 객체를 업데이트합니다.
-      updatedTripData[id].selectedSpot = filteredSpots;
+      // 업데이트된 selectedSpot 배열로 해당 날짜의 객체를 업데이트!!!
+      updatedTripDataSpot[id].selectedSpot = filteredSpots;
     });
 
     // 전체 tripData 상태를 업데이트합니다.
-    setTripData(updatedTripData);
+    setTripData(updatedTripDataSpot);
+  };
+
+  const handleRemoveRoute = (id, routeId) => {
+    // tripData의 복사본을 생성하기..!
+    const updatedTripDataRoute = { ...tripData };
+
+    // tripData의 모든 날짜(키)를 순회하게..
+    Object.keys(updatedTripDataRoute).forEach((id) => {
+      // 각 날짜의 selectedRoute 배열에서 routeId와 일치하지 않는 요소만 필터링!
+      const filteredRoutes = updatedTripDataRoute[id].selectedRoute.filter(
+        (routes) => routes.id !== routeId
+      );
+
+      // 업데이트된 selectedRoute 배열로 해당 날짜의 객체를 업데이트!!!
+      updatedTripDataRoute[id].selectedRoute = filteredRoutes;
+    });
+
+    // 전체 tripData 상태를 업데이트합니다.
+    setTripData(updatedTripDataRoute);
   };
 
   return (
@@ -429,16 +426,7 @@ const MapSidebar = ({ startDate, endDate, routes }) => {
           <div className="sidebar_tabs">
             <div className="sidebar_selecteddate">{renderDateTabs}</div>
           </div>
-          {/* <div className="sidebar_hotel_container">
-            {selectedSpot.map((spot, index) => (
-              <div key={index}>
-                <h4>{spot.title}</h4>
-                <button onClick={() => handleRemoveSpot(selectedDate, spot.id)}>
-                  <FaXmark />
-                </button>
-              </div>
-            ))}
-          </div> */}
+
           <div className="sidebar_footter">
             <button onClick={handleSaveTripData}>일정 저장</button>
           </div>
