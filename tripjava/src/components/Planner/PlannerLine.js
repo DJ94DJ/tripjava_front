@@ -46,17 +46,42 @@ const PlannerLine = ({ planner_no }) => {
   //   ],
   // });
 
+  const handleScroll = (scrollOffset) => {
+    scrollRef.current.scrollLeft += scrollOffset;
+  };
+
   return (
     <div className="PlannerLine">
-      {plannerData &&
-        plannerData.plans.map((item, index) => (
-          <div key={index} className="item">
-            <div className="dot" />
-            {/* contentid로 장소 이름 뽑기... 어떻게.. 하나요.......ㅠ..... */}
-            <h2>{item.tourist.title}</h2>{" "}
-            <div>{item.type === 0 ? "숙소" : `${item.type}박`}</div>
-          </div>
-        ))}
+      <div className="scrollContainer" ref={scrollRef}>
+        <div className="scrollContent">
+          {plannerData &&
+            plannerData.plans.map((item, index) => (
+              <div key={index} className="item">
+                <div className="dot" />
+                {item.tourist && item.tourist.firstimage ? (
+                  <img src={item.tourist.firstimage} alt="관광지 이미지" />
+                ) : (
+                  <img src={placeholderImage} alt="임시 이미지" />
+                )}
+                <h2>
+                  {item.tourist ? item.tourist.title : "관광지 정보 없음"}
+                </h2>
+                <div>{item.type === 0 ? "숙소" : `${item.type}박`}</div>
+              </div>
+            ))}
+        </div>
+        {/* 데이터가 충분히 많을 때만 화살표 표시 */}
+        {plannerData && plannerData.plans.length > 5 && (
+          <>
+            <div className="scrollArrow left" onClick={() => handleScroll(-900)}>
+              {"<"}
+            </div>
+            <div className="scrollArrow right" onClick={() => handleScroll(900)}>
+              {">"}
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 };
