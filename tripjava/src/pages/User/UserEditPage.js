@@ -79,48 +79,51 @@ function UserEditPage() {
     <>
       <br />
       <br />
-      <div className="container_edit">
-        <h2>계정정보 수정하기</h2>
-        <form onSubmit={handleSubmit}>
-          <label>
-            Password:
-            <input
-              type="password"
-              value={password}
-              onChange={handlePasswordChange}
-            />
-          </label>
-          <label>
-            Confirm Password:
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
-            />
-          </label>
-          {!isMatching && <p>패스워드가 일치하지 않습니다.</p>}
-          <label>
-            Email:
-            <input
-              type="email"
-              name="email"
-              value={userInfo.email}
-              onChange={handleChange}
-            />
-          </label>
-          <label>
-            Nickname:
-            <input
-              type="text"
-              name="nickname"
-              value={userInfo.nickname}
-              onChange={handleChange}
-            />
-          </label>
-
-          <button type="submit">저장</button>
-        </form>
+      <div className="backdrop">
+        <div className="container_edit">
+          <h2>계정정보 수정하기</h2>
+          <form onSubmit={handleSubmit}>
+            <label>
+              Password:
+              <input
+                type="password"
+                value={password}
+                onChange={handlePasswordChange}
+              />
+            </label>
+            <label>
+              Confirm Password:
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={handleConfirmPasswordChange}
+              />
+            </label>
+            {!isMatching && <p>패스워드가 일치하지 않습니다.</p>}
+            <label>
+              Email:
+              <input
+                type="email"
+                name="email"
+                value={userInfo.email}
+                onChange={handleChange}
+              />
+            </label>
+            <label>
+              Nickname:
+              <input
+                type="text"
+                name="nickname"
+                value={userInfo.nickname}
+                onChange={handleChange}
+              />
+            </label>
+            <button type="submit">저장</button>
+          </form>
+        </div>
       </div>
+
+          
     </>
   );
 }
