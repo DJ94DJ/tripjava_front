@@ -2,6 +2,9 @@
   overflow: scroll;
   height: 100vh;
   position: relative;
+  h2 {
+    font-family: var(--pointfont);
+  }
 }
 
 .pins_and_block {
