@@ -250,51 +250,53 @@ const MapSidebar = ({ startDate, endDate, routes, setTripData, tripData }) => {
           >
             {date}
           </button>
-          {/* {tripData.selectedRoute?.map((route, index) => {
-      //         const titleWithoutCertification = route.title
-      //           .replace('[한국관광 품질인증/Korea Quality]', '')
-      //           .trim();
-      //         return (
-      //           <div
-      //             key={index}
-      //             onClick={() => fetchNearbyDestinations(route.id)}
-      //           >
-      //             <h4>
-      //               {titleWithoutCertification}
-      //               {route.title.includes(
-      //                 '[한국관광 품질인증/Korea Quality]'
-      //               ) && <PiSealCheckFill />}
-      //             </h4>
-      //             <button onClick={() => handleRemoveRoute(route.id)}>
-      //               <FaXmark />
-      //             </button>
-      //           </div>
-      //         );
-      //       })} */}
-          <div>
-            <div className="sidebar_hotel">
-              <h3 id={date}>숙소</h3>
-            </div>
-
-            <div className="sidebar_hotel">
-              {routeDetail.map((route, id, routes) => (
-                <div className="sidebar_hotel_container" key={id}>
-                  <div onClick={() => fetchNearbyDestinations(routes.id)}>
-                    <h4> {routeDetail.length != 0 && routeDetail[0].title}</h4>
-                    <button
-                      // 클릭이벤트 버블링방지
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // onClick={() => {
-                        handleRemoveRoute(date, route.id);
-                      }}
-                    >
-                      <FaXmark />
-                    </button>
-                  </div>
+          {/* <div className="sidebar_hotel">
+            <h3 id={date}>숙소</h3>
+          </div>{' '}
+          <div className="sidebar_hotel">
+            {routeDetail.map((route, id, routes) => (
+              <div className="sidebar_hotel_container" key={id}>
+                <div onClick={() => fetchNearbyDestinations(routes.id)}>
+                  <h4> {routeDetail.length != 0 && routeDetail[0].title}</h4>
+                  <button
+                    // 클릭이벤트 버블링방지
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // onClick={() => {
+                      handleRemoveRoute(date, route.id);
+                    }}
+                  >
+                    <FaXmark />
+                  </button>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
+          </div> */}
+          <div className="sidebar_hotel">
+            {routeDetail.map((route, id, routes) => (
+              <div className="sidebar_hotel_container" key={id}>
+                <div onClick={() => fetchNearbyDestinations(routes.id)}>
+                  <h4>
+                    {/* 문자열 "한국관광 품질인증/Korea Quality"가 있으면 제거하고 결과를 표시 */}
+                    {route.title
+                      .replace('한국관광 품질인증/Korea Quality', '')
+                      .replace('[]', '')
+                      .trim()}
+                    {route.title.includes(
+                      '한국관광 품질인증/Korea Quality'
+                    ) && <PiSealCheckFill />}
+                  </h4>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation(); // 클릭 이벤트 버블링 방지
+                      handleRemoveRoute(date, route.id); // 삭제 핸들러 호출
+                    }}
+                  >
+                    <FaXmark />
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
           <div className="sidebar_route">
             <h3>장소</h3>
