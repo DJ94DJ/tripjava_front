@@ -240,8 +240,8 @@ const GoogleMapComponent = ({ startDate, setRoutes }) => {
                     )}
                   </div>
                   <p>{selected.addr1}</p>
-                  <p>위도: {marker.lat}</p>
-                  <p>경도: {marker.lng}</p>
+                  {/* <p>위도: {marker.lat}</p>
+                  <p>경도: {marker.lng}</p> */}
                 </div>
               </InfoWindow>
             )}
