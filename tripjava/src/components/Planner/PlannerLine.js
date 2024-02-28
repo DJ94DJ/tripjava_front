@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import "../../styles/style.scss";
+
+// 임시 이미지 URL
+// const placeholderImage = "https://via.placeholder.com/80";
+const placeholderImage = "../static/noimage.gif"
 
 const PlannerLine = ({ planner_no }) => {
   // plannerId가 없어서 오류납니당
   const [plannerData, setPlannerData] = useState(null);
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     axios
@@ -17,34 +22,6 @@ const PlannerLine = ({ planner_no }) => {
         console.error("여행 정보를 가져오는 동안 오류 발생: ", error);
       });
   }, [planner_no]);
-
-  // const [data, setData] = useState(null);
-  // const [error, setError] = useState(null);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://localhost:8080/planner/trip-route/${plannerId}`
-  //       );
-  //       setData(response.data);
-  //     } catch (error) {
-  //       setError("데이터를 불러오는데 실패하였습니다.");
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
-
-  // 이건 테스트용 데이터 코드입니당
-  // const [data, setData] = useState({
-  //   plans: [
-  //     { contentid: "12345", type: 1 },
-  //     { contentid: "67890", type: 0 },
-  //     { contentid: "23542", type: 2 },
-  //     { contentid: "42654", type: 3 },
-  //     { contentid: "75164", type: 3 },
-  //   ],
-  // });
 
   const handleScroll = (scrollOffset) => {
     scrollRef.current.scrollLeft += scrollOffset;
@@ -61,7 +38,7 @@ const PlannerLine = ({ planner_no }) => {
                 {item.tourist && item.tourist.firstimage ? (
                   <img src={item.tourist.firstimage} alt="관광지 이미지" />
                 ) : (
-                  <img src={placeholderImage} alt="임시 이미지" />
+                  <img className="defaultImg" src={placeholderImage} alt="임시 이미지" />
                 )}
                 <h2>
                   {item.tourist ? item.tourist.title : "관광지 정보 없음"}
@@ -85,5 +62,4 @@ const PlannerLine = ({ planner_no }) => {
     </div>
   );
 };
-
 export default PlannerLine;
