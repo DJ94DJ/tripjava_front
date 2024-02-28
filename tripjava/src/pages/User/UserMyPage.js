@@ -92,7 +92,7 @@ function UserMyPage() {
             </button>
           </div>
         </div>
-        <div className="myPage-form">
+        <div className="myPage-form tours">
           <h2>나의 여행계획</h2>
           <div className="tourlist">
             <div className="box">

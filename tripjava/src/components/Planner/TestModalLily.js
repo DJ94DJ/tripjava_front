@@ -13,12 +13,14 @@ const TestModalLily = ({
   onSave,
   planner_no,
   itineraryId,
+  todayNums,
+  selectedDayNumber
 }) => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [itinerary, setItinerary] = useState([]);
   const [newItinerary, setNewItinerary] = useState({
-    today_no: { today_no: 3 },
+    today_no: { today_no: null },
     start_time: "",
     end_time: "",
     memo: "",
@@ -27,6 +29,7 @@ const TestModalLily = ({
   });
 
   const [startTime, setStartTime] = useState("");
+  const [selectDate, setSelectDate] = useState(null);
 
   const getDayNumberFromDate = (selectedDate) => {
     const startDate = new Date(startDay);
@@ -59,13 +62,24 @@ const TestModalLily = ({
     // console.log("데이즈",days)
     const date = new Date(startDay);
     console.log("데이트" ,date);
-    date.setDate(date.getDate() + Number(days) - 1);
-    // date.setDate(date.getDate() + Number(newItinerary.today_no.today_no) - 1);
+    // date.setDate(date.getDate() + Number(days) - 1);
+    date.setDate(date.getDate() + Number(newItinerary.today_no.today_no) - 1);
     const newStartTime = `${date.toISOString().substring(0, 10)} ${startTime}`;
 
     setNewItinerary((prev) => ({ ...prev, start_time: newStartTime }));
+
+    const requsetData = {
+      today_no: { today_no: todayNums[newItinerary.today_no.today_no-1] },
+      start_time: newItinerary.start_time,
+      end_time: newItinerary.end_time,
+      memo: newItinerary.memo,
+      planner_title: newItinerary.planner_title,
+      price: newItinerary.price,
+    }
+    console.log("정제가 뭐야", selectedDayNumber, todayNums[newItinerary.today_no.today_no-1])
+    
     axios
-      .post("http://localhost:8080/itinerary/add", newItinerary)
+      .post("http://localhost:8080/itinerary/add", requsetData)
       .then((res) => {
         console.log("여행일정 정보 생성: ", res.data);
         setItinerary(res.data);
@@ -75,7 +89,9 @@ const TestModalLily = ({
           itinerary: res.data,
         });
 
-        // window.dispatchEvent(new CustomEvent(`itinerarySaved_${planner_no}`));
+        window.dispatchEvent(new CustomEvent(`itinerarySaved_${planner_no}`, {
+          detail: res.data
+        }));
       })
       .catch((error) => {
         console.error("생성 오류! 다시 시도하세요", error);
@@ -116,6 +132,7 @@ const TestModalLily = ({
     }
   };
 
+  
   // table에서 선택한 시간에 따라 기존에 선택했던 값 reset해줌
   useEffect(() => {
     if (selectedDateTime) {
@@ -138,6 +155,7 @@ const TestModalLily = ({
   useEffect(() => {
     if (selectedDateTime) {
       const selectedDayNumber = getDayNumberFromDate(selectedDateTime.date);
+      setSelectDate(selectedDayNumber);
       setNewItinerary((prev) => ({
         ...prev,
         today_no: { today_no: selectedDayNumber },
