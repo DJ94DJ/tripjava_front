@@ -53,7 +53,7 @@ const PlannerLine = ({ planner_no }) => {
           <div key={index} className="item">
             <div className="dot" />
             {/* contentid로 장소 이름 뽑기... 어떻게.. 하나요.......ㅠ..... */}
-            <h2>{item.contentid}</h2>{" "}
+            <h2>{item.tourist.title}</h2>{" "}
             <div>{item.type === 0 ? "숙소" : `${item.type}박`}</div>
           </div>
         ))}
