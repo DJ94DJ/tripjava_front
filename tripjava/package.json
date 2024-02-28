@@ -19,6 +19,8 @@
     "dom-to-image": "^2.6.0",
     "firebase": "^10.7.1",
     "html2canvas": "^1.4.1",
+    "inline-css": "^4.0.2",
+    "install": "^0.13.0",
     "mini-svg-data-uri": "^1.4.4",
     "or": "^0.2.0",
     "react": "^18.2.0",
