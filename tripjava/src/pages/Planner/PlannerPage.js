@@ -53,6 +53,17 @@ const PlannerPage = () => {
           <TestPlannerTableLily planner_no={plannerId} />
           {/* 가져온 plannerId를 PlannerTable 컴포넌트에 전달합니다. */}
         </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
       </div>
     </>
   );
