@@ -1,12 +1,11 @@
-import { useEffect } from "react";
-import "../../styles/style.scss";
+import { useEffect } from 'react';
+import '../../styles/style.scss';
 const { Kakao } = window;
 
 const KakaoShare = () => {
-  
-  const realUrl = "http://localhost:3000/planner";
+  const realUrl = `${process.env.REACT_APP_HOST}/planner`;
   const resultUrl = window.location.href;
-  
+
   useEffect(() => {
     Kakao.cleanup();
     Kakao.init(process.env.REACT_APP_KAKAO_KEY);
@@ -33,23 +32,22 @@ const KakaoShare = () => {
             mobileWebUrl: realUrl,
             webUrl: realUrl,
           },
-        }
+        },
       ],
     });
-  }
+  };
 
   return (
     <div className="kakao_share">
-        <img 
-          src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png" 
-          id="kakaotalk-sharing-btn" 
-          onClick={share} 
-          alt="카카오톡 공유하기" 
-          style={{ width: '70%', height: 'auto' }}
-        />
+      <img
+        src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"
+        id="kakaotalk-sharing-btn"
+        onClick={share}
+        alt="카카오톡 공유하기"
+        style={{ width: '70%', height: 'auto' }}
+      />
     </div>
-  )
-  
-}
+  );
+};
 
 export default KakaoShare;

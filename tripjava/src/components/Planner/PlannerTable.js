@@ -47,7 +47,12 @@ const PlannerTable = ({ planner_no }) => {
           </tr>
           <tr>
             <th style={{ border: '1px solid black', padding: '5px' }}>시간</th>
-            <th style={{ border: '1px solid black', padding: '5px' }}>계획</th>
+            <th
+              style={{ border: '1px solid black', padding: '5px' }}
+              className="planName"
+            >
+              계획
+            </th>
           </tr>
         </thead>
         <tbody>{hours}</tbody>
