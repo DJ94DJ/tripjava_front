@@ -237,9 +237,9 @@ const TestModalLily = ({
           <button className="save_alert" onClick={handleSave}>
             저장
           </button>
-          <button className="delete_alert" onClick={handleDelete}>
+          {/* <button className="delete_alert" onClick={handleDelete}>
             삭제
-          </button>
+          </button> */}
         </div>
       </div>
     </Draggable>
