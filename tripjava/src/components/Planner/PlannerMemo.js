@@ -1,28 +1,30 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const PlannerMemo = ({ planner_no }) => {
   const [items, setItems] = useState([]);
-  const [newItem, setNewItem] = useState("");
+  const [newItem, setNewItem] = useState('');
 
   useEffect(() => {
     // 체크리스트 확인
     axios
-      .get(`http://localhost:8080/planner/checklist/select/${planner_no}`)
+      .get(
+        `${process.env.REACT_APP_HOST}/planner/checklist/select/${planner_no}`
+      )
       .then((response) => {
         setItems(response.data);
       })
       .catch((error) => {
-        console.error("There was an error!", error);
+        console.error('There was an error!', error);
       });
   }, []);
 
   const addItem = () => {
-    if (newItem.trim() === "") {
+    if (newItem.trim() === '') {
       return;
     }
 
-    const ingredient = newItem.split(" ")[0];
+    const ingredient = newItem.split(' ')[0];
     const newChecklist = {
       text: newItem,
       checked: false,
@@ -33,20 +35,22 @@ const PlannerMemo = ({ planner_no }) => {
     // 체크리스트 저장
     axios
       .post(
-        `http://localhost:8080/planner/checklist/add/${planner_no}`,
+        `${process.env.REACT_APP_HOST}/planner/checklist/add/${planner_no}`,
         newChecklist
       )
       .then((response) => {
         axios
-          .get(`http://localhost:8080/planner/checklist/select/${planner_no}`)
+          .get(
+            `${process.env.REACT_APP_HOST}/planner/checklist/select/${planner_no}`
+          )
           .then((response) => {
             setItems(response.data);
           })
           .catch((error) => {
-            console.error("조회 에러!", error);
+            console.error('조회 에러!', error);
           });
 
-        setNewItem("");
+        setNewItem('');
       });
   };
 
@@ -58,11 +62,11 @@ const PlannerMemo = ({ planner_no }) => {
     // 체크리스트 수정
     axios
       .put(
-        `http://localhost:8080/planner/checklist/${newItems[index].checklist_no}`,
+        `${process.env.REACT_APP_HOST}/planner/checklist/${newItems[index].checklist_no}`,
         newItems[index]
       )
       .catch((error) => {
-        console.error("업데이트 에러!", error);
+        console.error('업데이트 에러!', error);
       });
   };
 
@@ -73,13 +77,13 @@ const PlannerMemo = ({ planner_no }) => {
     // 체크리스트 삭제
     axios
       .delete(
-        `http://localhost:8080/planner/checklist/${items[index].checklist_no}`
+        `${process.env.REACT_APP_HOST}/planner/checklist/${items[index].checklist_no}`
       )
       .then((response) => {
         setItems(newItems);
       })
       .catch((error) => {
-        console.error("There was an error!", error);
+        console.error('There was an error!', error);
       });
   };
 
@@ -110,7 +114,7 @@ const PlannerMemo = ({ planner_no }) => {
           value={newItem}
           onChange={(e) => setNewItem(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
+            if (e.key === 'Enter') {
               addItem();
             }
           }}

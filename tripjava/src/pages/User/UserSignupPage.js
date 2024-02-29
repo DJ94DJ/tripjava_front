@@ -1,15 +1,16 @@
-import React from "react";
-import axios from "axios";
-import { useState, useEffect, useRef } from "react";
-import "../../styles/style.scss";
+import React from 'react';
+import axios from 'axios';
+import { useState, useEffect, useRef } from 'react';
+import '../../styles/style.scss';
+import { Link } from 'react-router-dom';
 
 function UserSignupPage() {
   const [inputs, setInputs] = useState({
-    id: "",
-    password: "",
-    confirmPassword: "",
-    email: "",
-    nickname: "",
+    id: '',
+    password: '',
+    confirmPassword: '',
+    email: '',
+    nickname: '',
   });
 
   const [isPasswordMatched, setIsPasswordMatched] = useState(null);
@@ -41,7 +42,7 @@ function UserSignupPage() {
       [name]: value,
     });
 
-    if (name === "confirmPassword") {
+    if (name === 'confirmPassword') {
       setIsPasswordMatched(inputs.password === value);
     }
 
@@ -50,25 +51,25 @@ function UserSignupPage() {
     // 1초 후에 검증을 실행
     validationTimer = setTimeout(() => {
       switch (name) {
-        case "id":
+        case 'id':
           setValidState({
             ...validState,
             id: idValidation(value),
           });
           break;
-        case "password":
+        case 'password':
           setValidState({
             ...validState,
             password: passwordValidation(value),
           });
           break;
-        case "email":
+        case 'email':
           setValidState({
             ...validState,
             email: emailValidation(value),
           });
           break;
-        case "nickname":
+        case 'nickname':
           setValidState({
             ...validState,
             nickname: nicknameValidation(value),
@@ -108,17 +109,20 @@ function UserSignupPage() {
     e.preventDefault(); // 이벤트의 기본 동작을 막음
     // 아이디 중복확인 로직
     try {
-      const response = await axios.post(`http://localhost:8080/user/check-id`, {
-        id: id,
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST}/user/check-id`,
+        {
+          id: id,
+        }
+      );
       // 중복된 아이디가 없는 경우
       if (response.data) {
-        alert("중복된 아이디입니다. 다른 아이디를 입력하세요.");
+        alert('중복된 아이디입니다. 다른 아이디를 입력하세요.');
         setIdDuplicated(true);
       }
       // 중복된 아이디가 있는 경우
       else {
-        alert("사용 가능한 아이디입니다.");
+        alert('사용 가능한 아이디입니다.');
         setIdDuplicated(false);
       }
     } catch (error) {
@@ -130,32 +134,32 @@ function UserSignupPage() {
     e.preventDefault();
     const confirmPassword = e.target.elements.confirmPassword.value;
     if (password !== confirmPassword) {
-      alert("패스워드가 일치하지 않습니다.");
+      alert('패스워드가 일치하지 않습니다.');
       return;
     }
 
     if (idDuplicated) {
-      alert("아이디 중복확인이 필요합니다.");
+      alert('아이디 중복확인이 필요합니다.');
       return;
     }
 
     if (!idValid) {
-      alert("아이디는 영어와 숫자만 가능합니다.");
+      alert('아이디는 영어와 숫자만 가능합니다.');
       return;
     }
 
     if (!passwordValid) {
-      alert("비밀번호는 4~16자, 영어와 숫자 조합 필수, 특수문자 포함 가능");
+      alert('비밀번호는 4~16자, 영어와 숫자 조합 필수, 특수문자 포함 가능');
       return;
     }
 
     if (!emailValid) {
-      alert("이메일 형식에 맞지 않습니다. 예: example@example.com");
+      alert('이메일 형식에 맞지 않습니다. 예: example@example.com');
       return;
     }
 
     if (!nicknameValid) {
-      alert("닉네임은 한글, 영문, 숫자 포함 3자 이상 10자 이하로 입력하세요.");
+      alert('닉네임은 한글, 영문, 숫자 포함 3자 이상 10자 이하로 입력하세요.');
       return;
     }
 
@@ -169,9 +173,12 @@ function UserSignupPage() {
     }
 
     try {
-      const response = await axios.post("http://localhost:8080/user", inputs);
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST}/user`,
+        inputs
+      );
       console.log(response.data);
-      window.location = "/login";
+      window.location = '/login';
       // 회원가입 성공 처리
     } catch (error) {
       console.error(error);
@@ -200,16 +207,16 @@ function UserSignupPage() {
                 onChange={onChange}
                 placeholder="아이디"
               />
-              <div className={idValid === false ? "guide error" : "guide"}>
+              <div className={idValid === false ? 'guide error' : 'guide'}>
                 {idValid === null
-                  ? "영어와 숫자 조합의 아이디를 입력해주세요"
+                  ? '영어와 숫자 조합의 아이디를 입력해주세요'
                   : idDuplicated === true
-                  ? "중복된 아이디입니다. 다시 시도해주세요."
+                  ? '중복된 아이디입니다. 다시 시도해주세요.'
                   : idValid && idDuplicated === null
-                  ? "중복확인 버튼을 눌러주세요."
+                  ? '중복확인 버튼을 눌러주세요.'
                   : idValid && !idDuplicated
-                  ? "형식에 일치합니다"
-                  : "영어와 숫자 조합"}
+                  ? '형식에 일치합니다'
+                  : '영어와 숫자 조합'}
               </div>
               <br />
               <button className="duplicate-button" onClick={checkDuplicateId}>
@@ -225,7 +232,7 @@ function UserSignupPage() {
                 placeholder="닉네임"
               />
               <div
-                className={nicknameValid === false ? "guide error" : "guide"}
+                className={nicknameValid === false ? 'guide error' : 'guide'}
               >
                 {nicknameValid === null ? (
                   <>
@@ -233,9 +240,9 @@ function UserSignupPage() {
                     3~10자 이내의 닉네임을 입력해주세요
                   </>
                 ) : nicknameValid ? (
-                  "형식에 일치합니다"
+                  '형식에 일치합니다'
                 ) : (
-                  "한글, 영문, 숫자 포함, 3~10자"
+                  '한글, 영문, 숫자 포함, 3~10자'
                 )}
               </div>
               <br />
@@ -259,8 +266,8 @@ function UserSignupPage() {
               <div
                 className={
                   passwordValid === false || !isPasswordMatched
-                    ? "guide error"
-                    : "guide"
+                    ? 'guide error'
+                    : 'guide'
                 }
               >
                 {passwordValid === null ? (
@@ -269,7 +276,7 @@ function UserSignupPage() {
                     4~16자 이내의 패스워드를 입력해주세요
                   </>
                 ) : passwordValid && isPasswordMatched ? (
-                  "형식에 일치합니다"
+                  '형식에 일치합니다'
                 ) : (
                   <>
                     영어, 숫자 필수, 특수문자 포함 가능 4~16자
@@ -286,21 +293,27 @@ function UserSignupPage() {
                 onChange={onChange}
                 placeholder="이메일"
               />
-              <div className={emailValid === false ? "guide error" : "guide"}>
+              <div className={emailValid === false ? 'guide error' : 'guide'}>
                 {emailValid === null
-                  ? "형식에 맞는 이메일을 입력해주세요"
+                  ? '형식에 맞는 이메일을 입력해주세요'
                   : emailValid
-                  ? "형식에 일치합니다"
-                  : "예: example@example.com"}
+                  ? '형식에 일치합니다'
+                  : '예: example@example.com'}
               </div>
               <br />
               <br />
               <br />
               <br />
               <br />
-              <button className="submit-button" type="submit">
+              {/* <button className="submit-button" type="submit">
                 회원가입
-              </button>
+              </button> */}
+              <Link
+                to="/register"
+                style={{ textDecoration: 'none', color: 'black' }}
+              >
+                회원가입
+              </Link>
             </div>
           </form>
         </div>

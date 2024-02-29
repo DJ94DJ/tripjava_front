@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { setAuth } from "../../store/actions/auth";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { setAuth } from '../../store/actions/auth';
+import axios from 'axios';
 
 function UserEditPage() {
   const auth = useSelector((state) => state.auth);
   const [userInfo, setUserInfo] = useState({});
-  const [password, setPassword] = useState(""); // 패스워드를 저장할 상태를 만듭니다.
-  const [confirmPassword, setConfirmPassword] = useState(""); // 패스워드 확인을 저장할 상태를 만듭니다.
+  const [password, setPassword] = useState(''); // 패스워드를 저장할 상태를 만듭니다.
+  const [confirmPassword, setConfirmPassword] = useState(''); // 패스워드 확인을 저장할 상태를 만듭니다.
   const [isMatching, setIsMatching] = useState(true); // 패스워드 일치 여부를 저장할 상태를 만듭니다.
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/user?id=${auth.id}`)
+      .get(`${process.env.REACT_APP_HOST}/user?id=${auth.id}`)
       .then((response) => {
         setUserInfo(response.data);
-        console.log("수정페이지 요청", response.data);
+        console.log('수정페이지 요청', response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -48,7 +48,7 @@ function UserEditPage() {
     e.preventDefault();
 
     if (!isMatching) {
-      alert("패스워드가 일치하지 않습니다.");
+      alert('패스워드가 일치하지 않습니다.');
       return;
     }
 
@@ -58,8 +58,8 @@ function UserEditPage() {
       : { ...userInfo };
 
     const url = password
-      ? "http://localhost:8080/user"
-      : "http://localhost:8080/user/nickname-email";
+      ? `${process.env.REACT_APP_HOST}/user`
+      : `${process.env.REACT_APP_HOST}/user/nickname-email`;
 
     axios
       .patch(url, updatedUserInfo)
@@ -67,8 +67,8 @@ function UserEditPage() {
         console.log(response);
         const { id, nickname, token } = response.data; // 'response.data'로 접근합니다.
         dispatch(setAuth(token, id, nickname)); // 새로운 토큰과 사용자 정보를 리덕스에 저장합니다.
-        console.log("수정된 정보:", { id, nickname, token }); // 수정된 정보를 콘솔에 출력합니다.
-        navigate("/mypage"); // 마이페이지로 이동합니다.
+        console.log('수정된 정보:', { id, nickname, token }); // 수정된 정보를 콘솔에 출력합니다.
+        navigate('/mypage'); // 마이페이지로 이동합니다.
       })
       .catch((error) => {
         console.error(error);
@@ -122,8 +122,6 @@ function UserEditPage() {
           </form>
         </div>
       </div>
-
-          
     </>
   );
 }

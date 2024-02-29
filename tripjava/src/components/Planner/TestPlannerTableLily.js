@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo } from "react";
-import axios from "axios";
-import TestModalLily from "./TestModalLily";
+import React, { useState, useEffect, useMemo } from 'react';
+import axios from 'axios';
+import TestModalLily from './TestModalLily';
 
 const TestPlannerTableLily = ({ planner_no }) => {
   const [plannerData, setPlannerData] = useState(null);
@@ -18,16 +18,16 @@ const TestPlannerTableLily = ({ planner_no }) => {
 
   // 이전에 있던 병합을 제거하고 새로운 병합을 추가하는 함수입니다.
   const mergeCells = () => {
-    const table = document.querySelector(".test_PlannerTable");
+    const table = document.querySelector('.test_PlannerTable');
 
     if (!table) return;
 
-    const rows = Array.from(table.getElementsByTagName("tr"));
+    const rows = Array.from(table.getElementsByTagName('tr'));
     let lastCell = null;
     let count = 1;
 
     rows.forEach((row, rowIndex) => {
-      const currentCell = row.getElementsByTagName("td")[1];
+      const currentCell = row.getElementsByTagName('td')[1];
 
       // currentCell이 undefined이거나 textContent가 빈 문자열이면 무시합니다.
       if (!currentCell || !currentCell.textContent) return;
@@ -35,11 +35,11 @@ const TestPlannerTableLily = ({ planner_no }) => {
       if (lastCell && lastCell.textContent === currentCell.textContent) {
         count++;
         lastCell.rowSpan = count;
-        currentCell.style.display = "none";
-        currentCell.classList.add("merged"); // 현재 셀에 'merged' 클래스 추가
+        currentCell.style.display = 'none';
+        currentCell.classList.add('merged'); // 현재 셀에 'merged' 클래스 추가
       } else {
         lastCell = currentCell;
-        lastCell.classList.add("merged");
+        lastCell.classList.add('merged');
         count = 1;
       }
     });
@@ -59,13 +59,13 @@ const TestPlannerTableLily = ({ planner_no }) => {
   // 삭제 버튼을 추가하는 함수입니다.
   const addDeleteButton = (itineraries) => {
     itineraries.forEach((itinerary) => {
-      const cell = Array.from(document.querySelectorAll(".merged")).find(
+      const cell = Array.from(document.querySelectorAll('.merged')).find(
         (cell) => cell.textContent === itinerary.planner_title
       );
-      if (cell && !cell.querySelector("button")) {
-        const deleteButton = document.createElement("button");
-        deleteButton.innerText = "삭제";
-        deleteButton.addEventListener("click", () =>
+      if (cell && !cell.querySelector('button')) {
+        const deleteButton = document.createElement('button');
+        deleteButton.innerText = '삭제';
+        deleteButton.addEventListener('click', () =>
           handleDelete(itinerary.itinerary_no)
         );
         cell.appendChild(deleteButton);
@@ -78,11 +78,11 @@ const TestPlannerTableLily = ({ planner_no }) => {
     axios
       .delete(`http://localhost:8080/itinerary/del/${itineraryId}`)
       .then((res) => {
-        console.log("일정 삭제 성공: ", res.data);
+        console.log('일정 삭제 성공: ', res.data);
         // 삭제가 성공하면 모달을 닫거나 다시 로드하는 등의 동작을 수행할 수 있습니다.
       })
       .catch((error) => {
-        console.error("삭제 오류! 다시 시도하세요", error);
+        console.error('삭제 오류! 다시 시도하세요', error);
       });
   };
 
@@ -110,10 +110,10 @@ const TestPlannerTableLily = ({ planner_no }) => {
 
   useEffect(() => {
     axios
-    // http://localhost:8080/plan/today-no/{planner_no}/{days}
+      // http://localhost:8080/plan/today-no/{planner_no}/{days}
       .get(`http://localhost:8080/planner/trip-route/${planner_no}`)
       .then((response) => {
-        console.log("컴포넌트~여행 정보 요청 응답: ", response.data);
+        console.log('컴포넌트~여행 정보 요청 응답: ', response.data);
         setPlannerData(response.data);
         const startDay = new Date(response.data.start_day);
         const endDay = new Date(response.data.end_day);
@@ -122,15 +122,13 @@ const TestPlannerTableLily = ({ planner_no }) => {
         axios
           .get(`http://localhost:8080/plan/today-no/${planner_no}/${days}`)
           .then((response) => {
-            console.log("숫자 잘 들어오냐??", response.data)
+            console.log('숫자 잘 들어오냐??', response.data);
             setTodayNums(response.data);
-        })
+          });
       })
       .catch((error) => {
-        console.error("여행 정보를 가져오는 동안 오류 발생: ", error);
+        console.error('여행 정보를 가져오는 동안 오류 발생: ', error);
       });
-
-    
 
     // 모달에서 일정 저장 후 바로 table에 반영될 수 있게 해줌
     const handleItinerarySaved = () => {
@@ -145,8 +143,8 @@ const TestPlannerTableLily = ({ planner_no }) => {
 
   const handleSave = (newItinerary) => {
     setItineraries((prev) => [...prev, newItinerary.itinerary]);
-    console.log("newItinerary ", newItinerary);
-    console.log("itineraries ", itineraries);
+    console.log('newItinerary ', newItinerary);
+    console.log('itineraries ', itineraries);
     setShowModal(false); // 일정 저장 후 모달 숨김
     // setSelectedDate(null);  // 선택된 날짜를 초기화합니다.
   };
@@ -161,11 +159,11 @@ const TestPlannerTableLily = ({ planner_no }) => {
       .get(`http://localhost:8080/itinerary/select/${planner_no}`)
       .then((res) => {
         setItineraries(res.data);
-        console.log("aaaa 2");
-        console.log("여행일정 정보 다 받아오기 성공: ", res.data);
+        console.log('aaaa 2');
+        console.log('여행일정 정보 다 받아오기 성공: ', res.data);
       })
       .catch((error) => {
-        console.error("여행일정 정보 받아오기 실패! 다시 시도하세요", error);
+        console.error('여행일정 정보 받아오기 실패! 다시 시도하세요', error);
       });
   };
 
@@ -179,13 +177,13 @@ const TestPlannerTableLily = ({ planner_no }) => {
       }
 
       // 'HH:MM' 형식의 시간에서 'HH' 부분만 추출
-      const startHour = Number(it.start_time.split(":")[0]);
-      const endHour = Number(it.end_time.split(":")[0]);
+      const startHour = Number(it.start_time.split(':')[0]);
+      const endHour = Number(it.end_time.split(':')[0]);
       // 현재 시간이 시작 시간과 종료 시간 사이인지 확인
       return hour >= startHour && hour < endHour;
     });
 
-    return itinerary ? itinerary.planner_title || "No Title" : null;
+    return itinerary ? itinerary.planner_title || 'No Title' : null;
   };
 
   const createDailyTable = (date, dayNumber) => {
@@ -195,7 +193,7 @@ const TestPlannerTableLily = ({ planner_no }) => {
       hours.push(
         <tr key={i}>
           <td
-            style={{ border: "1px solid black", padding: "5px" }}
+            style={{ border: '1px solid black', padding: '5px' }}
             onClick={() => {
               handleTimeClick(date, i);
             }}
@@ -203,12 +201,12 @@ const TestPlannerTableLily = ({ planner_no }) => {
             {i}시
           </td>
           <td
-            style={{ border: "1px solid black", padding: "5px" }}
+            style={{ border: '1px solid black', padding: '5px' }}
             onClick={() => {
               handleTimeClick(date, i);
             }}
           >
-            {itinerary || ""}
+            {itinerary || ''}
           </td>
         </tr>
       );
@@ -218,16 +216,16 @@ const TestPlannerTableLily = ({ planner_no }) => {
       <table
         className="day-table"
         style={{
-          borderCollapse: "collapse",
-          minWidth: "250px",
-          marginBottom: "20px",
+          borderCollapse: 'collapse',
+          minWidth: '250px',
+          marginBottom: '20px',
         }}
       >
         <thead>
           <tr>
             <th
               colSpan={2}
-              style={{ border: "1px solid black", padding: "5px" }}
+              style={{ border: '1px solid black', padding: '5px' }}
             >
               {date.toLocaleDateString()}
             </th>
@@ -235,18 +233,18 @@ const TestPlannerTableLily = ({ planner_no }) => {
           <tr>
             <th
               style={{
-                width: "20%",
-                border: "1px solid black",
-                padding: "5px",
+                width: '20%',
+                border: '1px solid black',
+                padding: '5px',
               }}
             >
               시간
             </th>
             <th
               style={{
-                width: "80%",
-                border: "1px solid black",
-                padding: "5px",
+                width: '80%',
+                border: '1px solid black',
+                padding: '5px',
               }}
             >
               계획

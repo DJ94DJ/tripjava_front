@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import TestModal from "./TestModal";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import TestModal from './TestModal';
 
 const TestPlannerTable3 = ({ planner_no }) => {
   const [plannerData, setPlannerData] = useState(null);
@@ -13,15 +13,15 @@ const TestPlannerTable3 = ({ planner_no }) => {
 
   // 이전에 있던 병합을 제거하고 새로운 병합을 추가하는 함수입니다.
   const mergeCells = () => {
-    const table = document.querySelector(".test_PlannerTable");
+    const table = document.querySelector('.test_PlannerTable');
     if (!table) return;
 
-    const rows = Array.from(table.getElementsByTagName("tr"));
+    const rows = Array.from(table.getElementsByTagName('tr'));
     let lastCell = null;
     let count = 1;
 
     rows.forEach((row, rowIndex) => {
-      const currentCell = row.getElementsByTagName("td")[1];
+      const currentCell = row.getElementsByTagName('td')[1];
 
       // currentCell이 undefined이거나 textContent가 빈 문자열이면 무시합니다.
       if (!currentCell || !currentCell.textContent) return;
@@ -39,7 +39,7 @@ const TestPlannerTable3 = ({ planner_no }) => {
       if (lastCell && lastCell.textContent === currentCell.textContent) {
         count++;
         lastCell.rowSpan = count;
-        currentCell.style.display = "none";
+        currentCell.style.display = 'none';
       } else {
         lastCell = currentCell;
         count = 1;
@@ -57,7 +57,7 @@ const TestPlannerTable3 = ({ planner_no }) => {
     axios
       .get(`http://localhost:8080/planner/trip-route/${planner_no}`)
       .then((response) => {
-        console.log("컴포넌트~여행 정보 요청 응답: ", response.data);
+        console.log('컴포넌트~여행 정보 요청 응답: ', response.data);
         setPlannerData(response.data);
         const startDay = new Date(response.data.start_day);
         const endDay = new Date(response.data.end_day);
@@ -65,7 +65,7 @@ const TestPlannerTable3 = ({ planner_no }) => {
         setDays(days); // 여행 일수를 상태에 저장합니다.
       })
       .catch((error) => {
-        console.error("여행 정보를 가져오는 동안 오류 발생: ", error);
+        console.error('여행 정보를 가져오는 동안 오류 발생: ', error);
       });
   }, [planner_no]);
 
@@ -93,27 +93,27 @@ const TestPlannerTable3 = ({ planner_no }) => {
 
   const findItineraries = () => {
     axios
-      .get("http://localhost:8080/itinerary/select")
+      .get('http://localhost:8080/itinerary/select')
       .then((res) => {
         setItineraries(res.data);
-        console.log("여행일정 정보 다 받아오기 성공: ", res.data);
+        console.log('여행일정 정보 다 받아오기 성공: ', res.data);
       })
       .catch((error) => {
-        console.error("여행일정 정보 받아오기 실패! 다시 시도하세요", error);
+        console.error('여행일정 정보 받아오기 실패! 다시 시도하세요', error);
       });
   };
 
   const getItineraryForTime = (dayNumber, hour) => {
     const itinerary = itineraries.find((it) => {
-      console.log("잇???", it);
+      console.log('잇???', it);
       const today_no = it.today_no?.today_no;
       if (today_no === undefined || Number(today_no) !== dayNumber) {
         return false;
       }
 
       // 'HH:MM' 형식의 시간에서 'HH' 부분만 추출
-      const startHour = Number(it.start_time.split(":")[0]);
-      const endHour = Number(it.end_time.split(":")[0]);
+      const startHour = Number(it.start_time.split(':')[0]);
+      const endHour = Number(it.end_time.split(':')[0]);
       // 현재 시간이 시작 시간과 종료 시간 사이인지 확인
       return hour >= startHour && hour < endHour;
     });
@@ -124,7 +124,7 @@ const TestPlannerTable3 = ({ planner_no }) => {
     // }
 
     // return itinerary ? itinerary.planner_title : null;
-    return itinerary ? itinerary.planner_title || "No Title" : null;
+    return itinerary ? itinerary.planner_title || 'No Title' : null;
   };
 
   const createDailyTable = (date, dayNumber) => {
@@ -133,9 +133,9 @@ const TestPlannerTable3 = ({ planner_no }) => {
       const itinerary = getItineraryForTime(dayNumber, i); // 해당 시간에 일정이 있는지 확인.
       hours.push(
         <tr key={i}>
-          <td style={{ border: "1px solid black", padding: "5px" }}>{i}시</td>
-          <td style={{ border: "1px solid black", padding: "5px" }}>
-            {itinerary || ""}
+          <td style={{ border: '1px solid black', padding: '5px' }}>{i}시</td>
+          <td style={{ border: '1px solid black', padding: '5px' }}>
+            {itinerary || ''}
           </td>
         </tr>
       );
@@ -144,16 +144,16 @@ const TestPlannerTable3 = ({ planner_no }) => {
     return (
       <table
         style={{
-          borderCollapse: "collapse",
-          width: "100%",
-          marginBottom: "20px",
+          borderCollapse: 'collapse',
+          width: '100%',
+          marginBottom: '20px',
         }}
       >
         <thead>
           <tr>
             <th
               colSpan={2}
-              style={{ border: "1px solid black", padding: "5px" }}
+              style={{ border: '1px solid black', padding: '5px' }}
               onClick={() => {
                 setSelectedDate(date);
                 setSelectedDayNumber(dayNumber); // 선택된 날짜가 여행의 몇 번째 날인지
@@ -165,8 +165,8 @@ const TestPlannerTable3 = ({ planner_no }) => {
             </th>
           </tr>
           <tr>
-            <th style={{ border: "1px solid black", padding: "5px" }}>시간</th>
-            <th style={{ border: "1px solid black", padding: "5px" }}>계획</th>
+            <th style={{ border: '1px solid black', padding: '5px' }}>시간</th>
+            <th style={{ border: '1px solid black', padding: '5px' }}>계획</th>
           </tr>
         </thead>
         <tbody>{hours}</tbody>

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { logout } from "../../store/actions/auth";
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { logout } from '../../store/actions/auth';
 
 function UserLeavePage() {
-  const [email, setEmail] = useState("");
-  const [userEmail, setUserEmail] = useState(""); // 원본 이메일을 저장할 상태를 만듭니다.
+  const [email, setEmail] = useState('');
+  const [userEmail, setUserEmail] = useState(''); // 원본 이메일을 저장할 상태를 만듭니다.
   const [isMatching, setIsMatching] = useState(false);
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ function UserLeavePage() {
       return;
     }
     axios
-      .get(`http://localhost:8080/user?id=${auth.id}`)
+      .get(`${process.env.REACT_APP_HOST}/user?id=${auth.id}`)
       .then((response) => {
         setUserEmail(response.data.email); // 원본 이메일을 저장합니다.
       })
@@ -36,25 +36,25 @@ function UserLeavePage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!isMatching) {
-      alert("이메일이 일치하지 않습니다.");
+      alert('이메일이 일치하지 않습니다.');
       return;
     }
 
     const dataToSend = { id: auth.id, email: userEmail }; // 보낼 데이터를 상수로 선언
-    console.log("Data to Send:", dataToSend); // 콘솔에 데이터 출력
+    console.log('Data to Send:', dataToSend); // 콘솔에 데이터 출력
 
     axios
-      .delete(`http://localhost:8080/user`, {
+      .delete(`${process.env.REACT_APP_HOST}/user`, {
         data: dataToSend,
       })
       .then((response) => {
-        console.log("Response Status:", response.status); // 응답 상태 코드 출력
-        console.log("Response Data:", response.data); // 응답 데이터 출력
+        console.log('Response Status:', response.status); // 응답 상태 코드 출력
+        console.log('Response Data:', response.data); // 응답 데이터 출력
         dispatch(logout());
-        navigate("/");
+        navigate('/');
       })
       .catch((error) => {
-        console.error("Error Message:", error.message); // 에러 메시지 출력
+        console.error('Error Message:', error.message); // 에러 메시지 출력
       });
   };
 
