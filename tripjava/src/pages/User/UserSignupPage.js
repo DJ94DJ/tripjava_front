@@ -305,15 +305,9 @@ function UserSignupPage() {
               <br />
               <br />
               <br />
-              {/* <button className="submit-button" type="submit">
+              <button className="submit-button" type="submit">
                 회원가입
-              </button> */}
-              <Link
-                to="/register"
-                style={{ textDecoration: 'none', color: 'black' }}
-              >
-                회원가입
-              </Link>
+              </button>
             </div>
           </form>
         </div>
