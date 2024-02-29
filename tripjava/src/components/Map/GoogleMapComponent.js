@@ -143,7 +143,8 @@ const GoogleMapComponent = ({ startDate, setRoutes, tripData }) => {
       const touristData = async () => {
         try {
           const res = await axios.get(
-            `http://localhost:8080/destination/accommodation`,
+            `${process.env.REACT_APP_HOST}/destination/accommodation`,
+            // `http://localhost:8080/destination/accommodation`,
             {
               params: {
                 mapx: selectedLocation.lng,

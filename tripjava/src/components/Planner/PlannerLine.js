@@ -14,7 +14,9 @@ const PlannerLine = ({ planner_no }) => {
   const leftArrowRef = useRef(null);
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/planner/trip-route/${planner_no}`)
+      .get(`${process.env.REACT_APP_HOST}/planner/trip-route/${planner_no}`)
+
+      // .get(`http://localhost:8080/planner/trip-route/${planner_no}`)
       .then((response) => {
         // console.log("컴포넌트~여행 정보 요청 응답: ", response.data);
         setPlannerData(response.data); // 응답에서 받아온 데이터를 상태에 저장합니다.

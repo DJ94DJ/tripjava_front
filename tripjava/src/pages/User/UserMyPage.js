@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setPlannerId } from "../../store/actions/plannerid";
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setPlannerId } from '../../store/actions/plannerid';
 
 function UserMyPage() {
   const dispatch = useDispatch();
@@ -15,20 +15,21 @@ function UserMyPage() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/user?id=${auth.id}`)
+      .get(`${process.env.REACT_APP_HOST}/user?id=${auth.id}`)
       .then((response) => {
         setUserInfo(response.data); // 응답에서 사용자 정보를 가져와 저장합니다.
-        console.log("마이페이지 요청", response.data);
+        console.log('마이페이지 요청', response.data);
 
         // planner 정보를 가져와서 userPlanner에 저장
         axios
           .get(`http://localhost:8080/planner/mypage?userid=${auth.id}`)
+          // .get(`${process.env.REACT_APP_HOST}/planner/mypage?userid=${auth.id}`)
           .then((response) => {
             setUserPlanner(response.data);
-            console.log("플래너 정보 요청", response.data);
+            console.log('플래너 정보 요청', response.data);
           })
           .catch((error) => {
-            console.error("플래너 정보를 가져오는 동안 오류 발생: ", error);
+            console.error('플래너 정보를 가져오는 동안 오류 발생: ', error);
           });
       })
       .catch((error) => {
@@ -37,18 +38,18 @@ function UserMyPage() {
   }, [auth.id]);
 
   const handlePlannerClick = (plannerId) => {
-    console.log("디스패치 전:", plannerId, fullState); // 디스패치 전 상태를 출력합니다.
+    console.log('디스패치 전:', plannerId, fullState); // 디스패치 전 상태를 출력합니다.
 
     dispatch(setPlannerId(plannerId));
 
-    console.log("디스패치 후:", plannerId, fullState); // 디스패치 후 상태를 출력합니다.
+    console.log('디스패치 후:', plannerId, fullState); // 디스패치 후 상태를 출력합니다.
 
     navigate(`/planner`);
   };
 
   const deletePlanner = (plannerId) => {
     axios
-      .delete(`http://localhost:8080/planner?planner_no=${plannerId}`)
+      .delete(`${process.env.REACT_APP_HOST}/planner?planner_no=${plannerId}`)
       .then((response) => {
         console.log(response);
         // 성공적으로 삭제했다면 상태에서 해당 계획을 제거합니다.
@@ -76,7 +77,7 @@ function UserMyPage() {
               className="button_Edit"
               type="button"
               onClick={() => {
-                window.location.href = "/edit";
+                window.location.href = '/edit';
               }}
             >
               회원정보 수정
@@ -85,7 +86,7 @@ function UserMyPage() {
               className="button_Leave"
               type="button"
               onClick={() => {
-                window.location.href = "/leave";
+                window.location.href = '/leave';
               }}
             >
               탈퇴하기

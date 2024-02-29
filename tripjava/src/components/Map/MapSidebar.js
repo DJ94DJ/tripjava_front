@@ -136,12 +136,15 @@ const MapSidebar = ({ startDate, endDate, routes, setTripData, tripData }) => {
     const route = routes.find((route) => routes.id === id);
     if (!route) return;
     try {
-      const res = await axios.get(`http://localhost:8080/destination/nearby`, {
-        params: {
-          mapx: route.lng, // 경도
-          mapy: route.lat, // 위도
-        },
-      });
+      const res = await axios.get(
+        `${process.env.REACT_APP_HOST}/destination/nearby`,
+        {
+          params: {
+            mapx: route.lng, // 경도
+            mapy: route.lat, // 위도
+          },
+        }
+      );
       // console.log('숙소 근처 데이터 갖고 와지는지 확인', res.data);
 
       // 데이터가 있는지 확인하고 상태 업데이트
@@ -212,7 +215,7 @@ const MapSidebar = ({ startDate, endDate, routes, setTripData, tripData }) => {
     console.log('sendTripData:', sendTripData);
     try {
       const res = await axios.post(
-        'http://localhost:8080/planner/trip-route',
+        `${process.env.REACT_APP_HOST}/planner/trip-route`,
         sendTripData
       );
       console.log('Server res:', res.data);
