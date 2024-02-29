@@ -100,20 +100,20 @@
   .button_container {
     display: flex;
     justify-content: space-between;
-    width: 55%;    
+    width: 35%;    
   }
   
-
 
   .save_alert {
-    background: #273ed2be; // 저장하기 버튼 배경색
-    color: white; // 저장하기 버튼 글자색
+    background: #273ed2be; 
+    color: white; 
+    width: 100%;
   }
   
-  .delete_alert {
-    background: #ee483cc9; // 삭제하기 버튼 배경색
-    color: white; // 삭제하기 버튼 글자색
-  }
+  // .delete_alert {
+  //   background: #ee483cc9; 
+  //   color: white;
+  // }
   
   @media (max-width: 768px) {
     .alert {
@@ -121,7 +121,7 @@
       left: 68%;
       width: 28%;
       height: 12%;
-      font-size: 10px; // 텍스트 크기 줄이기
+      font-size: 10px;
     }
     .close_alert {
       font-size: 10px;
