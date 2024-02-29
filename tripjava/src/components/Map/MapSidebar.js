@@ -273,6 +273,7 @@ const MapSidebar = ({ startDate, endDate, routes, setTripData, tripData }) => {
             ))}
           </div> */}
           <div className="sidebar_hotel">
+            <h3 id={date}>숙소</h3>
             {routeDetail.map((route, id, routes) => (
               <div className="sidebar_hotel_container" key={id}>
                 <div onClick={() => fetchNearbyDestinations(routes.id)}>
