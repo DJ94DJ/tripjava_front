@@ -2,9 +2,11 @@ import React from 'react';
 import axios from 'axios';
 import { useState, useEffect, useRef } from 'react';
 import '../../styles/style.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function UserSignupPage() {
+  const navigate = useNavigate();
+
   const [inputs, setInputs] = useState({
     id: '',
     password: '',
@@ -178,7 +180,7 @@ function UserSignupPage() {
         inputs
       );
       console.log(response.data);
-      window.location = '/login';
+      navigate('/login');
       // 회원가입 성공 처리
     } catch (error) {
       console.error(error);

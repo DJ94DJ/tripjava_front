@@ -76,7 +76,7 @@ const TestPlannerTableLily = ({ planner_no }) => {
   // 일정을 삭제하는 함수입니다.
   const handleDelete = (itineraryId) => {
     axios
-      .delete(`http://localhost:8080/itinerary/del/${itineraryId}`)
+      .delete(`${process.env.REACT_APP_HOST}/itinerary/del/${itineraryId}`)
       .then((res) => {
         console.log('일정 삭제 성공: ', res.data);
         // 삭제가 성공하면 모달을 닫거나 다시 로드하는 등의 동작을 수행할 수 있습니다.
@@ -111,7 +111,7 @@ const TestPlannerTableLily = ({ planner_no }) => {
   useEffect(() => {
     axios
       // http://localhost:8080/plan/today-no/{planner_no}/{days}
-      .get(`http://localhost:8080/planner/trip-route/${planner_no}`)
+      .get(`${process.env.REACT_APP_HOST}/planner/trip-route/${planner_no}`)
       .then((response) => {
         console.log('컴포넌트~여행 정보 요청 응답: ', response.data);
         setPlannerData(response.data);
@@ -120,7 +120,9 @@ const TestPlannerTableLily = ({ planner_no }) => {
         const days = (endDay - startDay) / (1000 * 60 * 60 * 24) + 1; // 여행 일수를 계산합니다.
         setDays(days); // 여행 일수를 상태에 저장합니다.
         axios
-          .get(`http://localhost:8080/plan/today-no/${planner_no}/${days}`)
+          .get(
+            `${process.env.REACT_APP_HOST}/plan/today-no/${planner_no}/${days}`
+          )
           .then((response) => {
             console.log('숫자 잘 들어오냐??', response.data);
             setTodayNums(response.data);
@@ -156,7 +158,7 @@ const TestPlannerTableLily = ({ planner_no }) => {
 
   const findItineraries = () => {
     axios
-      .get(`http://localhost:8080/itinerary/select/${planner_no}`)
+      .get(`${process.env.REACT_APP_HOST}/itinerary/select/${planner_no}`)
       .then((res) => {
         setItineraries(res.data);
         console.log('aaaa 2');
