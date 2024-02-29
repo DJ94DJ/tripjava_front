@@ -13,8 +13,15 @@ const MapMainPage = () => {
   const selectedRegion = regions.find(
     (region) => region.name === selectedRegionName
   );
-
   const [routes, setRoutes] = useState([]);
+  const [tripData, setTripData] = useState({
+    // 1: {
+    //   selectedDate: null,
+    //   selectedRoute: null,
+    //   selectedSpot: [],
+    //   selectedDay: 1,
+    // },
+  });
 
   return (
     <>
@@ -24,10 +31,13 @@ const MapMainPage = () => {
         endDate={endDate}
         period={period}
         routes={routes}
+        tripData={tripData}
+        setTripData={setTripData}
       />
       <GoogleMapComponent
         selectedLocation={selectedRegion}
         setRoutes={setRoutes}
+        tripData={tripData}
       />
     </>
   );
