@@ -16,35 +16,6 @@ const TestPlannerTableLily = ({ planner_no }) => {
   }); // 선택된 날짜와 시간을 저장하는 상태
   const [todayNums, setTodayNums] = useState([]);
 
-  // // 이전에 있던 병합을 제거하고 새로운 병합을 추가하는 함수입니다.
-  // const mergeCells = () => {
-  //   const table = document.querySelector(".test_PlannerTable");
-
-  //   if (!table) return;
-
-  //   const rows = Array.from(table.getElementsByTagName("tr"));
-  //   let lastCell = null;
-  //   let count = 1;
-
-  //   rows.forEach((row, rowIndex) => {
-  //     const currentCell = row.getElementsByTagName("td")[1];
-
-  //     // currentCell이 undefined이거나 textContent가 빈 문자열이면 무시합니다.
-  //     if (!currentCell || !currentCell.textContent) return;
-
-  //     if (lastCell && lastCell.textContent === currentCell.textContent) {
-  //       count++;
-  //       lastCell.rowSpan = count;
-  //       currentCell.style.display = "none";
-  //       currentCell.classList.add("merged"); // 현재 셀에 'merged' 클래스 추가
-  //     } else {
-  //       lastCell = currentCell;
-  //       lastCell.classList.add("merged");
-  //       count = 1;
-  //     }
-  //   });
-  // };
-
   const mergeCells = () => {
     const table = document.querySelector(".test_PlannerTable");
 
@@ -55,23 +26,56 @@ const TestPlannerTableLily = ({ planner_no }) => {
     let matchedClass = null;
     let colorMap = new Map();
 
-    const getRandomColor = () => {
-      const letters = "0123456789ABCDEF";
-      let color = "#";
-      for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
-    };
-
     rows.forEach((row, rowIndex) => {
       const currentCell = row.getElementsByTagName("td")[1];
 
       // currentCell이 undefined이거나 textContent가 빈 문자열이면 무시합니다.
       if (!currentCell || !currentCell.textContent) return;
 
+      // 특정 구문 건너뜁니다.
+      if (currentCell.textContent.includes("IGN")) return;
+
+      // 상단 셀을 검사하여, 빈 셀 혹은 "start" 혹은 "bottom"이 있는 셀이 있는 경우 예외로 적용합니다.
+      let exceptionCell = false;
+      if (rowIndex > 0) {
+        const topCell = rows[rowIndex - 1].getElementsByTagName("td")[1];
+        if (
+          topCell &&
+          (!topCell.textContent ||
+            topCell.textContent.includes("start") ||
+            topCell.textContent.includes("bottom"))
+        ) {
+          exceptionCell = true;
+        }
+      }
+
+      // "start", "middle", "bottom"이 포함된 셀은 무시합니다. 단, 상단 셀이 빈 셀이거나 "start", "bottom"을 포함하고 있다면 예외로 적용합니다.
+      if (
+        !exceptionCell &&
+        (currentCell.textContent.includes("start") ||
+          currentCell.textContent.includes("middle") ||
+          currentCell.textContent.includes("bottom"))
+      )
+        return;
+
+      // 하단 셀을 검사하여, "middle" 혹은 "bottom"이 있는 셀이 있을 경우 건너뛰도록 합니다.
+      let ignoreCell = false;
+      if (rows[rowIndex + 1]) {
+        const bottomCell = rows[rowIndex + 1].getElementsByTagName("td")[1];
+        if (
+          bottomCell &&
+          (bottomCell.textContent.includes("middle") ||
+            bottomCell.textContent.includes("bottom"))
+        ) {
+          ignoreCell = true;
+        }
+      }
+
+      // 만약 하단 셀에 "middle" 혹은 "bottom"이 포함된 셀이 있으면, 현재 셀도 무시합니다.
+      if (ignoreCell) return;
+
       if (!colorMap.has(currentCell.textContent)) {
-        const colorClass = `color_${rowIndex}`; // 색상 클래스명
+        const colorClass = `color_test_${rowIndex % 8}`; // 색상 클래스명
         colorMap.set(currentCell.textContent, colorClass);
         currentCell.classList.add(colorClass); // 색상 클래스명 부여
       } else {
@@ -79,27 +83,127 @@ const TestPlannerTableLily = ({ planner_no }) => {
       }
 
       if (lastText && lastText === currentCell.textContent) {
-        currentCell.style.opacity = "0"; // 텍스트 투명도를 0으로 설정
+        currentCell.style.color = "transparent"; // 텍스트 투명도를 0으로 설정
+        currentCell.style.border = "0";
         currentCell.classList.add(matchedClass); // 동일한 클래스명 부여
+
+        const nextCell = rows[rowIndex + 1]
+          ? rows[rowIndex + 1].getElementsByTagName("td")[1]
+          : null;
+
+        if (!nextCell || nextCell.textContent !== currentCell.textContent) {
+          currentCell.textContent += " bottom";
+          currentCell.classList.add("merge-bottom"); // 병합됨 셀의 하단 부분에 클래스 추가
+
+          if (rows[rowIndex + 1]) {
+            const adjacentBottomCell =
+              rows[rowIndex + 1].getElementsByTagName("td")[1];
+            if (adjacentBottomCell) {
+              adjacentBottomCell.classList.add("adjacent-bottom"); // 병합됨 셀의 하단에 인접한 셀에 클래스 추가
+            }
+          }
+        } else {
+          currentCell.textContent += " middle";
+        }
       } else {
         lastText = currentCell.textContent;
         matchedClass = `matched_${rowIndex}`; // 일치하는 셀들에게 부여될 클래스명
         currentCell.classList.add(matchedClass);
+
+        if (
+          !currentCell.textContent.includes("---") &&
+          !currentCell.textContent.includes("bottom")
+        ) {
+          currentCell.textContent = "--- " + currentCell.textContent;
+          currentCell.classList.add("merge-top");
+        }
+
+        if (rowIndex > 0) {
+          const adjacentTopCell =
+            rows[rowIndex - 1].getElementsByTagName("td")[1];
+          if (adjacentTopCell) {
+            adjacentTopCell.classList.add("adjacent-top"); // 병합된 셀의 상단에 인접한 셀에 클래스 추가
+          }
+        }
+      }
+    });
+
+    rows.forEach((row, rowIndex) => {
+      const currentCell = row.getElementsByTagName("td")[1];
+      if (
+        currentCell &&
+        currentCell.textContent &&
+        !currentCell.textContent.includes("middle")
+      ) {
+        const nextCell = rows[rowIndex + 1]
+          ? rows[rowIndex + 1].getElementsByTagName("td")[1]
+          : null;
+        const prevCell =
+          rowIndex > 0
+            ? rows[rowIndex - 1].getElementsByTagName("td")[1]
+            : null;
+
+        if (
+          currentCell.textContent.includes("---") &&
+          ((prevCell && prevCell.textContent.includes("---")) ||
+            (nextCell && nextCell.textContent.includes("---"))) &&
+          (!prevCell ||
+            (prevCell.textContent !== currentCell.textContent &&
+              !prevCell.textContent.includes("middle") &&
+              !prevCell.textContent.includes("---"))) &&
+          (!nextCell ||
+            (nextCell.textContent !== currentCell.textContent &&
+              !nextCell.textContent.includes("middle") &&
+              !nextCell.textContent.includes("---") &&
+              !nextCell.textContent.includes("bottom")))
+        ) {
+          currentCell.classList.add("onlyone");
+        }
+      }
+    });
+
+    // 모든 작업이 완료된 후에 "---" 칸 위에 "---"가 있어서 "onlyone" 클래스가 적용된 칸을 검사했을 때 해당 내용이 불일치하면 "onlyone" 클래스를 제거합니다.
+    // 하단 칸이 비어있거나 "---"가 있을 경우에는 "onlyone" 클래스를 유지합니다.
+    rows.forEach((row, rowIndex) => {
+      const currentCell = row.getElementsByTagName("td")[1];
+      if (
+        currentCell &&
+        currentCell.textContent &&
+        currentCell.classList.contains("onlyone")
+      ) {
+        const nextCell =
+          rowIndex < rows.length - 1
+            ? rows[rowIndex + 1].getElementsByTagName("td")[1]
+            : null;
+        const prevCell =
+          rowIndex > 0
+            ? rows[rowIndex - 1].getElementsByTagName("td")[1]
+            : null;
+
+        if (
+          prevCell &&
+          prevCell.textContent.includes("---") &&
+          prevCell.textContent !== currentCell.textContent &&
+          nextCell &&
+          !nextCell.textContent.includes("---")
+        ) {
+          currentCell.classList.remove("onlyone");
+        }
       }
     });
 
     // 색상 설정
-    let style = document.createElement("style");
-    document.head.appendChild(style);
-    let styleSheet = style.sheet;
+    // let style = document.createElement("style");
+    // document.head.appendChild(style);
+    // let styleSheet = style.sheet;
 
-    colorMap.forEach((colorClass, text) => {
-      const colorStyle = getRandomColor(); // 랜덤 색상
-      styleSheet.insertRule(
-        `.${colorClass} { background-color: ${colorStyle}; }`,
-        styleSheet.cssRules.length
-      );
-    });
+    // colorMap.forEach((colorClass, text) => {
+    //   const colorStyle = getRandomColor(); // 랜덤 색상
+    //   styleSheet.insertRule(
+    //     `.${colorClass} { background-color: ${colorStyle}; }`,
+    //     styleSheet.cssRules.length
+    //   );
+    // });
   };
 
   // // 백엔드에서 Itinerary 전체를 가져오는 함수입니다.
@@ -245,12 +349,17 @@ const TestPlannerTableLily = ({ planner_no }) => {
 
   const createDailyTable = (date, dayNumber) => {
     const hours = [];
-    for (let i = 0; i < 24; i++) {
+    for (let i = 1; i < 25; i++) {
       const itinerary = getItineraryForTime(dayNumber, i); // 해당 시간에 일정이 있는지 확인.
       hours.push(
         <tr key={i}>
           <td
-            style={{ border: "1px solid black", padding: "5px" }}
+            style={{
+              border: "1px solid black",
+              borderRight: "0", // 오른쪽 선을 없앰
+              marginRight: "10px", // 오른쪽에 10px 간격을 둠
+              padding: "5px",
+            }}
             onClick={() => {
               handleTimeClick(date, i);
             }}

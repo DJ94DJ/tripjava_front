@@ -3,41 +3,121 @@
   display: flex;
   overflow-x: auto;
   width: 100%;
-  background-color: rgb(235, 167, 189);
+  // background-color: rgb(235, 167, 189);
+  padding: 20px;
+
+  // background-color: rgb(71, 151, 30);
 }
 
 .day-table {
-  background-color: rgb(147, 216, 112);
+  border-collapse: separate !important;
+  border-spacing: 8px 0px;
+  background-color: white;
 
   td {
-    background-color: rgb(90, 42, 138);
+    // background-color: rgb(218, 208, 226);
+    border-left: 0 !important;
+    border-right: 0 !important;
+    border-top: 0 !important;
+
     &.merged {
       background-color: rgb(205, 49, 59);
     }
   }
 
   .times {
-    background-color: rgb(54, 107, 229);
+    background-color: rgb(80, 109, 177);
+    border-bottom: 0 !important;
   }
 
   .plans {
-    background-color: rgb(129, 165, 248);
+    background-color: rgb(191, 207, 244);
   }
 
   thead {
     th {
-      background-color: rgb(38, 93, 11);
+      // background-color: rgb(170, 209, 151);
+      border: 0 !important;
     }
     tr {
-      background-color: rgb(90, 42, 138);
     }
 
     tbody {
-      background-color: rgb(171, 111, 231);
-    } // 아무일도 안일어남
+    }
   }
 }
 
 .selected {
   background-color: #a0d0e0; /* 예시 색상 */
+}
+
+.color_test_0 {
+  background-color: #ff0000 !important; /* 빨간색 */
+
+  border: 0 !important;
+}
+
+.color_test_1 {
+  background-color: #00ff00 !important; /* 초록색 */
+
+  border: 0 !important;
+}
+
+.color_test_2 {
+  background-color: #0000ff !important; /* 파란색 */
+  border: 0 !important;
+}
+
+.color_test_3 {
+  background-color: gold !important; /* 파란색 */
+  border: 0 !important;
+}
+.color_test_4 {
+  background-color: orangered !important; /* 파란색 */
+  border: 0 !important;
+}
+
+.color_test_5 {
+  background-color: palevioletred !important; /* 파란색 */
+  border: 0 !important;
+}
+
+.color_test_6 {
+  background-color: greenyellow !important; /* 파란색 */
+  border: 0 !important;
+}
+.color_test_7 {
+  background-color: purple !important; /* 파란색 */
+  border: 0 !important;
+}
+.color_test_8 {
+  background-color: rgb(65, 226, 110) !important; /* 파란색 */
+  border: 0 !important;
+}
+
+.merge-top {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+
+  // box-shadow: inset 0 3px 0 0 white;
+}
+.merge-bottom {
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  // box-shadow: inset 0 -3px 0 0 white;
+}
+
+.onlyone {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+.adjacent-top {
+  border-bottom: 0 !important;
+}
+
+.adjacent-bottom {
+  border-top: 0 !important;
 }
