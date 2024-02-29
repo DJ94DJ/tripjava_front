@@ -53,8 +53,7 @@ export default function Header() {
           />
           <ul className="menu">
             {/* <li onClick={() => navigate("/date")}>둘러보기</li> */}
-            {localStorage.getItem("token") && auth.nickname ? ( // 토큰과 닉네임 모두 있는 경우
-
+            {localStorage.getItem('token') && auth.nickname ? ( // 토큰과 닉네임 모두 있는 경우
               <>
                 <li onClick={() => navigate('/mypage')}>
                   {auth.nickname}님, 환영합니다! 💖
