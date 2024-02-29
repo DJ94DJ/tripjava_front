@@ -6,10 +6,11 @@ import { useState } from 'react';
 import '../../styles/style.scss';
 import Swal from 'sweetalert2';
 import 'animate.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function UserLoginPage() {
   const dispatch = useDispatch(); // 추가: dispatch 함수 가져오기
+  const navigate = useNavigate();
 
   const [inputs, setInputs] = useState({
     id: '',
@@ -39,7 +40,7 @@ function UserLoginPage() {
       console.log('저장된 토큰:', localStorage.getItem('token'));
       console.log(response.data);
       dispatch(setAuth(response.data.token, id)); // id는 사용자가 입력한 아이디
-      window.location = '/';
+      navigate('/');
 
       // 로그인 성공 처리
     } catch (error) {

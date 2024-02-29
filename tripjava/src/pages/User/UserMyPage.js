@@ -22,8 +22,8 @@ function UserMyPage() {
 
         // planner 정보를 가져와서 userPlanner에 저장
         axios
-          .get(`http://localhost:8080/planner/mypage?userid=${auth.id}`)
-          // .get(`${process.env.REACT_APP_HOST}/planner/mypage?userid=${auth.id}`)
+          // .get(`http://localhost:8080/planner/mypage?userid=${auth.id}`)
+          .get(`${process.env.REACT_APP_HOST}/planner/mypage?userid=${auth.id}`)
           .then((response) => {
             setUserPlanner(response.data);
             console.log('플래너 정보 요청', response.data);
@@ -77,7 +77,7 @@ function UserMyPage() {
               className="button_Edit"
               type="button"
               onClick={() => {
-                window.location.href = '/edit';
+                navigate('/edit');
               }}
             >
               회원정보 수정
@@ -86,7 +86,7 @@ function UserMyPage() {
               className="button_Leave"
               type="button"
               onClick={() => {
-                window.location.href = '/leave';
+                navigate('/leave');
               }}
             >
               탈퇴하기
