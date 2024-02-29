@@ -71,7 +71,10 @@ const MapDate = () => {
       // };
       console.log('Selected period:', selectedPeriod);
       axios
-        .get(`http://localhost:8080/destination?addr1=${selectedRegionName}`)
+        .get(
+          `${process.env.REACT_APP_HOST}/destination?addr1=${selectedRegionName}`
+        )
+        // .get(`http://localhost:8080/destination?addr1=${selectedRegionName}`)
         .then((res) => {
           const touristSpots = res.data.touristSpots;
           console.log('mapdate 페이지/투어api 호출 : ', res.data);

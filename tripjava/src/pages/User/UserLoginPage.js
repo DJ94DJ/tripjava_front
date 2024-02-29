@@ -1,18 +1,19 @@
-import React from "react";
-import axios from "axios";
-import { useDispatch } from "react-redux"; // 추가: useDispatch 가져오기
-import { setAuth } from "../../store/actions/auth"; // 추가: setAuth 액션 가져오기
-import { useState } from "react";
-import "../../styles/style.scss";
-import Swal from "sweetalert2";
-import "animate.css";
+import React from 'react';
+import axios from 'axios';
+import { useDispatch } from 'react-redux'; // 추가: useDispatch 가져오기
+import { setAuth } from '../../store/actions/auth'; // 추가: setAuth 액션 가져오기
+import { useState } from 'react';
+import '../../styles/style.scss';
+import Swal from 'sweetalert2';
+import 'animate.css';
+import { Link } from 'react-router-dom';
 
 function UserLoginPage() {
   const dispatch = useDispatch(); // 추가: dispatch 함수 가져오기
 
   const [inputs, setInputs] = useState({
-    id: "",
-    password: "",
+    id: '',
+    password: '',
   });
 
   const { id, password } = inputs;
@@ -30,23 +31,23 @@ function UserLoginPage() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/user/login",
+        `${process.env.REACT_APP_HOST}/user/login`,
         inputs
       );
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("id", id);
-      console.log("저장된 토큰:", localStorage.getItem("token"));
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('id', id);
+      console.log('저장된 토큰:', localStorage.getItem('token'));
       console.log(response.data);
       dispatch(setAuth(response.data.token, id)); // id는 사용자가 입력한 아이디
-      window.location = "/";
+      window.location = '/';
 
       // 로그인 성공 처리
     } catch (error) {
       console.error(error);
       Swal.fire({
         // 로그인 실패 처리
-        icon: "error",
-        title: "로그인에 실패했어요.",
+        icon: 'error',
+        title: '로그인에 실패했어요.',
         showClass: {
           popup: `
             animate__animated
@@ -63,7 +64,7 @@ function UserLoginPage() {
         },
         text: `아이디 혹은 비밀번호를 확인해주세요.`,
         customClass: {
-          popup: "login-fail",
+          popup: 'login-fail',
         },
       });
     }
@@ -97,15 +98,21 @@ function UserLoginPage() {
 
               <button type="submit">로그인</button>
               <br />
-              <button
+              {/* <button
                 className="button_signup"
                 type="button"
                 onClick={() => {
-                  window.location.href = "/signup";
+                  window.location.href = '/register';
                 }}
               >
                 회원가입
-              </button>
+              </button> */}
+              <Link
+                to="/register"
+                style={{ textDecoration: 'none', color: 'black' }}
+              >
+                회원가입
+              </Link>
             </form>
           </div>
         </div>
