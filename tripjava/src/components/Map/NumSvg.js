@@ -1,5 +1,5 @@
 // NumSvg.js
-import React from "react";
+import React from 'react';
 
 export const Num1PinSvg = ({ color }) => (
   <svg

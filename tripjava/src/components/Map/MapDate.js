@@ -61,14 +61,6 @@ const MapDate = () => {
         (region) => region.name === selectedRegionName
       );
 
-      ////////// 백엔드로 지역 데이터 전송
-      // 이 페이지에선 메인에서 prop으로 받은 지역 데이터만 백엔드로 보낼겁니다!
-      // 날짜는 /map 페이지에서 다른 정보랑 한꺼번에 보낼거에요!)
-
-      // 백엔드로 전송할 데이터
-      // const regionData = {
-      //   regionName: selectedRegionName,
-      // };
       console.log('Selected period:', selectedPeriod);
       axios
         .get(
