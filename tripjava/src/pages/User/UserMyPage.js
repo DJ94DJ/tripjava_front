@@ -96,25 +96,23 @@ function UserMyPage() {
         <div className="myPage-form tours">
           <h2>나의 여행계획</h2>
           <div className="tourlist">
-            <div className="box">
-              {userPlanner &&
-                userPlanner.map((value) => (
-                  <div key={value.planner_no} className="delete-part">
-                    <h3
-                      key={value.planner_no}
-                      onClick={() => handlePlannerClick(value.planner_no)}
-                    >
-                      {value.planner_title}
-                    </h3>
-                    <button
-                      onClick={() => deletePlanner(value.planner_no)}
-                      className="delete-btn"
-                    >
-                      삭제
-                    </button>
-                  </div>
-                ))}
-            </div>
+            {userPlanner &&
+              userPlanner.map((value) => (
+                <div key={value.planner_no} className="delete-part">
+                  <h3
+                    key={value.planner_no}
+                    onClick={() => handlePlannerClick(value.planner_no)}
+                  >
+                    {value.planner_title}
+                  </h3>
+                  <button
+                    onClick={() => deletePlanner(value.planner_no)}
+                    className="delete-btn"
+                  >
+                    삭제
+                  </button>
+                </div>
+              ))}
             <div className="container_map_img"></div>
           </div>
         </div>
