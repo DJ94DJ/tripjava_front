@@ -1,6 +1,11 @@
-  .kakao_share {
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: flex-end;
-    text-align: right;
+.kakao_share {
+  text-align: right;
+  margin-bottom: 10px;
+  h3.kakao_share {
+    margin: 0 10px 0 0;
+    font-family: var(--pointfont);
+    img {
+      @include flex-center;
+    }
+  }
 }

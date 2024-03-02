@@ -17,6 +17,7 @@
 }
 
 .side_menu {
+  background-color: #f9f7f5 !important;
   @include container;
   z-index: 100;
   position: fixed;
@@ -190,6 +191,7 @@ li {
 .nearby_menu {
   transition: transform 0.5s ease-in-out;
   transform: translateX(0);
+  background-color: #f9f7f5 !important;
   @include container;
   z-index: 100;
   position: fixed;
@@ -280,6 +282,7 @@ li {
 }
 
 button.nearby_toggle {
+  background-color: #f9f7f5 !important;
   @include flex-center;
   border-radius: 0 5px 5px 0;
 

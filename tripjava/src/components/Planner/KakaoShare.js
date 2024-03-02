@@ -39,13 +39,16 @@ const KakaoShare = () => {
 
   return (
     <div className="kakao_share">
-      <img
-        src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"
-        id="kakaotalk-sharing-btn"
-        onClick={share}
-        alt="카카오톡 공유하기"
-        style={{ width: '70%', height: 'auto' }}
-      />
+      <h3 className="kakao_share">
+        공유하기 &nbsp;
+        <img
+          src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"
+          id="kakaotalk-sharing-btn"
+          onClick={share}
+          alt="카카오톡 공유하기"
+          style={{ width: '30px', height: 'auto' }}
+        />
+      </h3>
     </div>
   );
 };

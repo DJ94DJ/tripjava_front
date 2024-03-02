@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { TbSquareCheckFilled } from 'react-icons/tb';
 
 const PlannerMemo = ({ planner_no }) => {
   const [items, setItems] = useState([]);
@@ -90,7 +91,10 @@ const PlannerMemo = ({ planner_no }) => {
   return (
     <div className="test_PlannerBlock">
       <div className="content">
-        <div className="planner_title">준비물 체크리스트 ✅</div>
+        <div className="planner_title">
+          <TbSquareCheckFilled />
+          &nbsp; 준비물 체크리스트
+        </div>
         <hr />
         <div className="item-notice">
           * 준비물 이름을 더블클릭하면 삭제됩니다.

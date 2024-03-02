@@ -11,31 +11,36 @@
   .content {
     flex-grow: 1;
 
-  .planner_title {
-    font-size: 1.5rem;
-    @include flex-center;
-  }
+    .planner_title {
+      font-size: 1.3rem;
+      @include flex-center;
+      font-family: var(--pointfont);
+      margin-bottom: 25px;
+    }
 
-  .item-notice {
-    font-size: 13px;
-  }
+    .item-notice {
+      font-size: 15px;
+      color: #d9af4f;
+    }
 
-  .item-text {
-    cursor: pointer;
-  }
+    .item-text {
+      cursor: pointer;
+      font-size: 17px;
+      color: var(--main-color);
+    }
 
-  div {
-    display: flex;
-    align-items: center;
-    margin: 10px 0;
+    div {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
 
-    input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
-      margin-right: 10px;
+      input[type='checkbox'] {
+        width: 17px;
+        height: 17px;
+        margin-right: 10px;
+      }
     }
   }
-}
 
   .input-area {
     display: flex;
@@ -43,19 +48,26 @@
     width: 100%; // 부모 요소의 너비를 100%로 설정
     margin-bottom: 0;
 
-    input[type="text"] {
+    input[type='text'] {
       width: 78%;
       height: 30px;
       border-radius: 10px;
-      border: 1px solid black;
       padding: 10px;
+      background-color: transparent;
+      border: 1px solid var(--main-color);
+      color: var(--main-color);
     }
 
     button {
       @include main-button;
+      font-family: var(--pointfont);
       width: 20%;
       height: 30px;
-      font-size: 18px;
+      font-size: 15px;
     }
   }
+}
+
+hr {
+  border: 0.1px solid var(--main-color);
 }

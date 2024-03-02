@@ -107,55 +107,71 @@ const MapDate = () => {
 
   return (
     <div className="container">
-      <h2>여행 기간을 선택해 주세요.</h2>
-      <div className="start-date-section">
+      <div className="item num1 h3">
         <h3>시작 날짜</h3>
-        <div className="react-datepicker-wrapper">
-          <DatePicker
-            selected={startDate}
-            onChange={handleStartDateSelect}
-            customInput={<input style={{ display: 'none' }} />}
-            open={true}
-            className="start-date-picker"
-            ref={startDateRef}
-            showPopperArrow={false}
-            selectsStart
-            startDate={startDate}
-            endDate={endDate}
-          />
-          {startDate && (
-            <div className="start-date">{startDate.toLocaleDateString()}</div>
-          )}
-        </div>
       </div>
-      <div className="end-date-section">
+      <div className="item2 num2 ">
+        <h4>여행 기간을 선택해 주세요.</h4>
+      </div>
+      <div className="item num3 h3">
         <h3>종료 날짜</h3>
-        <div className="react-datepicker-wrapper">
-          <DatePicker
-            selected={endDate}
-            onChange={handleEndDateSelect}
-            customInput={<input style={{ display: 'none' }} />}
-            open={true}
-            className="end-date-picker"
-            ref={endDateRef}
-            showPopperArrow={false}
-            selectsEnd
-            startDate={startDate}
-            endDate={endDate}
-            minDate={startDate}
-          />
-          {endDate && (
-            <div className="end-date">{endDate.toLocaleDateString()}</div>
-          )}
-        </div>
       </div>
+      <div className="item num4  date">
+        {startDate && (
+          <div className="start-date">{startDate.toLocaleDateString()}</div>
+        )}
+      </div>
+      <div className="item num5 ">선택한 기간: {selectedPeriod + 1}일</div>
+      <div className="item num6  date">
+        {endDate && (
+          <div className="end-date">{endDate.toLocaleDateString()}</div>
+        )}
+      </div>
+      <div className="item num7">
+        <DatePicker
+          formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 1)}
+          selected={startDate}
+          onChange={handleStartDateSelect}
+          customInput={<input style={{ display: 'none' }} />}
+          open={true}
+          classNameName="start-date-picker"
+          ref={startDateRef}
+          showPopperArrow={false}
+          selectsStart
+          startDate={startDate}
+          endDate={endDate}
+        />
+      </div>
+      <div className="item num8"></div>
+      <div className="item num9">
+        <DatePicker
+          formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 1)}
+          selected={endDate}
+          onChange={handleEndDateSelect}
+          customInput={<input style={{ display: 'none' }} />}
+          open={true}
+          className="end-date-picker"
+          ref={endDateRef}
+          showPopperArrow={false}
+          selectsEnd
+          startDate={startDate}
+          endDate={endDate}
+          minDate={startDate}
+        />
+      </div>
+      <div className="item num10"></div>
+      <div className="item num11">
+        <button onClick={handleComplete}>선택 완료</button>
+      </div>
+      <div className="item num12"></div>
+
       {selectedPeriod && (
         <>
           <div className="selectedPeriod-wrapper">
-            <div>선택한 기간: {selectedPeriod + 1}일</div>
+            {/* <div>선택한 기간: {selectedPeriod + 1}일</div> */}
           </div>
           <div className="selectedButton-wrapper">
-            <button onClick={handleComplete}>선택 완료</button>
+            {/* <button onClick={handleComplete}>선택 완료</button> */}
           </div>
         </>
       )}
